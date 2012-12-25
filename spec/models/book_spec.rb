@@ -19,7 +19,11 @@ require 'spec_helper'
 
 describe Book do
 
-  before { @book = Book.new(:title => "Dummy title", :author => "Dummy author") }
+  before { 
+    #category = Category.new
+    #category.stub!(:name)
+    @book = Book.new(:title => "Dummy title", :author => "Dummy author") 
+  }
   subject { @book }
 
   describe "invalid" do
@@ -31,6 +35,11 @@ describe Book do
 
     it "fails validation because lack of author" do 
       @book.author = nil
+      should_not be_valid
+    end
+
+    xit "fails validations because is not assigned to a category" do
+      @book.category = nil
       should_not be_valid
     end
 

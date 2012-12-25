@@ -24,7 +24,9 @@ describe BooksController do
   # Book. As you add validations to Book, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    { "title" => "MyString" }
+    category = Category.new
+    category.stub!(:name)
+    { "title" => "MyString", "author" => "MyAuthor"}#, "category" => category }
   end
 
   # This should return the minimal set of values that should be in the session

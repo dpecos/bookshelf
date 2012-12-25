@@ -17,7 +17,8 @@
 
 class Book < ActiveRecord::Base
   attr_accessible :abstract, :author, :editorial, :isbn, :pages, :title, :url, :year
-
+  
   validates :title, :presence => true
   validates :author, :presence => true
+
 end
