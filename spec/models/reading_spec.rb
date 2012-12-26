@@ -8,6 +8,7 @@
 #  month      :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  book_id    :integer
 #
 
 require 'spec_helper'

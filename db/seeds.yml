@@ -1,0 +1,20 @@
+#categories:
+#  -
+#    id: 1
+#    name: "Science Fiction"
+#
+#books:
+#  -
+#    id: 1
+#    category_id: 1
+#    title: "Foundation"
+#    author: "Isaac Asimov"
+#    year: 1942
+#
+#readings:
+#  -
+#    id: 1
+#    book_id: 1
+#    year: 2012
+#    month: 12
+#    notes: "Marevellous book!"

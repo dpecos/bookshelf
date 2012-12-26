@@ -8,12 +8,13 @@
 #  month      :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  book_id    :integer
 #
 
 class Reading < ActiveRecord::Base
   belongs_to :book
 
-  attr_accessible :month, :notes, :year
+  attr_accessible :id, :book_id, :month, :notes, :year
 
   validates :year, :presence => true
   validates :month, :presence => true

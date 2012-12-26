@@ -11,7 +11,7 @@
 class Category < ActiveRecord::Base
   has_many :books
 
-  attr_accessible :name
+  attr_accessible :id, :name
   
   validates :name, :presence => true
 end
