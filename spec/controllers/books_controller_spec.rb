@@ -19,14 +19,13 @@ require 'spec_helper'
 # that an instance is receiving a specific message.
 
 describe BooksController do
+  fixtures :categories
 
   # This should return the minimal set of attributes required to create a valid
   # Book. As you add validations to Book, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    category = Category.new
-    category.stub!(:name)
-    { "title" => "MyString", "author" => "MyAuthor"}#, "category" => category }
+    { "title" => "MyString", "author" => "MyAuthor", "category" => categories(:dummy) }
   end
 
   # This should return the minimal set of values that should be in the session
@@ -34,6 +33,13 @@ describe BooksController do
   # BooksController. Be sure to keep this updated too.
   def valid_session
     {}
+  end
+
+  after :all do
+    # unload possilbe fixture data
+    if (Category.all.count != 0)
+      Category.find(-1).destroy
+    end
   end
 
   describe "GET index" do

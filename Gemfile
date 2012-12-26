@@ -31,6 +31,7 @@ group :test do
   # linux
   gem 'rb-inotify'
   gem 'libnotify'
+  gem 'shoulda-matchers'
 end
 
 # To use ActiveModel has_secure_password

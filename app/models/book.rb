@@ -16,9 +16,11 @@
 #
 
 class Book < ActiveRecord::Base
-  attr_accessible :abstract, :author, :editorial, :isbn, :pages, :title, :url, :year
+  belongs_to :category
+
+  attr_accessible :abstract, :author, :editorial, :isbn, :pages, :title, :url, :year, :category
   
   validates :title, :presence => true
   validates :author, :presence => true
-
+  validates :category, :presence => true
 end

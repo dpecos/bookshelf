@@ -10,4 +10,8 @@ describe Category do
     should_not be_valid
   end
 
+  it "has many books" do
+    should have_many(:books)
+  end
+
 end

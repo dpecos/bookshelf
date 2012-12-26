@@ -20,9 +20,8 @@ require 'spec_helper'
 describe Book do
 
   before { 
-    #category = Category.new
-    #category.stub!(:name)
-    @book = Book.new(:title => "Dummy title", :author => "Dummy author") 
+    category = Category.new
+    @book = Book.new(:title => "Dummy title", :author => "Dummy author", :category => category) 
   }
   subject { @book }
 
@@ -38,7 +37,7 @@ describe Book do
       should_not be_valid
     end
 
-    xit "fails validations because is not assigned to a category" do
+    it "fails validations because is not assigned to a category" do
       @book.category = nil
       should_not be_valid
     end
@@ -48,6 +47,10 @@ describe Book do
   describe "valid" do 
     it "validates" do
       should be_valid
+    end
+
+    it "belongs to one category" do
+      should belong_to(:category)
     end
   end
 
