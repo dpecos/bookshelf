@@ -6,7 +6,7 @@ class ReadingsController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @readings }
+      format.json { render :json => @readings }
     end
   end
 
@@ -17,7 +17,7 @@ class ReadingsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @reading }
+      format.json { render :json => @reading }
     end
   end
 
@@ -28,7 +28,7 @@ class ReadingsController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render json: @reading }
+      format.json { render :json => @reading }
     end
   end
 
@@ -44,11 +44,11 @@ class ReadingsController < ApplicationController
 
     respond_to do |format|
       if @reading.save
-        format.html { redirect_to @reading, notice: 'Reading was successfully created.' }
-        format.json { render json: @reading, status: :created, location: @reading }
+        format.html { redirect_to @reading, :notice => 'Reading was successfully created.' }
+        format.json { render :json => @reading, :status => :created, :location => @reading }
       else
-        format.html { render action: "new" }
-        format.json { render json: @reading.errors, status: :unprocessable_entity }
+        format.html { render :action => "new" }
+        format.json { render :json => @reading.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -60,11 +60,11 @@ class ReadingsController < ApplicationController
 
     respond_to do |format|
       if @reading.update_attributes(params[:reading])
-        format.html { redirect_to @reading, notice: 'Reading was successfully updated.' }
+        format.html { redirect_to @reading, :notice => 'Reading was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
-        format.json { render json: @reading.errors, status: :unprocessable_entity }
+        format.html { render :action => "edit" }
+        format.json { render :json => @reading.errors, :status => :unprocessable_entity }
       end
     end
   end
