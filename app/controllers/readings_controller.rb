@@ -1,4 +1,11 @@
 class ReadingsController < ApplicationController
+
+  before_filter :check_cors
+
+  def check_cors
+    response.headers['Access-Control-Allow-Origin'] = '*' if request.headers.has_key? 'HTTP_ORIGIN'
+  end
+
   # GET /readings
   # GET /readings.json
   def index

@@ -1,8 +1,16 @@
-class BooksController < ApplicationController
+class BooksController < ApplicationController 
+
+  before_filter :check_cors
+
+  def check_cors
+    response.headers['Access-Control-Allow-Origin'] = '*' if request.headers.has_key? 'HTTP_ORIGIN'
+  end
+
   # GET /books
   # GET /books.json
   def index
-    @books = Book.all
+    #@books = Book.all
+    @books = Book.includes(:readings).order('readings.year DESC', 'readings.month DESC')
 
     respond_to do |format|
       format.html # index.html.erb
