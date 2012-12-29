@@ -27,6 +27,8 @@ describe "books/new" do
       assert_select "input#book_isbn", :name => "book[isbn]"
       assert_select "input#book_url", :name => "book[url]"
       assert_select "textarea#book_abstract", :name => "book[abstract]"
+      assert_select "input#book_reading_date", :name => "book[reading_date]"
+      assert_select "#book_category_id", :name => "book[category]"
     end
   end
 end

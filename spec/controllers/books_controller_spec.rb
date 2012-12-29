@@ -19,12 +19,19 @@ require 'spec_helper'
 # that an instance is receiving a specific message.
 
 describe BooksController do
+  
+  let :category do
+    stub_model(Category,
+      :name => 'Dummy',
+      :id => -1
+    )
+  end
 
   # This should return the minimal set of attributes required to create a valid
   # Book. As you add validations to Book, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    { "title" => "MyString", "author" => "MyAuthor", "category" => @category, "reading_date" => "2012/12"}
+    { "title" => "MyString", "author" => "MyAuthor", "category" => category, "reading_date" => "2012/12"}
   end
 
   # This should return the minimal set of values that should be in the session
@@ -35,10 +42,7 @@ describe BooksController do
   end
 
   before :each do
-    @category = mock_model Category
-    @category.stub!(:name).and_return('Dummy')
-    @category.stub!(:id).and_return(-1)
-    Category.stub!(:find).and_return(@category)
+    Category.stub!(:find).and_return(category)
   end
 
   describe "GET index" do

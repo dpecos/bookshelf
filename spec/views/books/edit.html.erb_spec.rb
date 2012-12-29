@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe "books/edit" do
   before(:each) do
+
     @book = assign(:book, stub_model(Book,
       :title => "MyString",
       :author => "MyString",
@@ -12,6 +13,7 @@ describe "books/edit" do
       :url => "MyString",
       :abstract => "MyText"
     ))
+
   end
 
   it "renders the edit book form" do
@@ -27,6 +29,8 @@ describe "books/edit" do
       assert_select "input#book_isbn", :name => "book[isbn]"
       assert_select "input#book_url", :name => "book[url]"
       assert_select "textarea#book_abstract", :name => "book[abstract]"
+      assert_select "input#book_reading_date", :name => "book[reading_date]"
+      assert_select "#book_category_id", :name => "book[category]"
     end
   end
 end

@@ -9,14 +9,17 @@ class BooksController < ApplicationController
   # GET /books
   # GET /books.json
   def index
-    #@books = Book.all
     @books = Book.order('reading_date DESC')
-
-    @books.each { |book| book.cover = book.cover.nil? }
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render :json => @books }
+      format.json { 
+        @books.each do |book| 
+          book.cover = !book.cover.nil? 
+        end 
+
+        render :json => @books 
+      }
     end
   end
 

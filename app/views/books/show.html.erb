@@ -1,6 +1,11 @@
 <p id="notice"><%= notice %></p>
 
 <p>
+  <b>Category:</b>
+  <%= @book.category.name %>
+</p>
+
+<p>
   <b>Title:</b>
   <%= @book.title %>
 </p>
@@ -13,6 +18,11 @@
 <p>
   <b>Year:</b>
   <%= @book.year %>
+</p>
+
+<p>
+  <b>Reading Date:</b>
+  <%= @book.reading_date %>
 </p>
 
 <p>
