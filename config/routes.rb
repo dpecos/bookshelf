@@ -5,7 +5,9 @@ Bookshelf::Application.routes.draw do
   resources :categories
 
 
-  resources :books
+  resources :books do
+    get 'cover', :on => :member
+  end
 
 
   # The priority is based upon order of creation:

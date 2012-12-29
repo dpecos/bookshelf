@@ -12,6 +12,8 @@ class BooksController < ApplicationController
     #@books = Book.all
     @books = Book.includes(:readings).order('readings.year DESC', 'readings.month DESC')
 
+    @books.each { |book| book.cover = book.cover.nil? }
+
     respond_to do |format|
       format.html # index.html.erb
       format.json { render :json => @books }
@@ -27,6 +29,13 @@ class BooksController < ApplicationController
       format.html # show.html.erb
       format.json { render :json => @book }
     end
+  end
+
+  # GET /books/1/cover
+  def cover
+    @book = Book.find(params[:id])
+
+    send_data @book.cover, :type => 'image/jpg',:disposition => 'inline'
   end
 
   # GET /books/new

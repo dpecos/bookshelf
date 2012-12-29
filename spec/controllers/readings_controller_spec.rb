@@ -24,7 +24,7 @@ describe ReadingsController do
   # Reading. As you add validations to Reading, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    { "notes" => "MyText" }
+    { "notes" => "MyText", "year" => 2012, "month" => 12 }
   end
 
   # This should return the minimal set of values that should be in the session

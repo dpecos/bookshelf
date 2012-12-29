@@ -1,10 +1,12 @@
 require 'spec_helper'
 
 describe "Books" do
-  describe "GET /books" do
-    it "works! (now write some real specs)" do
-      # Run the generator again with the --webrat flag if you want to use webrat methods/matchers
-      get books_path
+  describe "GET /books/1/cover" do
+    it "return a 200 OK code" do
+      book = mock_model Book
+      Book.stub!(:find).and_return(book)
+
+      get cover_book_path(-1)
       response.status.should be(200)
     end
   end
