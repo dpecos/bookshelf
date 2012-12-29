@@ -22,7 +22,7 @@ describe Book do
 
   before { 
     category = Category.new
-    @book = Book.new(:title => "Dummy title", :author => "Dummy author", :category => category) 
+    @book = Book.new(:title => "Dummy title", :author => "Dummy author", :category => category, :reading_date => "2012/12") 
   }
   subject { @book }
 
@@ -43,6 +43,11 @@ describe Book do
       should_not be_valid
     end
 
+    it "fails validations because lack of reading date" do
+      @book.reading_date = nil
+      should_not be_valid
+    end
+
   end
 
   describe "valid" do 
@@ -52,10 +57,6 @@ describe Book do
 
     it "belongs to one category" do
       should belong_to(:category)
-    end
-    
-    it "has many readings" do
-      should have_many(:readings)
     end
   end
 

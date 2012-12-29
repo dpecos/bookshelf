@@ -10,7 +10,7 @@ class BooksController < ApplicationController
   # GET /books.json
   def index
     #@books = Book.all
-    @books = Book.includes(:readings).order('readings.year DESC', 'readings.month DESC')
+    @books = Book.order('reading_date DESC')
 
     @books.each { |book| book.cover = book.cover.nil? }
 

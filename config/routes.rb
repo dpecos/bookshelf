@@ -1,7 +1,4 @@
 Bookshelf::Application.routes.draw do
-  resources :readings
-
-
   resources :categories
 
 

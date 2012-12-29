@@ -18,11 +18,11 @@
 
 class Book < ActiveRecord::Base
   belongs_to :category
-  has_many :readings, :dependent => :destroy
 
-  attr_accessible :id, :category_id, :abstract, :author, :editorial, :isbn, :pages, :title, :url, :year, :category
+  attr_accessible :id, :category_id, :abstract, :author, :editorial, :isbn, :pages, :title, :url, :year, :category, :reading_date
     
   validates :title, :presence => true
   validates :author, :presence => true
   validates :category, :presence => true
+  validates :reading_date, :presence => true
 end
