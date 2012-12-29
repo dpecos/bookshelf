@@ -29,7 +29,7 @@
     <td><%= book.editorial %></td>
     <td><%= book.isbn %></td>
     <td><%= book.url %></td>
-    <td><%= not book.cover.nil? %></td>
+    <td><% if not book.cover.nil? %>&#10004;<% end %></td>
     <td><%= book.abstract %></td>
     <td><%= link_to 'Show', book %></td>
     <td><%= link_to 'Edit', edit_book_path(book) %></td>

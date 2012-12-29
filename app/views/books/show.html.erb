@@ -50,5 +50,12 @@
   <%= @book.abstract %>
 </p>
 
+<% if not @book.cover.nil?  %>
+<p>
+  <b>Cover:</b>
+  <%= image_tag("/books/#{@book.id}/cover", :alt => "Image") %>
+</p>
+<% end %>
+
 <%= link_to 'Edit', edit_book_path(@book) %> |
 <%= link_to 'Back', books_path %>

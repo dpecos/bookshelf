@@ -69,6 +69,7 @@ class BooksController < ApplicationController
     loadCategory(params)
 
     @book = Book.new(params[:book])
+    @book.cover = @book.cover.tempfile.read if not @book.cover.nil?
 
     respond_to do |format|
       if @book.save
@@ -87,6 +88,7 @@ class BooksController < ApplicationController
     loadCategory(params)
 
     @book = Book.find(params[:id])
+    @book.cover = nil if not params.include? :cover
 
     respond_to do |format|
       if @book.update_attributes(params[:book])
