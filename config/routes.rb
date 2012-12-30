@@ -1,6 +1,7 @@
 Bookshelf::Application.routes.draw do
-  resources :categories
+  root :to => 'books#full_list'
 
+  resources :categories
 
   resources :books do
     get 'cover', :on => :member

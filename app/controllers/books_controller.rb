@@ -6,6 +6,15 @@ class BooksController < ApplicationController
     response.headers['Access-Control-Allow-Origin'] = '*' if request.headers.has_key? 'HTTP_ORIGIN'
   end
 
+  def full_list
+    @books = Book.order('reading_date DESC')
+
+    respond_to do |format|
+      format.html # full_list.html.erb
+    end
+  end
+
+
   # GET /books
   # GET /books.json
   def index
@@ -22,7 +31,7 @@ class BooksController < ApplicationController
       }
     end
   end
-
+  
   # GET /books/1
   # GET /books/1.json
   def show
