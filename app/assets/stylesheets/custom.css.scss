@@ -1,0 +1,16 @@
+@import "bootstrap";
+
+body {
+  padding-top: 45px;
+  padding-bottom: 10px;
+}
+
+table.table {
+  th {
+    text-align: center;
+  }
+  td {
+    &.center { text-align: center; }
+    &.right { text-align: right; }
+  }
+}

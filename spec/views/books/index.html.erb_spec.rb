@@ -44,12 +44,6 @@ describe "books/index" do
     assert_select "tr>td", :text => "Title".to_s, :count => 2
     assert_select "tr>td", :text => "Author".to_s, :count => 2
     assert_select "tr>td", :text => 1.to_s, :count => 2
-    assert_select "tr>td", :text => 2.to_s, :count => 2
-    assert_select "tr>td", :text => "Editorial".to_s, :count => 2
-    assert_select "tr>td", :text => "Isbn".to_s, :count => 2
-    assert_select "tr>td", :text => "Url".to_s, :count => 2
-    assert_select "tr>td", :text => "MyText".to_s, :count => 2
-    assert_select "tr>td", :text => "2012/12".to_s, :count => 1
-    assert_select "tr>td", :text => "1981/01".to_s, :count => 1
+    assert_select "tr>td", :text => "&#10004;".to_s, :count => 2
   end
 end

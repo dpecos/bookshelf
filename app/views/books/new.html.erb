@@ -1,5 +1,14 @@
-<h1>New book</h1>
+<div class="row">
+  <div class="span12">
+
+    <h2 class="pull-left">New book</h2>
+    
+    <ul class="nav nav-pills pull-right" style="margin-top: 1em">
+      <li>
+        <%= link_to 'Back', books_path %>
+      </li>
+    </ul>
+  </div>
+</div>
 
 <%= render 'form' %>
-
-<%= link_to 'Back', books_path %>

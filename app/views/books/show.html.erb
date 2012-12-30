@@ -1,61 +1,79 @@
-<p id="notice"><%= notice %></p>
+<div class="row">
+  <div class="span12">
 
-<p>
-  <b>Category:</b>
-  <%= @book.category.name %>
-</p>
+    <h2 class="pull-left">Book</h2>
+    
+    <ul class="nav nav-pills pull-right" style="margin-top: 1em">
+      <li>
+        <%= link_to 'Edit', edit_book_path(@book) %> 
+      </li>
+      <li>
+        <%= link_to 'Back', books_path %>
+      </li>
+    </ul>
+  </div>
+</div>
 
-<p>
-  <b>Title:</b>
-  <%= @book.title %>
-</p>
-
-<p>
-  <b>Author:</b>
-  <%= @book.author %>
-</p>
-
-<p>
-  <b>Year:</b>
-  <%= @book.year %>
-</p>
-
-<p>
-  <b>Reading Date:</b>
-  <%= @book.reading_date %>
-</p>
-
-<p>
-  <b>Pages:</b>
-  <%= @book.pages %>
-</p>
-
-<p>
-  <b>Editorial:</b>
-  <%= @book.editorial %>
-</p>
-
-<p>
-  <b>Isbn:</b>
-  <%= @book.isbn %>
-</p>
-
-<p>
-  <b>Url:</b>
-  <%= @book.url %>
-</p>
-
-<p>
-  <b>Abstract:</b>
-  <%= @book.abstract %>
-</p>
-
-<% if not @book.cover.nil?  %>
-<p>
-  <b>Cover:</b>
-  <%= image_tag("/books/#{@book.id}/cover", :alt => "Image") %>
-</p>
+<% if not notice.nil? %>
+  <div class="alert alert-success">
+    <%= notice %>
+  </div>
 <% end %>
 
-<%= link_to 'Edit', edit_book_path(@book) %> |
-<%= link_to 'Back', books_path %>
+<div class="row">
+  <div class="span6">
+
+    <table class="table table-striped table-bordered">
+      <tr>
+        <td width="150px"><b>Title:</b></td>
+        <td><%= @book.title %></td>
+      </tr>
+      <tr>
+        <td><b>Category:</b></td>
+        <td><%= @book.category.name %></td>
+      </tr>
+      <tr>
+        <td><b>Author:</b></td>
+        <td><%= @book.author %></td>
+      </tr>
+      <tr>
+        <td><b>Year:</b></td>
+        <td><%= @book.year %></td>
+      </tr>
+      <tr>
+        <td><b>Reading Date:</b></td>
+        <td><%= @book.reading_date %></td>
+      </tr>
+      <tr>
+        <td><b>Pages:</b></td>
+        <td><%= @book.pages %></td>
+      </tr>
+      <tr>
+        <td><b>Editorial:</b></td>
+        <td><%= @book.editorial %></td>
+      </tr>
+      <tr>
+        <td><b>Isbn:</b></td>
+        <td><%= @book.isbn %></td>
+      </tr>
+      <tr>
+        <td><b>Url:</b></td>
+        <td><%= @book.url %></td>
+      </tr>
+    </table>
+
+  </div>
+
+  <div class="span5 offset1">
+    <b>Cover:</b><br/>
+    <% if not @book.cover.nil?  %>
+      <%= image_tag("/books/#{@book.id}/cover", :alt => "Image") %>
+    <% end %>
+  </div>
+
+</div>
+
+<% if not @book.abstract.nil?  %>
+  <b>Abstract:</b><br/><br/>
+  <%= @book.abstract %>
+<% end %>

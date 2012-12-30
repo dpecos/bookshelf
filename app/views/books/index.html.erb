@@ -1,43 +1,49 @@
-<h1>Listing books</h1>
+<div class="row">
+  <div class="span12">
 
-<table>
-  <tr>
-    <th>Category</th>
-    <th>Title</th>
-    <th>Author</th>
-    <th>Year</th>
-    <th>Reading Date</th>
-    <th>Pages</th>
-    <th>Editorial</th>
-    <th>Isbn</th>
-    <th>Url</th>
-    <th>Cover</th>
-    <th>Abstract</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+    <h2 class="pull-left">Listing books</h2>
+    
+    <ul class="nav nav-pills pull-right" style="margin-top: 1em">
+      <li>
+        <%= link_to 'New Book', new_book_path %>
+      </li>
+    </ul>
+  </div>
+</div>
 
-<% @books.each do |book| %>
-  <tr>
-    <td><%= book.category.name %></td>
-    <td><%= book.title %></td>
-    <td><%= book.author %></td>
-    <td><%= book.year %></td>
-    <td><%= book.reading_date %></td>
-    <td><%= book.pages %></td>
-    <td><%= book.editorial %></td>
-    <td><%= book.isbn %></td>
-    <td><%= book.url %></td>
-    <td><% if not book.cover.nil? %>&#10004;<% end %></td>
-    <td><%= book.abstract %></td>
-    <td><%= link_to 'Show', book %></td>
-    <td><%= link_to 'Edit', edit_book_path(book) %></td>
-    <td><%= link_to 'Destroy', book, :method => :delete, :data => { :confirm => 'Are you sure?' } %></td>
-  </tr>
-<% end %>
-</table>
+<div class="row">
+  <div class="span12">
 
-<br />
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th width="150px">Category</th>
+          <th width="350px">Title</th>
+          <th width="200px">Author</th>
+          <th>Year</th>
+          <th>C</th>
+          <th>A</th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+      <% @books.each do |book| %>
+        <tr>
+          <td class="center"><%= book.category.name %></td>
+          <td><%= book.title %></td>
+          <td><%= book.author %></td>
+          <td class="right"><%= book.year %></td>
+          <td class="center"><% if not book.cover.nil? %>&#10004;<% end %></td>
+          <td class="center"><% if not book.abstract.nil? %>&#10004;<% end %></td>
+          <td><%= link_to 'S', book, :class => "btn-small btn-success" %></td>
+          <td><%= link_to 'E', edit_book_path(book), :class => "btn-small btn-primary"%></td>
+          <td><%= link_to 'D', book, :method => :delete, :data => { :confirm => 'Are you sure?' }, :class => "btn-small btn-danger" %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
 
-<%= link_to 'New Book', new_book_path %>
+  </div>
+</div>

@@ -32,6 +32,8 @@ GEM
     annotate (2.5.0)
       rake
     arel (3.0.2)
+    bootstrap-sass (2.2.2.0)
+      sass (~> 3.2)
     bourne (1.1.2)
       mocha (= 0.10.5)
     builder (3.0.4)
@@ -177,6 +179,7 @@ PLATFORMS
 
 DEPENDENCIES
   annotate
+  bootstrap-sass
   capybara (= 1.1.2)
   coffee-rails (~> 3.2.1)
   guard-rspec
