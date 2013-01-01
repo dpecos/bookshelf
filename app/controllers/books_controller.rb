@@ -6,6 +6,7 @@ class BooksController < ApplicationController
     response.headers['Access-Control-Allow-Origin'] = '*' if request.headers.has_key? 'HTTP_ORIGIN'
   end
 
+  # GET /books/full_list
   def full_list
     @books = Book.order('reading_date DESC')
 

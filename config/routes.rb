@@ -1,10 +1,11 @@
 Bookshelf::Application.routes.draw do
-  root :to => 'books#full_list'
+  root :to => 'books#index'
 
   resources :categories
 
   resources :books do
     get 'cover', :on => :member
+    match 'full_list', :on => :collection
   end
 
 
