@@ -98,7 +98,9 @@ class BooksController < ApplicationController
     loadCategory(params)
 
     @book = Book.find(params[:id])
-    @book.cover = nil if not params.include? :cover
+    @book.cover = params[:book][:cover].tempfile.read if params[:book].include?(:cover)
+
+    params[:book].delete(:cover)
 
     respond_to do |format|
       if @book.update_attributes(params[:book])
