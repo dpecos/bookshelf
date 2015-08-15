@@ -21,30 +21,36 @@
       <thead>
         <tr>
           <th width="150px">Category</th>
-          <th width="350px">Title</th>
+          <th width="400px">Title</th>
           <th width="150px">Collection</th>
           <th width="200px">Author</th>
           <th>Year</th>
           <th>C</th>
           <th>A</th>
-          <th></th>
-          <th></th>
-          <th></th>
+          <th width="100px"></th>
         </tr>
       </thead>
       <tbody>
       <% @books.each do |book| %>
         <tr>
           <td class="center"><%= book.category.name %></td>
-          <td><%= book.title %></td>
+          <td><%= link_to book.title, book %></td>
           <td><%= book.collection.name %></td>
           <td><%= book.author %></td>
           <td class="right"><%= book.year %></td>
           <td class="center"><% if not book.cover.nil? %>&#10004;<% end %></td>
           <td class="center"><% if not book.abstract.nil? %>&#10004;<% end %></td>
-          <td><%= link_to 'S', book, :class => "btn-small btn-success" %></td>
-          <td><%= link_to 'E', edit_book_path(book), :class => "btn-small btn-primary"%></td>
-          <td><%= link_to 'D', book, :method => :delete, :data => { :confirm => 'Are you sure?' }, :class => "btn-small btn-danger" %></td>
+          <td>
+             <%= link_to book, :class => "btn btn-xs" do %>
+               <span class="glyphicon glyphicon-book"></span>
+             <% end %>
+             <%= link_to edit_book_path(book), :class => "btn btn-xs" do %>
+               <span class="glyphicon glyphicon-pencil"></span>
+             <% end %>
+             <%= link_to book, :method => :delete, :data => { :confirm => 'Are you sure?' }, :class => "btn btn-xs" do %>
+               <span class="glyphicon glyphicon-trash"></span>
+             <% end %>
+          </td>
         </tr>
       <% end %>
       </tbody>

@@ -1,4 +1,4 @@
-<%= form_for(@book, :html=>{:multipart=>true, :class => 'form-horizontal'}) do |f| %>
+<%= form_for(@book, :html=>{:multipart=>true, :class => 'container'}) do |f| %>
   
   <% if @book.errors.any? %>
     <div class="alert alert-error alert-block">
@@ -14,105 +14,87 @@
   <% end %>
 
   <div class="row">
+    <div class="col-md-6">
 
-    <div class="span6">
+      <div class="form-group">
+        <%= f.label :title %>
+        <%= f.text_field :title, :class => "form-control" %>
+      </div>
 
-      <div class="control-group">
-        <%= f.label :title, :class => 'control-label' %>
-        <div class="controls">
-          <%= f.text_field :title %>
-        </div>
+      <div class="form-group">
+        <%= f.label :category %>
+        <%= f.select :category_id, Category.all.map {|c| [c.name, c.id]}, {:prompt => 'Select category'}, :class => "form-control" %>
       </div>
-      <div class="control-group">
-        <%= f.label :category, :class => 'control-label' %>
-        <div class="controls">
-          <%= f.select :category_id, Category.all.map {|c| [c.name, c.id]}, {:prompt => 'Select category'} %>
-        </div>
+
+      <div class="form-group">
+        <%= f.label :collection %>
+        <%= f.select :collection_id, Collection.all.map {|c| [c.name, c.id]}, {:prompt => 'Select collection'}, :class => "form-control" %>
       </div>
-      <div class="control-group">
-        <%= f.label :collection, :class => 'control-label' %>
-        <div class="controls">
-          <%= f.select :collection_id, Collection.all.map {|c| [c.name, c.id]}, {:prompt => 'Select collection'} %>
-        </div>
+      
+       <div class="form-group">
+        <%= f.label :author %>
+        <%= f.text_field :author, :class => "form-control" %>
       </div>
-       <div class="control-group">
-        <%= f.label :author, :class => 'control-label' %>
-        <div class="controls">
-          <%= f.text_field :author %>
-        </div>
+
+      <div class="form-group">
+        <%= f.label :year %>
+        <%= f.number_field :year, :class => "form-control" %>
       </div>
-      <div class="control-group">
-        <%= f.label :year, :class => 'control-label' %>
-        <div class="controls">
-          <%= f.number_field :year %>
-        </div>
+
+      <div class="form-group">
+        <%= f.label :reading_date %>
+        <%= f.text_field :reading_date, :class => "form-control" %>
       </div>
-      <div class="control-group">
-        <%= f.label :reading_date, :class => 'control-label' %>
-        <div class="controls">
-          <%= f.text_field :reading_date %>
-        </div>
+
+      <div class="form-group">
+        <%= f.label :pages %>
+        <%= f.number_field :pages, :class => "form-control" %>
       </div>
-      <div class="control-group">
-        <%= f.label :pages, :class => 'control-label' %>
-        <div class="controls">
-          <%= f.number_field :pages %>
-        </div>
+     
+      <div class="form-group">
+        <%= f.label :editorial %>
+        <%= f.text_field :editorial, :class => "form-control" %>
       </div>
-      <div class="control-group">
-        <%= f.label :editorial, :class => 'control-label' %>
-        <div class="controls">
-          <%= f.text_field :editorial %>
-        </div>
+      
+      <div class="form-group">
+        <%= f.label :isbn %>
+        <%= f.text_field :isbn, :class => "form-control" %>
       </div>
-      <div class="control-group">
-        <%= f.label :isbn, :class => 'control-label' %>
-        <div class="controls">
-          <%= f.text_field :isbn %>
-        </div>
-      </div>
-      <div class="control-group">
-        <%= f.label :url, :class => 'control-label' %>
-        <div class="controls">
-          <%= f.text_field :url %>
-        </div>
+
+      <div class="form-group">
+        <%= f.label :url %>
+        <%= f.text_field :url, :class => "form-control" %>
       </div>
 
     </div>
 
 
-    <div class="span6">
-      <div class="control-group">
-        <%= f.label :cover, :class => 'control-label' %>
-        <div class="controls">
-          <%= f.file_field :cover %>
-        </div>
+    <div class="col-md-6">
+
+      <div class="form-group">
+        <%= f.label :cover %>
+        <%= f.file_field :cover, :class => "form-control" %>
         <% if not @book.cover.nil?  %>
-          <%= image_tag("/books/#{@book.id}/cover", :alt => "Image") %>
-          <br />
+           <%= image_tag("/books/#{@book.id}/cover", :alt => "Image", :class => 'cover') %>
+           <br />
         <% end %>
       </div>
+
     </div>
 
   </div>
 
   <div class="row">
-    <div class="span12">
-      <div class="control-group" style="vertical-align: bottom">
-        <%= f.label :abstract, :class => 'control-label' %>
-        <div class="controls">
-          <%= f.text_area :abstract, :rows => "10", :style => "width: 90%" %>
-        </div>
+    <div class="col-md-12">
+       
+      <div class="form-group">
+        <%= f.label :abstract %>
+        <%= f.text_area :abstract, :rows => "10", :style => "width: 90%", :class => "form-control" %>
       </div>
+
     </div>
   </div>
 
-  <div class="row">
-    <div class="span12">
-      <div class="form-actions">
-        <%= f.submit :class => 'btn btn-primary pull-right' %>
-      </div>
-    </div>
-  </div>
-  
+  <%= f.submit :class => 'btn btn-primary' %>
+     
 <% end %>
