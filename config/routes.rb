@@ -1,4 +1,7 @@
 Bookshelf::Application.routes.draw do
+  resources :collections
+
+
   root :to => 'books#index'
 
   resources :categories

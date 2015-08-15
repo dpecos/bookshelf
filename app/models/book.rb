@@ -14,14 +14,16 @@
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  category_id  :integer
+#  collection_id  :integer
 #  cover        :binary(16777216)
 #  reading_date :string(255)
 #
 
 class Book < ActiveRecord::Base
   belongs_to :category
+  belongs_to :collection
 
-  attr_accessible :id, :category_id, :abstract, :author, :editorial, :isbn, :pages, :title, :url, :year, :category, :reading_date, :cover
+  attr_accessible :id, :category_id, :collection_id, :abstract, :author, :editorial, :isbn, :pages, :title, :url, :year, :category, :reading_date, :cover
     
   validates :title, :presence => true
   validates :author, :presence => true

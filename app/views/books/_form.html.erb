@@ -30,6 +30,12 @@
         </div>
       </div>
       <div class="control-group">
+        <%= f.label :collection, :class => 'control-label' %>
+        <div class="controls">
+          <%= f.select :collection_id, Collection.all.map {|c| [c.name, c.id]}, {:prompt => 'Select collection'} %>
+        </div>
+      </div>
+       <div class="control-group">
         <%= f.label :author, :class => 'control-label' %>
         <div class="controls">
           <%= f.text_field :author %>

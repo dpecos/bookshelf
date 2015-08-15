@@ -22,6 +22,7 @@
         <tr>
           <th width="150px">Category</th>
           <th width="350px">Title</th>
+          <th width="150px">Collection</th>
           <th width="200px">Author</th>
           <th>Year</th>
           <th>C</th>
@@ -36,6 +37,7 @@
         <tr>
           <td class="center"><%= book.category.name %></td>
           <td><%= book.title %></td>
+          <td><%= book.collection.name %></td>
           <td><%= book.author %></td>
           <td class="right"><%= book.year %></td>
           <td class="center"><% if not book.cover.nil? %>&#10004;<% end %></td>
