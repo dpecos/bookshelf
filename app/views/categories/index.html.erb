@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="span12">
+  <div class="col-md-12">
 
     <h2 class="pull-left">Listing categories</h2>
     
@@ -12,24 +12,30 @@
 </div>
 
 <div class="row">
-  <div class="span6 offset3">
+  <div class="col-md-6 col-md-offset-3">
 
     <table class="table table-striped">
       <thead>
         <tr>
           <th width="300px">Name</th>
-          <th></th>
-          <th></th>
-          <th></th>
+          <th width="100px"></th>
         </tr>
       </thead>
       <tbody>
       <% @categories.each do |category| %>
         <tr>
-          <td><%= category.name %></td>
-          <td><%= link_to 'Show', category, :class => "btn-small btn-success" %></td>
-          <td><%= link_to 'Edit', edit_category_path(category) , :class => "btn-small btn-primary"%></td>
-          <td><%= link_to 'Destroy', category, :method => :delete, :data => { :confirm => 'Are you sure?' }, :class => "btn-small btn-danger" %></td>
+          <td><%= link_to category.name, category %></td>
+          <td>
+             <%= link_to category, :class => "btn btn-xs" do %>
+               <span class="glyphicon glyphicon-tags"></span>
+             <% end %>
+             <%= link_to edit_category_path(category), :class => "btn btn-xs" do %>
+               <span class="glyphicon glyphicon-pencil"></span>
+             <% end %>
+             <%= link_to category, :method => :delete, :data => { :confirm => 'Are you sure?' }, :class => "btn btn-xs" do %>
+               <span class="glyphicon glyphicon-trash"></span>
+             <% end %>
+          </td>
          </tr>
       <% end %>
       </tbody>
