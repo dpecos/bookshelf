@@ -3,5 +3,9 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .cover {
-   max-width: 600px;
+   max-width: 500px;
+}
+
+input[type='file'] {
+   width: auto;
 }

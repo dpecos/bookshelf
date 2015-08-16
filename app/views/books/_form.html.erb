@@ -28,7 +28,7 @@
 
       <div class="form-group">
         <%= f.label :collection %>
-        <%= f.select :collection_id, Collection.all.map {|c| [c.name, c.id]}, {:prompt => 'Select collection'}, :class => "form-control" %>
+        <%= f.select :collection_id, Collection.all.map {|c| [c.name, c.id]}, {:prompt => 'Select collection', :include_blank => '- None -'}, :class => "form-control" %>
       </div>
       
        <div class="form-group">
@@ -69,12 +69,12 @@
     </div>
 
 
-    <div class="col-md-6">
+    <div class="col-md-5-offset-1">
 
       <div class="form-group">
-        <%= f.label :cover %>
         <%= f.file_field :cover, :class => "form-control" %>
         <% if not @book.cover.nil?  %>
+           <br />
            <%= image_tag("/books/#{@book.id}/cover", :alt => "Image", :class => 'cover') %>
            <br />
         <% end %>

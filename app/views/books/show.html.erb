@@ -34,7 +34,7 @@
       </tr>
       <tr>
         <td><b>Collection:</b></td>
-        <td><%= @book.collection.name %></td>
+        <td><%= @book.try(:collection).try(:name) %></td>
       </tr>
       <tr>
         <td><b>Author:</b></td>
