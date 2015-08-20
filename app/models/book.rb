@@ -23,7 +23,7 @@ class Book < ActiveRecord::Base
   belongs_to :category
   belongs_to :collection
 
-  attr_accessible :id, :category_id, :collection_id, :abstract, :author, :editorial, :isbn, :pages, :title, :url, :year, :category, :reading_date, :cover
+  attr_accessible :id, :category_id, :collection_id, :abstract, :author, :editorial, :isbn, :pages, :title, :title_vo, :url, :year, :category, :reading_date, :cover
     
   validates :title, :presence => true
   validates :author, :presence => true

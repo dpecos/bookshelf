@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150813064451) do
+ActiveRecord::Schema.define(:version => 20150820062524) do
 
   create_table "books", :force => true do |t|
     t.string   "title"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(:version => 20150813064451) do
     t.binary   "cover",         :limit => 16777216
     t.string   "reading_date"
     t.integer  "collection_id"
+    t.string   "title_vo"
   end
 
   create_table "categories", :force => true do |t|
