@@ -4,6 +4,7 @@
 #
 #  id           :integer          not null, primary key
 #  title        :string(255)
+#  title_vo        :string(255)
 #  author       :string(255)
 #  year         :integer
 #  pages        :integer

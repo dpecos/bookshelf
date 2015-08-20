@@ -9,6 +9,7 @@ Bookshelf::Application.routes.draw do
   resources :books do
     get 'cover', :on => :member
     match 'full_list', :on => :collection
+    match 'shelf', :on => :collection
   end
 
 

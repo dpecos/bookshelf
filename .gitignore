@@ -14,3 +14,5 @@
 /log/*.log
 /tmp
 db/seeds_dpm.yml
+
+/public/assets

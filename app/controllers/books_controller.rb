@@ -15,6 +15,15 @@ class BooksController < ApplicationController
     end
   end
 
+  # GET /books/shelf
+  def shelf
+    @books = Book.order('reading_date DESC')
+
+    respond_to do |format|
+      format.html 
+    end
+  end
+
 
   # GET /books
   # GET /books.json
@@ -67,17 +76,9 @@ class BooksController < ApplicationController
     @book = Book.find(params[:id])
   end
 
-  def loadCategory(params)
-    if (params.include? :book and params[:book].include? :category)
-      params[:book][:category] = Category.find(params[:book][:category])
-    end
-  end
-
   # POST /books
   # POST /books.json
   def create
-    loadCategory(params)
-
     @book = Book.new(params[:book])
     @book.cover = @book.cover.tempfile.read if not @book.cover.nil?
 
@@ -95,8 +96,6 @@ class BooksController < ApplicationController
   # PUT /books/1
   # PUT /books/1.json
   def update
-    loadCategory(params)
-
     @book = Book.find(params[:id])
     @book.cover = params[:book][:cover].tempfile.read if params[:book].include?(:cover)
 
