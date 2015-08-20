@@ -11,12 +11,18 @@ input[type='file'] {
 }
 
 #shelf {
+   display: flex;
+   flex-flow: row wrap;
+
    .book {
+      width: 200px;
+      margin: auto;
+
       .cover {
          margin-top: 20px;
          margin-bottom: 10px;
          width: 100%;
-         max-width: 300px;
+         max-width: 250px;
       }
 
       .details {
