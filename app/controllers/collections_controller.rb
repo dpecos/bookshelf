@@ -15,6 +15,8 @@ class CollectionsController < ApplicationController
   def show
     @collection = Collection.find(params[:id])
 
+    @books = Book.where('collection_id = ?', params[:id])
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @collection }
