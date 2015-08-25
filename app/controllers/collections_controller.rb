@@ -16,6 +16,7 @@ class CollectionsController < ApplicationController
     @collection = Collection.find(params[:id])
 
     @books = Book.filter_by(params).where('collection_id = ?', params[:id])
+    @shelf_view = params[:shelf].present?
 
     respond_to do |format|
       format.html # show.html.erb

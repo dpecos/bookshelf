@@ -15,20 +15,11 @@ class BooksController < ApplicationController
     end
   end
 
-  # GET /books/shelf
-  def shelf
-    @books = Book.filter_by params
-
-    respond_to do |format|
-      format.html 
-    end
-  end
-
-
   # GET /books
   # GET /books.json
   def index
     @books = Book.filter_by params
+    @shelf_view = params[:shelf].present?
 
     respond_to do |format|
       format.html # index.html.erb
