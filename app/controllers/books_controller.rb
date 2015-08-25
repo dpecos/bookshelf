@@ -8,7 +8,7 @@ class BooksController < ApplicationController
 
   # GET /books/full_list
   def full_list
-    @books = Book.order('reading_date DESC')
+    @books = Book.filter_by params
 
     respond_to do |format|
       format.html # full_list.html.erb
@@ -17,7 +17,7 @@ class BooksController < ApplicationController
 
   # GET /books/shelf
   def shelf
-    @books = Book.order('reading_date DESC')
+    @books = Book.filter_by params
 
     respond_to do |format|
       format.html 
@@ -28,10 +28,7 @@ class BooksController < ApplicationController
   # GET /books
   # GET /books.json
   def index
-    books = Book.where(nil)
-    books = Book.by_year(params[:year]) if (params[:year].present?)
-    books = Book.by_author(params[:author]) if (params[:author].present?)
-    @books = books.order('reading_date DESC')
+    @books = Book.filter_by params
 
     respond_to do |format|
       format.html # index.html.erb

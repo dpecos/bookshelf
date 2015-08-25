@@ -35,4 +35,11 @@ class Book < ActiveRecord::Base
   scope :by_author, -> author { where author: author }
   scope :by_year, -> year { where year: year }
 
+  scope :filter_by, -> filters {
+    books = Book.where(nil)
+    books = Book.by_year(filters[:year]) if (filters[:year].present?)
+    books = Book.by_author(filters[:author]) if (filters[:author].present?)
+    books.order('reading_date DESC')
+  }
+
 end

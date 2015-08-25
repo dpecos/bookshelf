@@ -15,7 +15,7 @@ class CollectionsController < ApplicationController
   def show
     @collection = Collection.find(params[:id])
 
-    @books = Book.where('collection_id = ?', params[:id])
+    @books = Book.filter_by(params).where('collection_id = ?', params[:id])
 
     respond_to do |format|
       format.html # show.html.erb

@@ -22,7 +22,7 @@ class CategoriesController < ApplicationController
   def show
     @category = Category.find(params[:id])
 
-    @books = Book.where('category_id = ?', params[:id])
+    @books = Book.filter_by(params).where('category_id = ?', params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
