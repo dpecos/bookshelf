@@ -20,6 +20,7 @@
         <tr>
           <th width="150px">Category</th>
           <th width="400px">Title</th>
+          <th>Collection</th>
           <th width="250px">Author</th>
           <th>Year</th>
           <th>Reading date</th>
@@ -36,8 +37,9 @@
         <tr>
           <td class="center"><%= link_to book.category.name, book.category %></td>
           <td><%= link_to book.title, book %></td>
-          <td><%= book.author %></td>
-          <td class="right"><%= book.year %></td>
+          <td><%= (book.collection.present?) ? link_to(book.collection.name, book.collection) : "" %></td>
+          <td><%= (book.author.present?) ? link_to(book.author, url_for(params.merge(:author => book.author))) : ""  %></td>
+          <td class="right"><%= (book.year.present?) ? link_to(book.year, url_for(params.merge(:year => book.year))) : "" %></td>
           <td class="right" style="white-space: nowrap"><%= book.reading_date %></td>
           <td class="right"><%= book.pages %></td>
           <td><%= book.editorial %></td>

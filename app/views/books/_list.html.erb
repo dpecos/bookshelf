@@ -19,11 +19,11 @@
         <tr>
           <td class="center"><%= link_to book.category.name, book.category %></td>
           <td><%= link_to book.title, book %></td>
-          <td><%= (not book.collection.nil?) ? link_to(book.collection.name, book.collection) : "" %></td>
-          <td><%= book.author %></td>
-          <td class="right"><%= book.year %></td>
-          <td class="center"><% if not book.cover.nil? %>&#10004;<% end %></td>
-          <td class="center"><% if not book.abstract.nil? %>&#10004;<% end %></td>
+          <td><%= (book.collection.present?) ? link_to(book.collection.name, book.collection) : "" %></td>
+          <td><%= (book.author.present?) ? link_to(book.author, url_for(params.merge(:author => book.author))) : ""  %></td>
+          <td class="right"><%= (book.year.present?) ? link_to(book.year, url_for(params.merge(:year => book.year))) : "" %></td>
+          <td class="center"><% if book.cover.present? %>&#10004;<% end %></td>
+          <td class="center"><% if book.abstract.present? %>&#10004;<% end %></td>
           <td>
              <%= link_to book, :class => "btn btn-xs" do %>
                <span class="glyphicon glyphicon-book"></span>

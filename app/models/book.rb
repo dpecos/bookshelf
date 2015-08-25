@@ -21,6 +21,7 @@
 #
 
 class Book < ActiveRecord::Base
+
   belongs_to :category
   belongs_to :collection
 
@@ -30,5 +31,8 @@ class Book < ActiveRecord::Base
   validates :author, :presence => true
   validates :category, :presence => true
   validates :reading_date, :presence => true
+
+  scope :by_author, -> author { where author: author }
+  scope :by_year, -> year { where year: year }
 
 end
