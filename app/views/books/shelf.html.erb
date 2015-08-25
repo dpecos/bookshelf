@@ -20,8 +20,10 @@
          <% end %>
          <div class="details">
             <span><%= link_to book.title, book %></span>
-            <span><%= book.category.name %></span>
-            <span><%= book.author %> (<%= book.year %>)</span>
+            <span><%= (book.collection.present?) ? link_to(book.collection.name, book.collection) : "" %><span/>
+            <span><%= link_to book.category.name, book.category %></span>
+            <span><%= (book.author.present?) ? link_to(book.author, url_for(params.merge(:author => book.author))) : ""  %> 
+               <%= (book.year.present?) ? link_to("(#{book.year})", url_for(params.merge(:year => book.year))) : "" %></span>
          </div>
       </div>
    <% end %>
