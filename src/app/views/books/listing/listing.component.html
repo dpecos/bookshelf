@@ -1,20 +1,20 @@
 <table class="table table-striped">
   <thead>
     <tr>
+      <th>Cover</th>
       <th>Title</th>
       <th>Title VO</th>
       <th>Author</th>
       <th>Year</th>
-      <th>Cover</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let book of books">
+      <td><img *ngIf="book.cover" src="http://apps.danielpecos.com/bookshelf/books/{{book.id}}/cover" width="50px"/></td>
       <td>{{book.title}}</td>
       <td>{{book.title_vo}}</td>
       <td>{{book.author}}</td>
       <td>{{book.year}}</td>
-      <td>{{book.cover}}</td>
     </tr>
   </tbody>
 </table>

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { BooksService } from '../../services';
-import { Book } from '../../models';
+import { BooksService } from '../../../services';
+import { Book } from '../../../models';
 
 @Component({
   moduleId: module.id,
-  selector: 'app-listing',
+  selector: 'book-listing',
   templateUrl: 'listing.component.html',
   styleUrls: ['listing.component.css'],
   providers: [BooksService]

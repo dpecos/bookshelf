@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-import { Book } from '../models';
+import { Category } from '../models';
 
 @Injectable()
-export class BooksService {
+export class CategoriesService {
 
   constructor(private http: Http) { }
 
-  private extractBooks(res: Response): Observable<Book[]> {
+  private extractCategories(res: Response): Observable<Category[]> {
     let body = res.json();
     return body || [];
   }
@@ -20,15 +20,15 @@ export class BooksService {
     //return Observable.throw(errMsg);
   }
 
-  private retrieveBooks() {
-    return this.http.get("http://apps.danielpecos.com/bookshelf/books.json")
+  private retrieveCategories() {
+    return this.http.get("http://apps.danielpecos.com/bookshelf/categories.json")
       //.catch(this.handleError);
 
   }
 
   list() {
-    return this.retrieveBooks()
-      .flatMap(this.extractBooks);
+    return this.retrieveCategories()
+      .flatMap(this.extractCategories);
   }
 
 }

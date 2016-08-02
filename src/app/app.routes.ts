@@ -1,8 +1,9 @@
 import { provideRouter, RouterConfig } from '@angular/router';
-import { ListingComponent } from './books'
+import { BookListingComponent, CategoryListingComponent } from './views';
 
 const routes: RouterConfig = [
-  { path: 'books', component: ListingComponent }
+  { path: 'books', component: BookListingComponent },
+  { path: 'categories', component: CategoryListingComponent }
 ];
 
 export const appRouterProviders = [
