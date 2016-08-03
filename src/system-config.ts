@@ -9,10 +9,15 @@
  **********************************************************************************************/
 /** Map relative paths to URLs. */
 const map: any = {
+  'lodash': 'vendor/lodash'
 };
 
 /** User packages configuration. */
 const packages: any = {
+  'lodash': {
+    defaultExtension: 'js',
+    main: 'index.js'
+  }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
