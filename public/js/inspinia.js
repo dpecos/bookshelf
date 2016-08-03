@@ -5,7 +5,7 @@
  *
  */
 
-
+function inspiniaLoad() {
 $(document).ready(function () {
 
 
@@ -292,4 +292,4 @@ function WinMove() {
         .disableSelection();
 }
 
-
+}
