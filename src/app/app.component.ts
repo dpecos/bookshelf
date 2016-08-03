@@ -12,8 +12,9 @@ declare function inspiniaLoad();
   directives: [MainComponent, SidebarComponent]
 })
 export class AppComponent implements OnInit {
-  title = 'app works!';
+
   ngOnInit() {
     inspiniaLoad();
   }
+
 }
