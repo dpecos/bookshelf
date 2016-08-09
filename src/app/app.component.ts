@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { MainComponent, SidebarComponent } from './shared';
+import { MainComponent, NavbarComponent, FooterComponent, ContentComponent, SidebarComponent } from './components';
 
 declare function inspiniaLoad();
 
@@ -9,7 +9,7 @@ declare function inspiniaLoad();
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.css'],
-  directives: [MainComponent, SidebarComponent]
+  directives: [MainComponent, SidebarComponent, NavbarComponent, FooterComponent, ContentComponent]
 })
 export class AppComponent implements OnInit {
 

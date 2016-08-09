@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { BooksService } from '../../../services';
 import { Book } from '../../../models';
+import { TitleFilterPipe } from '../../../shared/pipes/title-filter.pipe';
 
 @Component({
   moduleId: module.id,
   selector: 'book-listing',
   templateUrl: 'listing.component.html',
   styleUrls: ['listing.component.css'],
-  providers: [BooksService]
+  providers: [BooksService],
+  pipes: [TitleFilterPipe]
 })
 export class ListingComponent implements OnInit {
   books: Book[] = [];

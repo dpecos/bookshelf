@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NavbarComponent } from './navbar';
-import { FooterComponent } from './footer';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 
 @Component({
@@ -8,7 +6,7 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
   selector: 'app-main',
   templateUrl: 'main.component.html',
   styleUrls: ['main.component.css'],
-  directives: [ROUTER_DIRECTIVES, NavbarComponent, FooterComponent]
+  directives: [ROUTER_DIRECTIVES]
 })
 export class MainComponent implements OnInit {
 

@@ -1,2 +1,1 @@
-export * from './main';
-export * from './sidebar';
+export * from './pipes/title-filter.pipe';
