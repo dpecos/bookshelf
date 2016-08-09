@@ -1,5 +1,5 @@
 import { provideRouter, RouterConfig } from '@angular/router';
-import { BookListingComponent, CategoryListingComponent, CollectionListingComponent } from './views';
+import { BookListingComponent, CategoryListingComponent, CollectionListingComponent } from './components';
 
 const routes: RouterConfig = [
   { path: 'books', component: BookListingComponent },
