@@ -9,7 +9,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let book of books | titleFilter: search">
+    <tr *ngFor="let book of books | async | titleFilter: query">
       <td><img *ngIf="book.cover" src="http://apps.danielpecos.com/bookshelf/books/{{book.id}}/cover" width="50px"/></td>
       <td>{{book.title}}</td>
       <td>{{book.title_vo}}</td>

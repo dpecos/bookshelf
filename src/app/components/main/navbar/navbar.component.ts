@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { EventBusService } from '../../../services';
 
 @Component({
   moduleId: module.id,
@@ -6,11 +7,11 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: 'navbar.component.html',
   styleUrls: ['navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
+  constructor(private eventBus: EventBusService) { }
 
-  constructor() { }
-
-  ngOnInit() {
+  triggerFilter(query) {
+    this.eventBus.dispatch('filter', query);
   }
 
 }

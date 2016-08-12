@@ -12,9 +12,7 @@ declare function inspiniaLoad();
   directives: [MainComponent, SidebarComponent, NavbarComponent, FooterComponent, ContentComponent]
 })
 export class AppComponent implements OnInit {
-
   ngOnInit() {
     inspiniaLoad();
   }
-
 }

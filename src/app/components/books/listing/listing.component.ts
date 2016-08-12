@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { BooksService } from '../../../services';
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BooksService, EventBusService } from '../../../services';
 import { Book } from '../../../models';
 import { TitleFilterPipe } from '../../../shared/pipes/title-filter.pipe';
 
@@ -12,21 +15,24 @@ import { TitleFilterPipe } from '../../../shared/pipes/title-filter.pipe';
   pipes: [TitleFilterPipe]
 })
 export class ListingComponent implements OnInit {
-  books: Book[] = [];
+  private booksSubject: BehaviorSubject<Book[]> = new BehaviorSubject([]);
+  books: Observable<Book[]> = this.booksSubject.asObservable();
+  query: string;
 
-  constructor(private booksService: BooksService) { }
+  constructor(private booksService: BooksService, private eventBus: EventBusService, route: ActivatedRoute) {
+  }
 
   ngOnInit() {
     this.getBooks();
+    this.eventBus.listen('filter')
+      .subscribe(queryEv => {
+        this.query = queryEv.value;
+      });
   }
 
   private getBooks() {
-    return this.booksService.list()
-      .map(record => new Book(record))
-      .subscribe(
-      book => this.books.push(book),
-      error => console.error(error)
-      );
+    this.booksService.list()
+      .subscribe(book => this.booksSubject.getValue().push(book));
   }
 
 }
