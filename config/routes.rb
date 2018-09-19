@@ -1,6 +1,7 @@
 Bookshelf::Application.routes.draw do
 
-  scope "/bookshelf" do
+  #scope "/bookshelf" do
+  scope "/" do
     root :to => 'books#index'
 
     resources :collections
