@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(:version => 20150820062524) do
     t.datetime "created_at",                        :null => false
     t.datetime "updated_at",                        :null => false
     t.integer  "category_id"
-    t.binary   "cover",         :limit => 16777216
+    t.binary   "cover",         :limit => 2147483647
     t.string   "reading_date"
     t.integer  "collection_id"
     t.string   "title_vo"
