@@ -74,7 +74,7 @@
 
   <div class="col-md-5 col-md-offset-1">
     <% if not @book.cover.nil?  %>
-       <%= image_tag("books/#{@book.id}/cover", :alt => "Image", :class => "cover") %>
+       <%= image_tag("/books/#{@book.id}/cover", :alt => "Image", :class => "cover") %>
     <% end %>
   </div>
 

@@ -80,7 +80,7 @@
         <%= f.file_field :cover, :class => "form-control" %>
         <% if not @book.cover.nil?  %>
            <br />
-           <%= image_tag("books/#{@book.id}/cover", :alt => "Image", :class => 'cover') %>
+           <%= image_tag("/books/#{@book.id}/cover", :alt => "Image", :class => 'cover') %>
            <br />
         <% end %>
       </div>

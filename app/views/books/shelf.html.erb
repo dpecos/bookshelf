@@ -16,7 +16,7 @@
    <% @books.each do |book| %>
       <div class="book">
          <% if not book.cover.nil?  %>
-            <%= image_tag("books/#{book.id}/cover", :alt => "Image", :class => "cover") %>
+            <%= image_tag("/books/#{book.id}/cover", :alt => "Image", :class => "cover") %>
          <% end %>
          <div class="details">
             <span><%= link_to book.title, book %></span>
