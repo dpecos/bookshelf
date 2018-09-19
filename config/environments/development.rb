@@ -34,4 +34,8 @@ Bookshelf::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  config.relative_url_root = "/bookshelf"
+  config.assets.prefix = "/bookshelf"  
+  # config.action_controller.relative_url_root = "/bookshelf"
 end

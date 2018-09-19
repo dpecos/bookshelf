@@ -21,7 +21,7 @@ test:
 production:
   adapter: mysql2
   database: bookshelf
-  host: localhost
+  host: db
   username: bookshelf
   password: bookshelf
   encoding: utf8
