@@ -1,0 +1,54 @@
+<div th:switch="${book}">
+    <h2 th:case="null">Book not found</h2>
+    <div class="book_details" th:case="*">
+        <h2 th:text="${book.title}"></h2>
+        <table class="details">
+            <tr>
+                <td>Title</td>
+                <td th:text="${book.title}"></td>
+            </tr>
+            <tr>
+                <td>OV Title</td>
+                <td th:text="${book.titleOV}"></td>
+            </tr>
+            <tr>
+                <td>Category</td>
+                <td th:text="${book.category.name}"></td>
+            </tr>
+            <tr>
+                <td>Collection</td>
+                <td th:text="${book.collection?.name}"></td>
+            </tr>
+            <tr>
+                <td>Author</td>
+                <td th:text="${book.author}"></td>
+            </tr>
+            <tr>
+                <td>Year</td>
+                <td th:text="${book.year}"></td>
+            </tr>
+            <tr>
+                <td>Reading Date</td>
+                <td th:text="${book.readingDate}"></td>
+            </tr>
+            <tr>
+                <td>Pages</td>
+                <td th:text="${book.pages}"></td>
+            </tr>
+            <tr>
+                <td>Editorial</td>
+                <td th:text="${book.editorial}"></td>
+            </tr>
+            <tr>
+                <td>ISBN</td>
+                <td th:text="${book.isbn}"></td>
+            </tr>
+            <tr>
+                <td>URL</td>
+                <td th:text="${book.url}"></td>
+            </tr>
+        </table>
+        <div class="abstract" th:text="${book.bookAbstract}"></div>
+        <img class="cover" th:src="@{/book/{id}/cover(id=${book.id})}"/>
+    </div>
+</div>

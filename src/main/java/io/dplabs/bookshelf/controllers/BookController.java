@@ -43,4 +43,11 @@ public class BookController {
         }
         return null;
     }
+
+    @GetMapping(value = "/book/{id}")
+    public String bookDetails(@PathVariable Long id, Model model) {
+        Optional<Book> book = booksRepository.findById(id);
+        model.addAttribute("book", book.get());
+        return "book_details";
+    }
 }
