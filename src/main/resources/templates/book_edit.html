@@ -1,0 +1,53 @@
+<div th:switch="${book}">
+    <h2 th:case="null">Book not found</h2>
+    <div class="book_form" th:case="*">
+        <h2 th:text="${book.title}"></h2>
+        <form th:action="@{/book/{id}(id=${book.id})}" enctype="multipart/form-data" method="post">
+
+            <label for="book_title">Title</label>
+            <input id="book_title" type="text" th:field="*{book.title}"/>
+
+            <label for="book_titleov">OV Title</label>
+            <input id="book_titleov" type="text" th:field="*{book.titleOV}"/>
+
+
+            <label for="book_category">Category</label>
+            <select id="book_category" th:field="*{book.category}">
+                <option value="">Select category</option>
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+            </select>
+
+            <label for="book_collection">Collection</label>
+            <select id="book_collection" th:field="*{book.collection}">
+                <option value="">Select collection</option>
+                <option th:each="collection : ${collections}" th:value="${collection.id}" th:text="${collection.name}"></option>
+            </select>
+
+            <label for="book_author">Author</label>
+            <input id="book_author" type="text" th:field="*{book.author}"/>
+
+            <label for="book_readingDate">Reading Date</label>
+            <input id="book_readingDate" type="text" th:field="*{book.readingDate}"/>
+
+            <label for="book_pages">Pages</label>
+            <input id="book_pages" type="text" th:field="*{book.pages}"/>
+
+            <label for="book_editorial">Editorial</label>
+            <input id="book_editorial" type="text" th:field="*{book.editorial}"/>
+
+            <label for="book_isbn">ISBN</label>
+            <input id="book_isbn" type="text" th:field="*{book.isbn}"/>
+
+            <label for="book_url">URL</label>
+            <input id="book_url" type="text" th:field="*{book.url}"/>
+
+            <label for="book_abstract">Abstract</label>
+            <textarea id="book_abstract" th:field="*{book.bookAbstract}"/>
+
+            <label for="book_cover">Cover</label>
+            <input id="book_cover" type="file" name="book_cover"/>
+
+            <button type="submit">Save</button>
+        </form>
+    </div>
+</div>
