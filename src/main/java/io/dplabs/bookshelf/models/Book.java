@@ -25,6 +25,7 @@ import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 
@@ -57,7 +58,8 @@ public class Book extends BaseEntity {
     @NotBlank(message="Reading date is mandatory")
     private String readingDate;
 
-//    cover
+    @Lob
+    private byte[] cover;
 
     @ManyToOne(optional=false)
     @NotBlank(message="Category is mandatory")

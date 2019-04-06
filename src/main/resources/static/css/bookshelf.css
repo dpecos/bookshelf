@@ -1,0 +1,17 @@
+.book_shelf {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.book {
+    border: 1px solid black;
+    padding: 20px;
+    text-align: center;
+    min-width: 250px;
+}
+
+.book .cover {
+    width: 100%;
+    max-width: 200px;
+}
