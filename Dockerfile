@@ -17,5 +17,7 @@ EXPOSE 3000:3000
 ENV RAILS_ENV=production
 # ENV RAILS_RELATIVE_URL_ROOT=/bookshelf
 
+ENV VIRTUAL_HOST=bookshelf.apps.danielpecos.com
+
 CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
 #CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
