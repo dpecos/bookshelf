@@ -7,7 +7,7 @@ WORKDIR /app
 
 COPY Gemfile ./Gemfile
 COPY Gemfile.lock ./Gemfile.lock
-RUN gem install bundler && bundle install
+RUN gem install bundler -v '~>1.0.0' && bundle install
 
 COPY . ./
 RUN RAILS_ENV=development bundle exec rake assets:precompile
