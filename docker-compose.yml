@@ -9,7 +9,12 @@ services:
       - MYSQL_PASSWORD=bookshelf
   app:
     build: .
-    ports:
-      - 3000:3000
     depends_on:
       - db
+    networks:
+      - default
+      - nginx_default
+networks:
+  nginx_default:
+    external:
+      name: nginx_default
