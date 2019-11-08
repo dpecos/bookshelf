@@ -10,7 +10,7 @@
                 <h2>Books</h2>
                 <div class="book_shelf">
                     <div class="book" th:each="book : ${books}">
-                        <img class="cover" th:src="@{/book/{id}/cover(id=${book.id})}" />
+                        <img loading="lazy" class="cover" th:src="@{/book/{id}/cover(id=${book.id})}" />
                         <div th:text="${book.title}"></div>
                         <div th:text="${book.category.name}"></div>
                         <div th:text="${book.author}"></div>
