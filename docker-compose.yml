@@ -11,10 +11,3 @@ services:
     build: .
     depends_on:
       - db
-    networks:
-      - default
-      - nginx_default
-networks:
-  nginx_default:
-    external:
-      name: nginx_default

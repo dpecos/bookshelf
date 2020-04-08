@@ -24,5 +24,9 @@ Backups from EC2 to S3, with crontab:
 
 Docker clean
 
+    docker system prune -a
+
+old:
+
     docker rm $(docker ps -a -f status=exited -q)
     docker rmi $(docker images -a -q)
