@@ -1,0 +1,66 @@
+import { loadConfig } from '@utils/config';
+import { getLogger } from '@utils/logger';
+import { Connection, createConnection } from 'typeorm';
+import winston from 'winston';
+
+export class Repository {
+  connection: Connection;
+  logger: winston.Logger;
+
+  constructor() {
+    this.logger = getLogger('repository');
+  }
+
+  async connect() {
+    const config = loadConfig();
+    try {
+      this.connection = await createConnection({
+        type: 'postgres',
+        host: config.db.host,
+        port: parseInt(config.db.port),
+        username: config.db.username,
+        password: config.db.password,
+        database: config.db.database,
+        entities: [],
+        synchronize: true,
+        logging: config.db.log,
+        maxQueryExecutionTime: 1000,
+        migrations: ['repository/migrations/*.ts'],
+        poolErrorHandler: (err) => {
+          this.logger.error(`Database error: ${err}`);
+          process.exit(-1);
+        },
+      });
+
+      await this.connection.runMigrations();
+
+      this.logger.info(`Database initialized`);
+    } catch (err) {
+      this.logger.error(`Database initialization failed: ${err}`);
+      err.handled = true;
+      throw err;
+    }
+  }
+
+  async disconnect() {
+    if (this.connection) {
+      await this.connection.close();
+      this.logger.warn('Database disconnected');
+    }
+  }
+
+  // async saveTester(tester: Tester): Promise<Tester> {
+  //   const testerRepository = this.connection.getRepository(Tester);
+
+  //   return await testerRepository.save(tester);
+  // }
+
+  // async retrieveTesterProfile(
+  //   app: string,
+  //   platformId: string
+  // ): Promise<Tester> {
+  //   const testerRepository = this.connection.getRepository(Tester);
+
+  //   return await testerRepository.findOne({ app, platformId });
+  // }
+}

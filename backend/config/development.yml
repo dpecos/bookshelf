@@ -1,0 +1,10 @@
+web:
+  port: 8080
+
+db:
+  host: localhost
+  port: 5432
+  database: bookshelf
+  username: postgres
+  password: bookshelf
+  log: false
