@@ -7,10 +7,10 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "@controllers/*": ["controllers/*"],
-      "@repository/*": ["repository/*"],
-      "@services/*": ["services/*"],
-      "@utils/*": ["utils/*"]
+      "@controllers/*": ["src/controllers/*"],
+      "@repository/*": ["src/repository/*"],
+      "@services/*": ["src/services/*"],
+      "@utils/*": ["src/utils/*"]
     },
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
