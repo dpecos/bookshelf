@@ -1,5 +1,6 @@
 import { Repository } from '@repository/repository';
 import { CategoriesService } from '@services/categories-service';
+import { CollectionsService } from '@services/collections-service';
 import { loadConfig } from '@utils/config';
 import { getLogger } from '@utils/logger';
 import express from 'express';
@@ -23,8 +24,9 @@ export async function startServer(port?: number): Promise<http.Server> {
     }
 
     const categoriesService = new CategoriesService(repository);
+    const collectionsService = new CollectionsService(repository);
 
-    await setupEndpoints(app, categoriesService);
+    await setupEndpoints(app, categoriesService, collectionsService);
 
     const server = http.createServer(app);
 

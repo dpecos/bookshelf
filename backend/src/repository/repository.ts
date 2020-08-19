@@ -71,4 +71,9 @@ export class Repository {
     const categoriesRepository = this.connection.getRepository(Category);
     return await categoriesRepository.find();
   }
+
+  async retrieveCollections(): Promise<Collection[]> {
+    const collectionsRepository = this.connection.getRepository(Collection);
+    return await collectionsRepository.find();
+  }
 }
