@@ -23,6 +23,18 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
     })
   );
 
+  router.get(
+    '/:bookId/cover',
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      const cover = await booksService.getBookCover(req.param.bookId);
+      res.writeHead(200, {
+        'Content-Type': 'image/jpeg',
+        'Content-Length': cover.length,
+      });
+      res.end(cover);
+    })
+  );
+
   logger.info('API: Endpoints for books activated');
 
   return router;

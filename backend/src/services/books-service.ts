@@ -30,4 +30,9 @@ export class BooksService {
     delete book.cover;
     return book;
   }
+
+  async getBookCover(bookId: string): Promise<Buffer> {
+    const book = await this.repository.retrieveBook(bookId);
+    return book.cover;
+  }
 }
