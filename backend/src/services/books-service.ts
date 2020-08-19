@@ -26,12 +26,24 @@ export class BooksService {
   }
 
   async getBook(bookId: string): Promise<Book> {
+    if (!bookId) {
+      const msg = 'Book ID not specified';
+      this.logger.error(msg);
+      throw new Error(msg);
+    }
+
     const book = await this.repository.retrieveBook(bookId);
     delete book.cover;
     return book;
   }
 
   async getBookCover(bookId: string): Promise<Buffer> {
+    if (!bookId) {
+      const msg = 'Book ID not specified';
+      this.logger.error(msg);
+      throw new Error(msg);
+    }
+
     const book = await this.repository.retrieveBook(bookId);
     return book.cover;
   }

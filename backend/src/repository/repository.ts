@@ -83,7 +83,13 @@ export class Repository {
   }
 
   async retrieveBook(bookId: string): Promise<Book> {
-    const booksRepository = this.connection.getRepository(Book);
-    return await booksRepository.findOneOrFail(bookId);
+    try {
+      const booksRepository = this.connection.getRepository(Book);
+      return await booksRepository.findOneOrFail({ where: { id: bookId } });
+    } catch (err) {
+      const message = 'Error retrieving book';
+      this.logger.error(`${message}: ${err}`);
+      throw new Error(message);
+    }
   }
 }

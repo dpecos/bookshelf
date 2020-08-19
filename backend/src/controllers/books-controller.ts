@@ -19,14 +19,14 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
   router.get(
     '/:bookId',
     asyncHandler(async (req: express.Request, res: express.Response) => {
-      res.send(await booksService.getBook(req.param.bookId));
+      res.send(await booksService.getBook(req.params.bookId));
     })
   );
 
   router.get(
     '/:bookId/cover',
     asyncHandler(async (req: express.Request, res: express.Response) => {
-      const cover = await booksService.getBookCover(req.param.bookId);
+      const cover = await booksService.getBookCover(req.params.bookId);
       res.writeHead(200, {
         'Content-Type': 'image/jpeg',
         'Content-Length': cover.length,

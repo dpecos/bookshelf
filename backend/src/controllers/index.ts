@@ -7,6 +7,7 @@ import express from 'express';
 import { setupBooksAPI } from './books-controller';
 import { setupCategoriesAPI } from './categories-controller';
 import { setupCollectionsAPI } from './collections-controller';
+import { errorHandler } from './middleware/errors';
 
 export async function setupEndpoints(
   app: express.App,
@@ -22,5 +23,5 @@ export async function setupEndpoints(
   app.use('/api/collections', setupCollectionsAPI(collectionsService));
   app.use('/api/books', setupBooksAPI(booksService));
 
-  // app.use(errorHandler(logger));
+  app.use(errorHandler());
 }
