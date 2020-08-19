@@ -1,8 +1,10 @@
 import { Repository } from '@repository/repository';
+import { CategoriesService } from '@services/categories-service';
 import { loadConfig } from '@utils/config';
 import { getLogger } from '@utils/logger';
 import express from 'express';
 import http from 'http';
+import { setupEndpoints } from './controllers';
 
 export async function startServer(port?: number): Promise<http.Server> {
   const logger = getLogger();
@@ -20,11 +22,9 @@ export async function startServer(port?: number): Promise<http.Server> {
       await repository.connect();
     }
 
-    // const testersService = new TestersService(repository, logger);
-    // const themesService
-    // const experimentsService
+    const categoriesService = new CategoriesService(repository);
 
-    // await setupEndpoints(app, testersService, logger);
+    await setupEndpoints(app, categoriesService);
 
     const server = http.createServer(app);
 

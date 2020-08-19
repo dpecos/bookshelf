@@ -66,4 +66,9 @@ export class Repository {
 
   //   return await testerRepository.findOne({ app, platformId });
   // }
+
+  async retrieveCategories(): Promise<Category[]> {
+    const categoriesRepository = this.connection.getRepository(Category);
+    return await categoriesRepository.find();
+  }
 }
