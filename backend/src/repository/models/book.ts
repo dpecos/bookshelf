@@ -32,11 +32,13 @@ export class Book {
   @ManyToOne(() => Category, (category) => category.books, {
     cascade: false,
     nullable: false,
+    eager: true,
   })
   category: Category;
 
   @ManyToOne(() => Collection, (collection) => collection.books, {
     cascade: false,
+    eager: true,
   })
   collection: Collection;
 

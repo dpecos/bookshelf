@@ -1,15 +1,18 @@
+import { BooksService } from '@services/books-service';
 import { CategoriesService } from '@services/categories-service';
 import { CollectionsService } from '@services/collections-service';
 import { getLogger } from '@utils/logger';
 import bodyParser from 'body-parser';
 import express from 'express';
+import { setupBooksAPI } from './books-controller';
 import { setupCategoriesAPI } from './categories-controller';
 import { setupCollectionsAPI } from './collections-controller';
 
 export async function setupEndpoints(
   app: express.App,
   categoriesService: CategoriesService,
-  collectionsService: CollectionsService
+  collectionsService: CollectionsService,
+  booksService: BooksService
 ) {
   const logger = getLogger('controller');
 
@@ -17,6 +20,7 @@ export async function setupEndpoints(
 
   app.use('/api/categories', setupCategoriesAPI(categoriesService));
   app.use('/api/collections', setupCollectionsAPI(collectionsService));
+  app.use('/api/books', setupBooksAPI(booksService));
 
   // app.use(errorHandler(logger));
 }

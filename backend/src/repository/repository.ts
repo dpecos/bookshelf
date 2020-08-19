@@ -76,4 +76,9 @@ export class Repository {
     const collectionsRepository = this.connection.getRepository(Collection);
     return await collectionsRepository.find();
   }
+
+  async retrieveBooks(): Promise<Book[]> {
+    const booksRepository = this.connection.getRepository(Book);
+    return await booksRepository.find();
+  }
 }
