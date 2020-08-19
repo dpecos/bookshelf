@@ -2,6 +2,9 @@ import { loadConfig } from '@utils/config';
 import { getLogger } from '@utils/logger';
 import { Connection, createConnection } from 'typeorm';
 import winston from 'winston';
+import { Book } from './models/book';
+import { Category } from './models/category';
+import { Collection } from './models/collection';
 
 export class Repository {
   connection: Connection;
@@ -21,7 +24,7 @@ export class Repository {
         username: config.db.username,
         password: config.db.password,
         database: config.db.database,
-        entities: [],
+        entities: [Category, Collection, Book],
         synchronize: true,
         logging: config.db.log,
         maxQueryExecutionTime: 1000,

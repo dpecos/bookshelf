@@ -5,56 +5,39 @@
 To create a new docker database:
 
 ```sh
-docker run --name bookshelf_db -p 127.0.0.1:5432:5432 -d -e POSTGRES_DB=bookshelf -e POSTGRES_PASSWORD=bookshelf postgres
+docker run --name bookshelf-db -p 127.0.0.1:5432:5432 -d -e POSTGRES_DB=bookshelf -e POSTGRES_PASSWORD=bookshelf postgres
 ```
 
 PSQL cli:
 
 ```sh
-docker exec -it bookshelf_db psql -U postgres -d bookshelf
+docker exec -it bookshelf-db psql -U postgres -d bookshelf
 ```
 
-## Database migration
+## Database backup / restore
 
-1. Load a backup file into a MySQL instance
+### Backup
 
-New MySQL instance:
+Everything:
 
 ```sh
-docker run --name bookshelf_mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=bookshelf -e MYSQL_USER=bookshelf -e MYSQL_PASSWORD=bookshelf -p 127.0.0.1:3306:3306 -d mysql:5.7
+docker exec -t bookshelf-db pg_dumpall -c -U postgres > bookshelf_`date +%Y%m%d"_"%H%M%S`.sql
 ```
 
-Load data:
+Just data:
 
 ```sh
-docker exec -i bookshelf_mysql mysql -ubookshelf -pbookshelf bookshelf < bookshelf_20200816_001502.sql
-#docker exec -it bookshelf_mysql mysql -ubookshelf -pbookshelf bookshelf
+docker exec -t bookshelf-db pg_dump -U postgres -a --inserts bookshelf > bookshelf_data_`date +%Y%m%d"_"%H%M%S`.sql
 ```
 
-2. Create a new PostgreSQL instance
+Only schema:
 
 ```sh
-docker run --name bookshelf_db -p 127.0.0.1:5432:5432 -d -e POSTGRES_DB=bookshelf -e POSTGRES_PASSWORD=bookshelf postgres
+docker exec -t bookshelf-db pg_dump -U postgres --schema-only bookshelf > bookshelf_schema_`date +%Y%m%d"_"%H%M%S`.sql
 ```
 
-3. Perform the migration using `pgloader` (https://www.digitalocean.com/community/tutorials/how-to-migrate-mysql-database-to-postgres-using-pgloader)
+### Restore a backup
 
 ```sh
-pgloader mysql://bookshelf:bookshelf@localhost:3306/bookshelf postgresql://postgres:bookshelf@localhost:5432/bookshelf
-```
-
-4. Destroy the MySQL instance
-
-```sh
-docker stop bookshelf_mysql
-docker rm bookshel_mysql
-```
-
-5. Prepare data in PostgreSQL
-
-```sql
-drop sequence books_id_seq cascade;
-drop sequence categories_id_seq cascade;
-drop sequence collections_id_seq cascade;
-drop table schema_migrations;
+docker exec -i bookshelf-db psql -U postgres -d bookshelf < bookshelf_xxx.sql
 ```
