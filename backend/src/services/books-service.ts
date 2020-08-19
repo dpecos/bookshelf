@@ -1,3 +1,4 @@
+import { Book } from '@repository/models/book';
 import { Repository } from '@repository/repository';
 import { getLogger } from '@utils/logger';
 import winston from 'winston';
@@ -22,5 +23,11 @@ export class BooksService {
         modified: book.modified,
       };
     });
+  }
+
+  async getBook(bookId: string): Promise<Book> {
+    const book = await this.repository.retrieveBook(bookId);
+    delete book.cover;
+    return book;
   }
 }
