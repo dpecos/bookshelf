@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { Table } from 'react-bootstrap';
+import { BookDetails } from './BookDetails';
+import { BookForm } from './BookForm';
 
 interface IProps {}
 
 interface IState {
   books: any[];
-  book: any;
+  bookId: string | null;
+  action: string | null;
 }
 
 export class BooksList extends Component<IProps, IState> {
@@ -14,7 +17,8 @@ export class BooksList extends Component<IProps, IState> {
 
     this.state = {
       books: [],
-      book: null,
+      bookId: null,
+      action: null,
     };
   }
 
@@ -29,49 +33,74 @@ export class BooksList extends Component<IProps, IState> {
   }
 
   showBookDetails(book: any) {
-    fetch(`http://localhost:8080/api/books/${book.id}`)
-      .then((response) => response.json())
-      .then((json) => this.setState({ book: json }));
+    this.setState({ bookId: book.id, action: 'details' });
+  }
+
+  hideBookDetails() {
+    this.setState({ bookId: null, action: null });
+  }
+
+  editBook(book: any) {
+    this.setState({ bookId: book.id, action: 'edit' });
+  }
+
+  hideBookForm() {
+    this.setState({ bookId: null, action: null });
   }
 
   render() {
     return (
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Cover</th>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Year</th>
-            <th>Category</th>
-            <th>Collection</th>
-          </tr>
-        </thead>
-        <tbody>
-          {this.state.books.length === 0 ? (
+      <>
+        <Table striped bordered hover>
+          <thead>
             <tr>
-              <td colSpan={6}>Loading books...</td>
+              <th>Cover</th>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Year</th>
+              <th>Category</th>
+              <th>Collection</th>
             </tr>
-          ) : (
-            this.state.books.map((book) => (
-              <tr key={book.id} onClick={() => this.showBookDetails(book)}>
-                <td>
-                  <img
-                    alt={book.title}
-                    src={`http://localhost:8080/api/books/${book.id}/cover`}
-                    width="50px"
-                  />
-                </td>
-                <td>{book.title}</td>
-                <td>{book.author}</td>
-                <td>{book.year}</td>
-                <td>{book.category.name}</td>
-                <td>{book.collection?.name}</td>
+          </thead>
+          <tbody>
+            {this.state.books.length === 0 ? (
+              <tr>
+                <td colSpan={6}>Loading books...</td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </Table>
+            ) : (
+              this.state.books.map((book) => (
+                <tr key={book.id} onClick={() => this.showBookDetails(book)}>
+                  <td>
+                    <img
+                      alt={book.title}
+                      src={`http://localhost:8080/api/books/${book.id}/cover`}
+                      width="50px"
+                    />
+                  </td>
+                  <td>{book.title}</td>
+                  <td>{book.author}</td>
+                  <td>{book.year}</td>
+                  <td>{book.category.name}</td>
+                  <td>{book.collection?.name}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </Table>
+
+        <BookDetails
+          show={this.state.action === 'details'}
+          bookId={this.state.bookId}
+          editBook={(book) => this.editBook(book)}
+          hideDetails={() => this.hideBookDetails()}
+        ></BookDetails>
+
+        <BookForm
+          show={this.state.action === 'edit'}
+          bookId={this.state.bookId}
+          hideForm={() => this.hideBookForm()}
+        ></BookForm>
+      </>
     );
   }
 }
