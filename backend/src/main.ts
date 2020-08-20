@@ -1,3 +1,4 @@
+import { setupCORS } from '@controllers/middleware/cors';
 import { Repository } from '@repository/repository';
 import { BooksService } from '@services/books-service';
 import { CategoriesService } from '@services/categories-service';
@@ -17,6 +18,8 @@ export async function startServer(port?: number): Promise<http.Server> {
     const app = express();
 
     logger.info('--- bookshelf ---');
+
+    setupCORS(app);
 
     let repository: Repository = null;
     if (config.db) {
