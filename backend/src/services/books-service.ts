@@ -17,6 +17,7 @@ export class BooksService {
         id: book.id,
         title: book.title,
         author: book.author,
+        year: book.year,
         category: book.category,
         collection: book.collection,
         created: book.created,
