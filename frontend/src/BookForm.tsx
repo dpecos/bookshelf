@@ -54,8 +54,17 @@ export class BookForm extends Component<IProps, IState> {
     this.props.hideForm();
   }
 
-  storeBook() {
-    // fetch({ method: 'put', url: 'http://localhost:8080/api/books' });
+  async storeBook() {
+    await fetch(`http://localhost:8080/api/books/${this.props.bookId}`, {
+      method: 'put',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(this.state.book),
+    });
+
+    this.hideBookForm();
   }
 
   handleChangeEvent(event: any) {

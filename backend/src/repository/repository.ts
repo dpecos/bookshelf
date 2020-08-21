@@ -92,4 +92,15 @@ export class Repository {
       throw new Error(message);
     }
   }
+
+  async updateBook(book: Book): Promise<void> {
+    try {
+      const booksRepository = this.connection.getRepository(Book);
+      await booksRepository.update(book.id, book);
+    } catch (err) {
+      const message = 'Error updating book';
+      this.logger.error(`${message}: ${err}`);
+      throw new Error(message);
+    }
+  }
 }

@@ -48,4 +48,8 @@ export class BooksService {
     const book = await this.repository.retrieveBook(bookId);
     return book.cover;
   }
+
+  async updateBook(book: Book): Promise<void> {
+    await this.repository.updateBook(book);
+  }
 }

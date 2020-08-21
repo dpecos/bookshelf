@@ -1,3 +1,4 @@
+import { Book } from '@repository/models/book';
 import { BooksService } from '@services/books-service';
 import { CategoriesService } from '@services/categories-service';
 import { getLogger } from '@utils/logger';
@@ -32,6 +33,16 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
         'Content-Length': cover.length,
       });
       res.end(cover);
+    })
+  );
+
+  router.put(
+    '/:bookId',
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      const book = req.body as Book;
+      await booksService.updateBook(book);
+
+      res.send(await booksService.getBook(book.id));
     })
   );
 

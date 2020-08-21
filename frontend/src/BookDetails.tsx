@@ -80,7 +80,7 @@ export class BookDetails extends Component<IProps, IState> {
                         {
                           id: 'collection',
                           label: 'Collection',
-                          value: this.state.book?.collection.name,
+                          value: this.state.book?.collection?.name,
                         },
                         { id: 'pages', label: 'Pages' },
                         { id: 'editorial', label: 'Editorial' },
