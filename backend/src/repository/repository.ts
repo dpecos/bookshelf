@@ -69,17 +69,17 @@ export class Repository {
 
   async retrieveCategories(): Promise<Category[]> {
     const categoriesRepository = this.connection.getRepository(Category);
-    return await categoriesRepository.find();
+    return await categoriesRepository.find({ order: { name: 'ASC' } });
   }
 
   async retrieveCollections(): Promise<Collection[]> {
     const collectionsRepository = this.connection.getRepository(Collection);
-    return await collectionsRepository.find();
+    return await collectionsRepository.find({ order: { name: 'ASC' } });
   }
 
   async retrieveBooks(): Promise<Book[]> {
     const booksRepository = this.connection.getRepository(Book);
-    return await booksRepository.find();
+    return await booksRepository.find({ order: { readingDates: 'DESC' } });
   }
 
   async retrieveBook(bookId: string): Promise<Book> {
