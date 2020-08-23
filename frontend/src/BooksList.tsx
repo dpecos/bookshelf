@@ -1,24 +1,21 @@
+import { History } from 'history';
 import React, { Component } from 'react';
 import { Table } from 'react-bootstrap';
-import { BookDetails } from './BookDetails';
-import { BookForm } from './BookForm';
+import { useHistory } from 'react-router-dom';
 
-interface IProps {}
+interface IProps {
+  history: History;
+}
 
 interface IState {
   books: any[];
-  bookId: string | null;
-  action: string | null;
 }
-
-export class BooksList extends Component<IProps, IState> {
+class BooksList extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
     this.state = {
       books: [],
-      bookId: null,
-      action: null,
     };
   }
 
@@ -33,19 +30,7 @@ export class BooksList extends Component<IProps, IState> {
   }
 
   showBookDetails(book: any) {
-    this.setState({ bookId: book.id, action: 'details' });
-  }
-
-  hideBookDetails() {
-    this.setState({ bookId: null, action: null });
-  }
-
-  editBook(book: any) {
-    this.setState({ bookId: book.id, action: 'edit' });
-  }
-
-  hideBookForm() {
-    this.setState({ bookId: null, action: null });
+    this.props.history.push(`/books/${book.id}`);
   }
 
   render() {
@@ -87,20 +72,12 @@ export class BooksList extends Component<IProps, IState> {
             )}
           </tbody>
         </Table>
-
-        <BookDetails
-          show={this.state.action === 'details'}
-          bookId={this.state.bookId}
-          editBook={(book) => this.editBook(book)}
-          hideDetails={() => this.hideBookDetails()}
-        ></BookDetails>
-
-        <BookForm
-          show={this.state.action === 'edit'}
-          bookId={this.state.bookId}
-          hideForm={() => this.hideBookForm()}
-        ></BookForm>
       </>
     );
   }
 }
+
+export default () => {
+  const history = useHistory();
+  return <BooksList history={history} />;
+};

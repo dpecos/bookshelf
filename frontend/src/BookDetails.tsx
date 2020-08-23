@@ -1,11 +1,11 @@
+import { History } from 'history';
 import React, { Component } from 'react';
 import { Button, Col, Container, Modal, Row, Table } from 'react-bootstrap';
+import { useHistory, useParams } from 'react-router-dom';
 
 interface IProps {
-  show: boolean;
-  bookId: any;
-  editBook: (book: any) => void;
-  hideDetails: () => void;
+  history: History;
+  bookId: string;
 }
 
 interface IState {
@@ -21,31 +21,31 @@ export class BookDetails extends Component<IProps, IState> {
     };
   }
 
-  componentDidUpdate(prevProps: IProps) {
-    if (this.props.show && this.props.bookId !== null && !this.state.book) {
-      this.fetchBookDetails();
+  componentDidMount() {
+    if (this.props.bookId) {
+      this.fetchBookDetails(this.props.bookId);
     }
   }
 
-  fetchBookDetails() {
-    fetch(`http://localhost:8080/api/books/${this.props.bookId}`)
+  fetchBookDetails(bookId: string) {
+    fetch(`http://localhost:8080/api/books/${bookId}`)
       .then((response) => response.json())
       .then((json) => this.setState({ book: json }));
   }
 
   hideBookDetails() {
-    this.props.hideDetails();
+    this.props.history.goBack();
   }
 
   editBook() {
-    this.props.editBook(this.state.book);
+    this.props.history.push(`/books/${this.props.bookId}/edit`);
   }
 
   render() {
     return (
       <>
         <Modal
-          show={this.props.show && this.state.book !== null}
+          show={this.state.book !== null}
           animation={false}
           size="xl"
           aria-labelledby="contained-modal-title-vcenter"
@@ -133,3 +133,9 @@ export class BookDetails extends Component<IProps, IState> {
     );
   }
 }
+
+export default () => {
+  const { bookId } = useParams();
+  const history = useHistory();
+  return <BookDetails bookId={bookId} history={history} />;
+};
