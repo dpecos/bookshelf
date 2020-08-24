@@ -1,7 +1,7 @@
 import { createBrowserHistory } from 'history';
 import React, { Component } from 'react';
 import { Nav, Navbar } from 'react-bootstrap';
-import { Redirect, Route, Router, Switch } from 'react-router-dom';
+import { Link, Redirect, Route, Router, Switch } from 'react-router-dom';
 import './App.css';
 import BookDetails from './BookDetails';
 import BookForm from './BookForm';
@@ -12,12 +12,16 @@ class App extends Component {
     const history = createBrowserHistory();
     return (
       <Router history={history}>
-        <Navbar bg="light" expand="lg">
-          <Navbar.Brand href="/">BookShelf</Navbar.Brand>
+        <Navbar bg="dark" variant="dark" expand="lg">
+          <Navbar.Brand as={Link} to="/">
+            BookShelf
+          </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
-              <Nav.Link href="/books/list">List</Nav.Link>
+              <Nav.Link as={Link} to="/books/list">
+                List
+              </Nav.Link>
               {/* <Nav.Link href="/books/shelf">shelf</Nav.Link> */}
               {/* <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
