@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import { Nav, Navbar } from 'react-bootstrap';
 import { Link, Redirect, Route, Router, Switch } from 'react-router-dom';
 import './App.css';
-import BookDetails from './BookDetails';
-import BookForm from './BookForm';
-import BooksList from './BooksList';
+import BookDetails from './books/BookDetails';
+import BookForm from './books/BookForm';
+import BooksList from './books/BooksList';
 
 class App extends Component {
   render() {
