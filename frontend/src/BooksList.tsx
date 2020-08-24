@@ -1,7 +1,7 @@
 import { History } from 'history';
 import React, { Component } from 'react';
-import { Table } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
+import { Form, FormControl, Nav, Navbar, Table } from 'react-bootstrap';
+import { Link, useHistory } from 'react-router-dom';
 
 interface IProps {
   history: History;
@@ -9,6 +9,7 @@ interface IProps {
 
 interface IState {
   books: any[];
+  fullList: any[];
 }
 class BooksList extends Component<IProps, IState> {
   constructor(props: IProps) {
@@ -16,6 +17,7 @@ class BooksList extends Component<IProps, IState> {
 
     this.state = {
       books: [],
+      fullList: [],
     };
   }
 
@@ -26,16 +28,46 @@ class BooksList extends Component<IProps, IState> {
   async fetchBooks() {
     fetch('http://localhost:8080/api/books')
       .then((response) => response.json())
-      .then((json) => this.setState({ books: json }));
+      .then((json) => this.setState({ fullList: json, books: json }));
   }
 
   showBookDetails(book: any) {
     this.props.history.push(`/books/${book.id}`);
   }
 
+  filterBooks(event: any) {
+    const filter = event.target.value.toLowerCase();
+    this.setState({
+      books: this.state.fullList.filter(
+        (book) =>
+          book.title.toLowerCase().indexOf(filter) !== -1 ||
+          (book.titleOV && book.titleOV.toLowerCase().indexOf(filter) !== -1)
+      ),
+    });
+  }
+
   render() {
     return (
       <>
+        <Navbar>
+          <Navbar.Brand>Books</Navbar.Brand>
+          <Navbar.Collapse className="justify-content-end">
+            <Nav>
+              <Nav.Link as={Link} to="/books/new">
+                New book
+              </Nav.Link>
+            </Nav>
+            <Form inline>
+              <FormControl
+                type="text"
+                placeholder="Filter books"
+                className="mr-sm-2"
+                onChange={(event) => this.filterBooks(event)}
+              />
+            </Form>
+          </Navbar.Collapse>
+        </Navbar>
+
         <Table striped bordered hover>
           <thead>
             <tr>
@@ -48,7 +80,7 @@ class BooksList extends Component<IProps, IState> {
             </tr>
           </thead>
           <tbody>
-            {this.state.books.length === 0 ? (
+            {this.state.fullList.length === 0 ? (
               <tr>
                 <td colSpan={6}>Loading books...</td>
               </tr>

@@ -16,6 +16,7 @@ export class BooksService {
       return {
         id: book.id,
         title: book.title,
+        titleOV: book.titleOV,
         author: book.author,
         year: book.year,
         category: book.category,
