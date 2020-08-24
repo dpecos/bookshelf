@@ -6,6 +6,8 @@ import './App.css';
 import BookDetails from './books/BookDetails';
 import BookForm from './books/BookForm';
 import BooksList from './books/BooksList';
+import CategoriesList from './categories/CategoriesList';
+import CollectionsList from './collections/CollectionsList';
 
 class App extends Component {
   render() {
@@ -21,10 +23,10 @@ class App extends Component {
               <Nav.Link as={Link} to="/books/list">
                 Books
               </Nav.Link>
-              <Nav.Link as={Link} to="/categories">
+              <Nav.Link as={Link} to="/categories/list">
                 Categories
               </Nav.Link>
-              <Nav.Link as={Link} to="/collections">
+              <Nav.Link as={Link} to="/collections/list">
                 Collections
               </Nav.Link>
             </Nav>
@@ -51,6 +53,15 @@ class App extends Component {
           <Route path="/books/:bookId">
             <BookDetails />
           </Route>
+
+          <Route path="/categories/list">
+            <CategoriesList />
+          </Route>
+
+          <Route path="/collections/list">
+            <CollectionsList />
+          </Route>
+
           <Route path="/">
             <Redirect to="/books/list" />
           </Route>
