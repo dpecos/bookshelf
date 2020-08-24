@@ -1,8 +1,16 @@
 import bsCustomFileInput from 'bs-custom-file-input';
 import { History } from 'history';
 import React, { Component } from 'react';
-import { Button, Col, Container, Form, Navbar, Row } from 'react-bootstrap';
 import { useHistory, useParams } from 'react-router-dom';
+import {
+  Alert,
+  Button,
+  Col,
+  Container,
+  Form,
+  Navbar,
+  Row,
+} from 'react-bootstrap';
 
 interface IProps {
   history: History;
@@ -11,8 +19,11 @@ interface IProps {
 
 interface IState {
   book: any;
+  isNew: boolean;
+  pageTitle: string;
   collections: any;
   categories: any;
+  message: string | null;
 }
 
 class BookForm extends Component<IProps, IState> {
@@ -21,17 +32,25 @@ class BookForm extends Component<IProps, IState> {
 
     this.state = {
       book: null,
+      isNew: false,
+      pageTitle: '',
       collections: [],
       categories: [],
+      message: null,
     };
   }
 
   componentDidMount() {
     bsCustomFileInput.init();
+
+    this.fetchCollections();
+    this.fetchCategories();
+
     if (this.props.bookId) {
-      this.fetchCollections();
-      this.fetchCategories();
       this.fetchBookDetails(this.props.bookId);
+      this.setState({ isNew: false, pageTitle: 'Edit book' });
+    } else {
+      this.setState({ isNew: true, book: {}, pageTitle: 'New book' });
     }
   }
 
@@ -57,7 +76,37 @@ class BookForm extends Component<IProps, IState> {
     this.props.history.goBack();
   }
 
-  async storeBook() {
+  async createBook() {
+    debugger;
+    const response = await fetch(`http://localhost:8080/api/books`, {
+      method: 'post',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(this.state.book),
+    });
+
+    const json = await response.json();
+    if (response.ok) {
+      this.props.history.push(`/books/${json.id}`);
+    } else {
+      this.setState({ message: `${json.type.toUpperCase()}: ${json.message}` });
+    }
+  }
+
+  async deleteBook() {
+    await fetch(`http://localhost:8080/api/books/${this.props.bookId}`, {
+      method: 'delete',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    this.props.history.push('/');
+  }
+
+  async editBook() {
     await fetch(`http://localhost:8080/api/books/${this.props.bookId}`, {
       method: 'put',
       mode: 'cors',
@@ -85,6 +134,16 @@ class BookForm extends Component<IProps, IState> {
         <Container>
           <Form>
             <Row>
+              {this.state.message && (
+                <Col lg="12">
+                  <Alert key={'error'} variant={'danger'}>
+                    {this.state.message}
+                  </Alert>
+                </Col>
+              )}
+              <Col lg="12">
+                <h2>{this.state.pageTitle}</h2>
+              </Col>
               <Col lg="6">
                 {[
                   { id: 'title', label: 'Title' },
@@ -135,7 +194,7 @@ class BookForm extends Component<IProps, IState> {
                         <Form.Control
                           as="select"
                           placeholder={field.label}
-                          value={this.state.book?.[field.id] || ''}
+                          value={this.state.book?.[field.id]?.id || ''}
                           onChange={(event) => this.handleChangeEvent(event)}
                         >
                           <option></option>
@@ -163,7 +222,7 @@ class BookForm extends Component<IProps, IState> {
                 })}
               </Col>
               <Col lg="6">
-                {this.state.book && (
+                {this.state.book?.id && (
                   <img
                     alt={this.state.book?.title}
                     src={`http://localhost:8080/api/books/${this.state.book?.id}/cover`}
@@ -196,9 +255,21 @@ class BookForm extends Component<IProps, IState> {
             >
               Cancel
             </Button>
-            <Button variant="success" onClick={() => this.storeBook()}>
-              Save
-            </Button>
+            {this.state.isNew && (
+              <Button variant="success" onClick={() => this.createBook()}>
+                Create
+              </Button>
+            )}
+            {!this.state.isNew && (
+              <>
+                <Button variant="danger" onClick={() => this.deleteBook()}>
+                  Delete
+                </Button>
+                <Button variant="warning" onClick={() => this.editBook()}>
+                  Save
+                </Button>
+              </>
+            )}
           </Navbar.Collapse>
         </Navbar>
       </>

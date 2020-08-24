@@ -52,5 +52,17 @@ export class BooksService {
 
   async updateBook(book: Book): Promise<void> {
     await this.repository.updateBook(book);
+    this.logger.debug(`Book ${book.id} updated successfully`);
+  }
+
+  async createBook(book: Book): Promise<Book> {
+    const newBook = await this.repository.createBook(book);
+    this.logger.debug(`Book ${book.id} created successfully`);
+    return newBook;
+  }
+
+  async deleteBook(bookId: string): Promise<void> {
+    await this.repository.deleteBook(bookId);
+    this.logger.debug(`Book ${bookId} deleted successfully`);
   }
 }

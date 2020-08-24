@@ -103,4 +103,27 @@ export class Repository {
       throw new Error(message);
     }
   }
+
+  async createBook(book: Book): Promise<Book> {
+    try {
+      const booksRepository = this.connection.getRepository(Book);
+      delete book.id;
+      return await booksRepository.save(book);
+    } catch (err) {
+      const message = 'Error creating book';
+      this.logger.error(`${message}: ${err}`);
+      throw new Error(message);
+    }
+  }
+
+  async deleteBook(bookId: string): Promise<void> {
+    try {
+      const booksRepository = this.connection.getRepository(Book);
+      await booksRepository.delete(bookId);
+    } catch (err) {
+      const message = 'Error deleting book';
+      this.logger.error(`${message}: ${err}`);
+      throw new Error(message);
+    }
+  }
 }
