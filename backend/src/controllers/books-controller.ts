@@ -1,9 +1,12 @@
 import { Book } from '@repository/models/book';
 import { BooksService } from '@services/books-service';
-import { CategoriesService } from '@services/categories-service';
 import { getLogger } from '@utils/logger';
 import express from 'express';
 import asyncHandler from 'express-async-handler';
+import {
+  convertBufferToDataURL,
+  convertDataURLToBuffer,
+} from '@utils/data-urls';
 
 export function setupBooksAPI(booksService: BooksService): express.Router {
   const logger = getLogger('controller:books');
@@ -22,7 +25,10 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
     asyncHandler(async (req: express.Request, res: express.Response) => {
       try {
         const book = await booksService.getBook(req.params.bookId);
-        res.send(book);
+
+        let cover = convertBufferToDataURL(book.cover, 'image/jpeg');
+
+        res.send({ ...book, cover });
       } catch (err) {
         res.status(404);
       }
@@ -49,6 +55,9 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
     '/:bookId',
     asyncHandler(async (req: express.Request, res: express.Response) => {
       const book = req.body as Book;
+
+      book.cover = convertDataURLToBuffer(req.body.cover);
+
       await booksService.updateBook(book);
 
       res.send(await booksService.getBook(book.id));
@@ -59,6 +68,9 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
     '/',
     asyncHandler(async (req: express.Request, res: express.Response) => {
       const book = req.body as Book;
+
+      book.cover = convertDataURLToBuffer(req.body.cover);
+
       const newBook = await booksService.createBook(book);
 
       res.send(newBook);

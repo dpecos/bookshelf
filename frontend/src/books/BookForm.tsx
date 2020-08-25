@@ -77,7 +77,6 @@ class BookForm extends Component<IProps, IState> {
   }
 
   async createBook() {
-    debugger;
     const response = await fetch(`http://localhost:8080/api/books`, {
       method: 'post',
       mode: 'cors',
@@ -107,23 +106,60 @@ class BookForm extends Component<IProps, IState> {
   }
 
   async editBook() {
-    await fetch(`http://localhost:8080/api/books/${this.props.bookId}`, {
-      method: 'put',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(this.state.book),
-    });
+    const response = await fetch(
+      `http://localhost:8080/api/books/${this.props.bookId}`,
+      {
+        method: 'put',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(this.state.book),
+      }
+    );
 
-    this.closeBookForm();
+    const json = await response.json();
+    if (response.ok) {
+      this.closeBookForm();
+    } else {
+      this.setState({ message: `${json.type.toUpperCase()}: ${json.message}` });
+    }
   }
 
-  handleChangeEvent(event: any) {
+  convertImageToBase64(input: any): Promise<string> {
+    return new Promise((resolve) => {
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onloadend = function () {
+        resolve(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async handleChangeEvent(event: any) {
     if (event) {
       const book = this.state.book;
       const field = event.target.id;
-      book[field] = event.target.value;
+      const value = event.target.value;
+
+      if (field === 'category') {
+        const category = this.state.categories.find(
+          (category: any) => category.id === value
+        );
+        book.category = category;
+      } else if (field === 'collection') {
+        const collection = this.state.collections.find(
+          (collection: any) => collection.id === value
+        );
+        book.collection = collection;
+      } else if (field === 'readingDates') {
+        book.readingDates = value.split(',');
+      } else if (field === 'cover') {
+        book.cover = await this.convertImageToBase64(event.currentTarget);
+      } else {
+        book[field] = value;
+      }
       this.setState({ book });
     }
   }
@@ -185,7 +221,11 @@ class BookForm extends Component<IProps, IState> {
                   { id: 'editorial', label: 'Editorial' },
                   { id: 'isbn', label: 'ISBN' },
                   { id: 'url', label: 'URL' },
-                  { id: 'readingDates', label: 'Reading Dates' },
+                  {
+                    id: 'readingDates',
+                    label: 'Reading Dates',
+                    value: this.state.book?.readingDates.join(','),
+                  },
                 ].map((field) => {
                   if (field.options) {
                     return (
@@ -194,7 +234,9 @@ class BookForm extends Component<IProps, IState> {
                         <Form.Control
                           as="select"
                           placeholder={field.label}
-                          value={this.state.book?.[field.id]?.id || ''}
+                          value={
+                            field.value || this.state.book?.[field.id]?.id || ''
+                          }
                           onChange={(event) => this.handleChangeEvent(event)}
                         >
                           <option></option>
@@ -213,7 +255,9 @@ class BookForm extends Component<IProps, IState> {
                         <Form.Control
                           type="text"
                           placeholder={field.label}
-                          value={this.state.book?.[field.id] || ''}
+                          value={
+                            field.value || this.state.book?.[field.id] || ''
+                          }
                           onChange={(event) => this.handleChangeEvent(event)}
                         />
                       </Form.Group>
@@ -222,14 +266,19 @@ class BookForm extends Component<IProps, IState> {
                 })}
               </Col>
               <Col lg="6">
-                {this.state.book?.id && (
+                {this.state.book?.cover && (
                   <img
                     alt={this.state.book?.title}
-                    src={`http://localhost:8080/api/books/${this.state.book?.id}/cover`}
+                    src={this.state.book.cover}
                     width="350px"
                   />
                 )}
-                <Form.File id="cover" label="Book cover" custom />
+                <Form.File
+                  id="cover"
+                  label="Book cover"
+                  custom
+                  onChange={(event: any) => this.handleChangeEvent(event)}
+                />
                 <Form.Group controlId="abstract">
                   <Form.Label>Abstract</Form.Label>
                   <Form.Control

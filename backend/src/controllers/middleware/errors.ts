@@ -30,6 +30,7 @@ export function errorHandler() {
         errorResponse.type = ErrorType[ErrorType.auth];
         break;
       case 500:
+      default:
         statusResponse = 500;
         errorResponse.type = ErrorType[ErrorType['server-error']];
 
@@ -50,15 +51,16 @@ export function errorHandler() {
           });
         }
         break;
-      default:
-        statusResponse = 400;
-        errorResponse.type = err.type || ErrorType[ErrorType.application];
     }
 
-    if (errorResponse.type === ErrorType[ErrorType['server-error']]) {
+    if (
+      errorResponse.type === ErrorType[ErrorType['server-error']] ||
+      errorResponse.type === ErrorType[ErrorType.application]
+    ) {
       logger.error(
         `Server error: ${statusResponse}: ${JSON.stringify(errorResponse)}`
       );
+      console.error(err);
     } else {
       const errorType =
         errorResponse.type.charAt(0).toUpperCase() +

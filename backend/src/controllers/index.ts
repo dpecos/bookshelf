@@ -17,7 +17,7 @@ export async function setupEndpoints(
 ) {
   const logger = getLogger('controller');
 
-  app.use(bodyParser.json());
+  app.use(bodyParser.json({ limit: '20mb' }));
 
   app.use('/api/categories', setupCategoriesAPI(categoriesService));
   app.use('/api/collections', setupCollectionsAPI(collectionsService));

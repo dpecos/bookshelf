@@ -35,7 +35,6 @@ export class BooksService {
     }
 
     const book = await this.repository.retrieveBook(bookId);
-    delete book.cover;
     return book;
   }
 
