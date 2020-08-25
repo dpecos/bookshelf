@@ -1,7 +1,16 @@
 import { History } from 'history';
 import React, { Component } from 'react';
-import { Button, Col, Container, Navbar, Row, Table } from 'react-bootstrap';
+import {
+  Alert,
+  Button,
+  Col,
+  Container,
+  Navbar,
+  Row,
+  Table,
+} from 'react-bootstrap';
 import { useHistory, useParams } from 'react-router-dom';
+import { getLanguage } from './languages';
 
 interface IProps {
   history: History;
@@ -10,6 +19,7 @@ interface IProps {
 
 interface IState {
   book: any;
+  message: string | null;
 }
 
 export class BookDetails extends Component<IProps, IState> {
@@ -18,6 +28,7 @@ export class BookDetails extends Component<IProps, IState> {
 
     this.state = {
       book: null,
+      message: null,
     };
   }
 
@@ -30,7 +41,10 @@ export class BookDetails extends Component<IProps, IState> {
   fetchBookDetails(bookId: string) {
     fetch(`http://localhost:8080/api/books/${bookId}`)
       .then((response) => response.json())
-      .then((json) => this.setState({ book: json }));
+      .then((json) => this.setState({ book: json }))
+      .catch((err) =>
+        this.setState({ message: 'Error retrieving book details' })
+      );
   }
 
   hideBookDetails() {
@@ -60,19 +74,41 @@ export class BookDetails extends Component<IProps, IState> {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body> */}
+
+        <Navbar>
+          <Navbar.Brand>{this.state.book?.title}</Navbar.Brand>
+        </Navbar>
+
+        {this.state.message && (
+          <Container>
+            <Row>
+              <Col lg="12">
+                <Alert key={'error'} variant={'danger'}>
+                  {this.state.message}
+                </Alert>
+              </Col>
+            </Row>
+          </Container>
+        )}
+
         <Container>
           <Row>
-            <Col lg="12">
-              <h2>{this.state.book?.title}</h2>
-            </Col>
             <Col lg="6">
               <Table striped bordered hover>
                 <tbody>
                   {[
                     { id: 'title', label: 'Title' },
                     { id: 'titleOV', label: 'Title OV' },
-                    { id: 'language', label: 'Language' },
-                    { id: 'languageOV', label: 'Language OV' },
+                    {
+                      id: 'language',
+                      label: 'Language',
+                      value: getLanguage(this.state.book?.language),
+                    },
+                    {
+                      id: 'languageOV',
+                      label: 'Language OV',
+                      value: getLanguage(this.state.book?.languageOV),
+                    },
                     { id: 'author', label: 'Author' },
                     { id: 'year', label: 'Year' },
                     {

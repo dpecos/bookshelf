@@ -30,7 +30,7 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
 
         res.send({ ...book, cover });
       } catch (err) {
-        res.status(404);
+        res.status(404).send();
       }
     })
   );

@@ -1,6 +1,16 @@
 import { History } from 'history';
 import React, { Component } from 'react';
-import { Form, FormControl, Nav, Navbar, Table } from 'react-bootstrap';
+import {
+  Alert,
+  Col,
+  Container,
+  Form,
+  FormControl,
+  Nav,
+  Navbar,
+  Row,
+  Table,
+} from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 
 interface IProps {
@@ -10,6 +20,7 @@ interface IProps {
 interface IState {
   books: any[];
   fullList: any[];
+  message: string | null;
 }
 class BooksList extends Component<IProps, IState> {
   constructor(props: IProps) {
@@ -18,6 +29,7 @@ class BooksList extends Component<IProps, IState> {
     this.state = {
       books: [],
       fullList: [],
+      message: null,
     };
   }
 
@@ -28,7 +40,8 @@ class BooksList extends Component<IProps, IState> {
   async fetchBooks() {
     fetch('http://localhost:8080/api/books')
       .then((response) => response.json())
-      .then((json) => this.setState({ fullList: json, books: json }));
+      .then((json) => this.setState({ fullList: json, books: json }))
+      .catch((err) => this.setState({ message: 'Error retrieving books' }));
   }
 
   showBookDetails(book: any) {
@@ -67,6 +80,18 @@ class BooksList extends Component<IProps, IState> {
             </Form>
           </Navbar.Collapse>
         </Navbar>
+
+        {this.state.message && (
+          <Container>
+            <Row>
+              <Col lg="12">
+                <Alert key={'error'} variant={'danger'}>
+                  {this.state.message}
+                </Alert>
+              </Col>
+            </Row>
+          </Container>
+        )}
 
         <Table striped bordered hover>
           <thead>

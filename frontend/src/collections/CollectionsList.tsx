@@ -1,6 +1,14 @@
 import { History } from 'history';
 import React, { Component } from 'react';
-import { Nav, Navbar, Table } from 'react-bootstrap';
+import {
+  Alert,
+  Col,
+  Container,
+  Nav,
+  Navbar,
+  Row,
+  Table,
+} from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 
 interface IProps {
@@ -9,6 +17,7 @@ interface IProps {
 
 interface IState {
   collections: any[];
+  message: string | null;
 }
 class CollectionsList extends Component<IProps, IState> {
   constructor(props: IProps) {
@@ -16,6 +25,7 @@ class CollectionsList extends Component<IProps, IState> {
 
     this.state = {
       collections: [],
+      message: null,
     };
   }
 
@@ -26,7 +36,10 @@ class CollectionsList extends Component<IProps, IState> {
   async fetchCollections() {
     fetch('http://localhost:8080/api/collections')
       .then((response) => response.json())
-      .then((json) => this.setState({ collections: json }));
+      .then((json) => this.setState({ collections: json }))
+      .catch((err) =>
+        this.setState({ message: 'Error retrieving collections' })
+      );
   }
 
   render() {
@@ -42,6 +55,18 @@ class CollectionsList extends Component<IProps, IState> {
             </Nav>
           </Navbar.Collapse>
         </Navbar>
+
+        {this.state.message && (
+          <Container>
+            <Row>
+              <Col lg="12">
+                <Alert key={'error'} variant={'danger'}>
+                  {this.state.message}
+                </Alert>
+              </Col>
+            </Row>
+          </Container>
+        )}
 
         <Table striped bordered hover>
           <thead>

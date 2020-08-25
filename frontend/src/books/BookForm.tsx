@@ -2,6 +2,7 @@ import bsCustomFileInput from 'bs-custom-file-input';
 import { History } from 'history';
 import React, { Component } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import { languages } from './languages';
 import {
   Alert,
   Button,
@@ -57,19 +58,28 @@ class BookForm extends Component<IProps, IState> {
   fetchCollections() {
     fetch(`http://localhost:8080/api/collections`)
       .then((response) => response.json())
-      .then((json) => this.setState({ collections: json }));
+      .then((json) => this.setState({ collections: json }))
+      .catch((err) =>
+        this.setState({ message: 'Error retrieving collections' })
+      );
   }
 
   fetchCategories() {
     fetch(`http://localhost:8080/api/categories`)
       .then((response) => response.json())
-      .then((json) => this.setState({ categories: json }));
+      .then((json) => this.setState({ categories: json }))
+      .catch((err) =>
+        this.setState({ message: 'Error retrieving categories' })
+      );
   }
 
   fetchBookDetails(bookId: string) {
     fetch(`http://localhost:8080/api/books/${bookId}`)
       .then((response) => response.json())
-      .then((json) => this.setState({ book: json }));
+      .then((json) => this.setState({ book: json }))
+      .catch((err) =>
+        this.setState({ message: 'Error retrieving book details' })
+      );
   }
 
   closeBookForm() {
@@ -141,7 +151,7 @@ class BookForm extends Component<IProps, IState> {
     if (event) {
       const book = this.state.book;
       const field = event.target.id;
-      const value = event.target.value;
+      const value = event.target.value.trim() || null;
 
       if (field === 'category') {
         const category = this.state.categories.find(
@@ -167,19 +177,24 @@ class BookForm extends Component<IProps, IState> {
   render() {
     return (
       <>
+        <Navbar>
+          <Navbar.Brand>{this.state.pageTitle}</Navbar.Brand>
+        </Navbar>
+
+        {this.state.message && (
+          <Container>
+            <Row>
+              <Col lg="12">
+                <Alert key={'error'} variant={'danger'}>
+                  {this.state.message}
+                </Alert>
+              </Col>
+            </Row>
+          </Container>
+        )}
         <Container>
           <Form>
             <Row>
-              {this.state.message && (
-                <Col lg="12">
-                  <Alert key={'error'} variant={'danger'}>
-                    {this.state.message}
-                  </Alert>
-                </Col>
-              )}
-              <Col lg="12">
-                <h2>{this.state.pageTitle}</h2>
-              </Col>
               <Col lg="6">
                 {[
                   { id: 'title', label: 'Title' },
@@ -187,18 +202,12 @@ class BookForm extends Component<IProps, IState> {
                   {
                     id: 'language',
                     label: 'Language',
-                    options: [
-                      { value: 'en', label: 'English' },
-                      { value: 'es', label: 'Spanish' },
-                    ],
+                    options: languages,
                   },
                   {
                     id: 'languageOV',
                     label: 'Language OV',
-                    options: [
-                      { value: 'en', label: 'English' },
-                      { value: 'es', label: 'Spanish' },
-                    ],
+                    options: languages,
                   },
                   { id: 'author', label: 'Author' },
                   { id: 'year', label: 'Year' },
@@ -235,7 +244,10 @@ class BookForm extends Component<IProps, IState> {
                           as="select"
                           placeholder={field.label}
                           value={
-                            field.value || this.state.book?.[field.id]?.id || ''
+                            field.value ||
+                            this.state.book?.[field.id]?.id ||
+                            this.state.book?.[field.id] ||
+                            ''
                           }
                           onChange={(event) => this.handleChangeEvent(event)}
                         >
