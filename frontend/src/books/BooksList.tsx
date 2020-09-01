@@ -1,6 +1,7 @@
 import { History } from 'history';
 import React, { Component } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { getLanguage } from './languages';
 import {
   Alert,
   Col,
@@ -42,7 +43,7 @@ class BooksList extends Component<IProps, IState> {
   async fetchBooks() {
     const url =
       this.props.type === 'detailed'
-        ? `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/detailed  `
+        ? `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/detailed`
         : `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books`;
 
     fetch(url)
@@ -106,7 +107,8 @@ class BooksList extends Component<IProps, IState> {
             <Row>
               <Col lg="12">
                 <Alert key={'error'} variant={'danger'}>
-                  {this.state.message}
+                  <Alert.Heading>Oh no! There was an error!</Alert.Heading>
+                  <p>{this.state.message}</p>
                 </Alert>
               </Col>
             </Row>
@@ -129,19 +131,18 @@ class BooksList extends Component<IProps, IState> {
                         variant="top"
                         src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${book.id}/cover`}
                       />
+
                       <Card.Body>
                         <Card.Title>{book.title}</Card.Title>
+                        {book.collection && (
+                          <Card.Subtitle className="mb-2 text-muted">
+                            {book.collection.name}
+                          </Card.Subtitle>
+                        )}
                         <Card.Text>
                           {book.author} ({book.year})
                           <br />
                           {book.category?.name}
-                          <br />
-                          {book.collection && (
-                            <>
-                              <i>{book.collection.name}</i>
-                              <br />
-                            </>
-                          )}
                         </Card.Text>
                         {/*<Button variant="primary">Go somewhere</Button> */}
                       </Card.Body>
@@ -158,6 +159,7 @@ class BooksList extends Component<IProps, IState> {
               <tr>
                 <th>Cover</th>
                 <th>Title</th>
+                <th>Language</th>
                 <th>Author</th>
                 <th>Year</th>
                 <th>Category</th>
@@ -167,7 +169,7 @@ class BooksList extends Component<IProps, IState> {
             <tbody>
               {this.state.fullList.length === 0 && !this.state.message ? (
                 <tr>
-                  <td colSpan={6}>Loading books...</td>
+                  <td colSpan={7}>Loading books...</td>
                 </tr>
               ) : (
                 this.state.books.map((book) => (
@@ -180,6 +182,7 @@ class BooksList extends Component<IProps, IState> {
                       />
                     </td>
                     <td>{book.title}</td>
+                    <td>{getLanguage(book.language)}</td>
                     <td>{book.author}</td>
                     <td>{book.year}</td>
                     <td>{book.category.name}</td>
@@ -195,7 +198,9 @@ class BooksList extends Component<IProps, IState> {
           <Table striped bordered hover>
             <thead>
               <tr>
+                <th>Cover</th>
                 <th>Title</th>
+                <th>Language</th>
                 <th>Author</th>
                 <th>Year</th>
                 <th>Category</th>
@@ -209,12 +214,20 @@ class BooksList extends Component<IProps, IState> {
             <tbody>
               {this.state.fullList.length === 0 && !this.state.message ? (
                 <tr>
-                  <td colSpan={9}>Loading books...</td>
+                  <td colSpan={11}>Loading books...</td>
                 </tr>
               ) : (
                 this.state.books.map((book) => (
                   <tr key={book.id} onClick={() => this.showBookDetails(book)}>
+                    <td>
+                      <img
+                        alt={book.title}
+                        src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${book.id}/cover`}
+                        width="50px"
+                      />
+                    </td>
                     <td>{book.title}</td>
+                    <td>{getLanguage(book.language)}</td>
                     <td>{book.author}</td>
                     <td>{book.year}</td>
                     <td>{book.category.name}</td>

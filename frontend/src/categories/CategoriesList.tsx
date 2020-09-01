@@ -63,7 +63,8 @@ class CategoriesList extends Component<IProps, IState> {
             <Row>
               <Col lg="12">
                 <Alert key={'error'} variant={'danger'}>
-                  {this.state.message}
+                  <Alert.Heading>Oh no! There was an error!</Alert.Heading>
+                  <p>{this.state.message}</p>
                 </Alert>
               </Col>
             </Row>
