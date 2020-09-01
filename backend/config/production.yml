@@ -1,0 +1,10 @@
+web:
+  port: 8080
+
+db:
+  host: postgres
+  port: 5432
+  database: bookshelf
+  username: postgres
+  password: bookshelf-prod
+  log: false

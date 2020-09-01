@@ -1,5 +1,7 @@
 import { History } from 'history';
 import React, { Component } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import { getLanguage } from './languages';
 import {
   Alert,
   Button,
@@ -9,8 +11,6 @@ import {
   Row,
   Table,
 } from 'react-bootstrap';
-import { useHistory, useParams } from 'react-router-dom';
-import { getLanguage } from './languages';
 
 interface IProps {
   history: History;
@@ -39,7 +39,9 @@ export class BookDetails extends Component<IProps, IState> {
   }
 
   fetchBookDetails(bookId: string) {
-    fetch(`http://localhost:8080/api/books/${bookId}`)
+    fetch(
+      `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${bookId}`
+    )
       .then((response) => response.json())
       .then((json) => this.setState({ book: json }))
       .catch((err) =>
@@ -145,7 +147,7 @@ export class BookDetails extends Component<IProps, IState> {
               {this.state.book && (
                 <img
                   alt={this.state.book?.title}
-                  src={`http://localhost:8080/api/books/${this.state.book?.id}/cover`}
+                  src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${this.state.book?.id}/cover`}
                   width="350px"
                 />
               )}

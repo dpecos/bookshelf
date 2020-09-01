@@ -1,5 +1,6 @@
 import { History } from 'history';
 import React, { Component } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import {
   Alert,
   Col,
@@ -9,7 +10,6 @@ import {
   Row,
   Table,
 } from 'react-bootstrap';
-import { Link, useHistory } from 'react-router-dom';
 
 interface IProps {
   history: History;
@@ -34,7 +34,9 @@ class CategoriesList extends Component<IProps, IState> {
   }
 
   async fetchCategories() {
-    fetch('http://localhost:8080/api/categories')
+    fetch(
+      `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/categories`
+    )
       .then((response) => response.json())
       .then((json) => this.setState({ categories: json }))
       .catch((err) =>

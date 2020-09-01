@@ -5,7 +5,7 @@
 To create a new docker database:
 
 ```sh
-docker run --name bookshelf-db -p 127.0.0.1:5432:5432 -d -e POSTGRES_DB=bookshelf -e POSTGRES_PASSWORD=bookshelf postgres
+docker run --name bookshelf-db -p 127.0.0.1:5432:5432 -d -e POSTGRES_DB=bookshelf -e POSTGRES_PASSWORD=bookshelf postgres:12.4
 ```
 
 PSQL cli:

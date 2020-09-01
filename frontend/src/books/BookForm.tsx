@@ -60,7 +60,9 @@ class BookForm extends Component<IProps, IState> {
   }
 
   fetchCollections() {
-    fetch(`http://localhost:8080/api/collections`)
+    fetch(
+      `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/collections`
+    )
       .then((response) => response.json())
       .then((json) => this.setState({ collections: json }))
       .catch((err) =>
@@ -69,7 +71,9 @@ class BookForm extends Component<IProps, IState> {
   }
 
   fetchCategories() {
-    fetch(`http://localhost:8080/api/categories`)
+    fetch(
+      `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/categories`
+    )
       .then((response) => response.json())
       .then((json) => this.setState({ categories: json }))
       .catch((err) =>
@@ -78,7 +82,9 @@ class BookForm extends Component<IProps, IState> {
   }
 
   fetchBookDetails(bookId: string) {
-    fetch(`http://localhost:8080/api/books/${bookId}`)
+    fetch(
+      `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${bookId}`
+    )
       .then((response) => response.json())
       .then((json) => this.setState({ book: json }))
       .catch((err) =>
@@ -91,14 +97,17 @@ class BookForm extends Component<IProps, IState> {
   }
 
   async createBook() {
-    const response = await fetch(`http://localhost:8080/api/books`, {
-      method: 'post',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(this.state.book),
-    });
+    const response = await fetch(
+      `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books`,
+      {
+        method: 'post',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(this.state.book),
+      }
+    );
 
     const json = await response.json();
     if (response.ok) {
@@ -109,13 +118,16 @@ class BookForm extends Component<IProps, IState> {
   }
 
   async deleteBook() {
-    await fetch(`http://localhost:8080/api/books/${this.props.bookId}`, {
-      method: 'delete',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    await fetch(
+      `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${this.props.bookId}`,
+      {
+        method: 'delete',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
     this.props.history.push('/');
   }
 
@@ -129,7 +141,7 @@ class BookForm extends Component<IProps, IState> {
 
   async editBook() {
     const response = await fetch(
-      `http://localhost:8080/api/books/${this.props.bookId}`,
+      `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${this.props.bookId}`,
       {
         method: 'put',
         mode: 'cors',
