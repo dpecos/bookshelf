@@ -2,6 +2,7 @@ import bsCustomFileInput from 'bs-custom-file-input';
 import { History } from 'history';
 import React, { Component } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import './books.css';
 import { languages } from './languages';
 import {
   Alert,
@@ -11,6 +12,7 @@ import {
   Form,
   Navbar,
   Row,
+  Modal,
 } from 'react-bootstrap';
 
 interface IProps {
@@ -25,6 +27,7 @@ interface IState {
   collections: any;
   categories: any;
   message: string | null;
+  showConfirmDeletion: boolean;
 }
 
 class BookForm extends Component<IProps, IState> {
@@ -38,6 +41,7 @@ class BookForm extends Component<IProps, IState> {
       collections: [],
       categories: [],
       message: null,
+      showConfirmDeletion: false,
     };
   }
 
@@ -113,6 +117,14 @@ class BookForm extends Component<IProps, IState> {
       },
     });
     this.props.history.push('/');
+  }
+
+  showConfirmationDialog() {
+    this.setState({ showConfirmDeletion: true });
+  }
+
+  closeConfirmationDialog() {
+    this.setState({ showConfirmDeletion: false });
   }
 
   async editBook() {
@@ -193,7 +205,7 @@ class BookForm extends Component<IProps, IState> {
           </Container>
         )}
         <Container>
-          <Form>
+          <Form id="bookForm">
             <Row>
               <Col lg="6">
                 {[
@@ -233,7 +245,7 @@ class BookForm extends Component<IProps, IState> {
                   {
                     id: 'readingDates',
                     label: 'Reading Dates',
-                    value: this.state.book?.readingDates.join(','),
+                    value: this.state.book?.readingDates?.join(','),
                   },
                 ].map((field) => {
                   if (field.options) {
@@ -307,6 +319,18 @@ class BookForm extends Component<IProps, IState> {
         </Container>
 
         <Navbar bg="light" variant="light" fixed="bottom">
+          <Navbar.Collapse className="justify-content-start">
+            {!this.state.isNew && (
+              <>
+                <Button
+                  variant="danger"
+                  onClick={() => this.showConfirmationDialog()}
+                >
+                  Delete
+                </Button>
+              </>
+            )}
+          </Navbar.Collapse>
           <Navbar.Collapse className="justify-content-end">
             <Button
               variant="secondary"
@@ -323,9 +347,6 @@ class BookForm extends Component<IProps, IState> {
             )}
             {!this.state.isNew && (
               <>
-                <Button variant="danger" onClick={() => this.deleteBook()}>
-                  Delete
-                </Button>
                 <Button variant="warning" onClick={() => this.editBook()}>
                   Save
                 </Button>
@@ -333,6 +354,30 @@ class BookForm extends Component<IProps, IState> {
             )}
           </Navbar.Collapse>
         </Navbar>
+
+        <Modal show={this.state.showConfirmDeletion} animation={false}>
+          <Modal.Header closeButton>
+            <Modal.Title>Delete this book?</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            You are about to delete <b>{this.state.book?.title}</b>
+            <br /> <br />
+            This operation is not reversable!
+            <br /> <br />
+            Are you sure you want to proceed with the operation?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={() => this.closeConfirmationDialog()}
+            >
+              Close
+            </Button>
+            <Button variant="danger" onClick={() => this.deleteBook()}>
+              Confirm
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </>
     );
   }
