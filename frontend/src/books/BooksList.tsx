@@ -1,5 +1,6 @@
 import { History } from 'history';
 import React, { Component } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import {
   Alert,
   Col,
@@ -10,11 +11,12 @@ import {
   Navbar,
   Row,
   Table,
+  Card,
 } from 'react-bootstrap';
-import { Link, useHistory } from 'react-router-dom';
 
 interface IProps {
   history: History;
+  type: string | undefined;
 }
 
 interface IState {
@@ -38,7 +40,12 @@ class BooksList extends Component<IProps, IState> {
   }
 
   async fetchBooks() {
-    fetch('http://localhost:8080/api/books')
+    const url =
+      this.props.type === 'detailed'
+        ? `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/detailed  `
+        : `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books`;
+
+    fetch(url)
       .then((response) => response.json())
       .then((json) => this.setState({ fullList: json, books: json }))
       .catch((err) => this.setState({ message: 'Error retrieving books' }));
@@ -64,6 +71,19 @@ class BooksList extends Component<IProps, IState> {
       <>
         <Navbar>
           <Navbar.Brand>Books</Navbar.Brand>
+          <Navbar.Collapse className="justify-content-start">
+            <Nav>
+              <Nav.Link as={Link} to="/books/list">
+                Normal list
+              </Nav.Link>
+              <Nav.Link as={Link} to="/books/list/detailed">
+                Detailed list
+              </Nav.Link>
+              <Nav.Link as={Link} to="/books/list/shelf">
+                Shelf
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
           <Navbar.Collapse className="justify-content-end">
             <Nav>
               <Nav.Link as={Link} to="/books/new">
@@ -93,48 +113,138 @@ class BooksList extends Component<IProps, IState> {
           </Container>
         )}
 
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>Cover</th>
-              <th>Title</th>
-              <th>Author</th>
-              <th>Year</th>
-              <th>Category</th>
-              <th>Collection</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.fullList.length === 0 ? (
+        {this.props.type === 'shelf' &&
+          (this.state.fullList.length === 0 && !this.state.message ? (
+            <>Loading books...</>
+          ) : (
+            <Container fluid>
+              <Row>
+                {this.state.books.map((book) => (
+                  <Col key={book.id}>
+                    <Card
+                      style={{ width: '18rem' }}
+                      onClick={() => this.showBookDetails(book)}
+                    >
+                      <Card.Img
+                        variant="top"
+                        src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${book.id}/cover`}
+                      />
+                      <Card.Body>
+                        <Card.Title>{book.title}</Card.Title>
+                        <Card.Text>
+                          {book.author} ({book.year})
+                          <br />
+                          {book.category?.name}
+                          <br />
+                          {book.collection && (
+                            <>
+                              <i>{book.collection.name}</i>
+                              <br />
+                            </>
+                          )}
+                        </Card.Text>
+                        {/*<Button variant="primary">Go somewhere</Button> */}
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+            </Container>
+          ))}
+
+        {this.props.type === 'concise' && (
+          <Table striped bordered hover>
+            <thead>
               <tr>
-                <td colSpan={6}>Loading books...</td>
+                <th>Cover</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Year</th>
+                <th>Category</th>
+                <th>Collection</th>
               </tr>
-            ) : (
-              this.state.books.map((book) => (
-                <tr key={book.id} onClick={() => this.showBookDetails(book)}>
-                  <td>
-                    <img
-                      alt={book.title}
-                      src={`http://localhost:8080/api/books/${book.id}/cover`}
-                      width="50px"
-                    />
-                  </td>
-                  <td>{book.title}</td>
-                  <td>{book.author}</td>
-                  <td>{book.year}</td>
-                  <td>{book.category.name}</td>
-                  <td>{book.collection?.name}</td>
+            </thead>
+            <tbody>
+              {this.state.fullList.length === 0 && !this.state.message ? (
+                <tr>
+                  <td colSpan={6}>Loading books...</td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </Table>
+              ) : (
+                this.state.books.map((book) => (
+                  <tr key={book.id} onClick={() => this.showBookDetails(book)}>
+                    <td>
+                      <img
+                        alt={book.title}
+                        src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${book.id}/cover`}
+                        width="50px"
+                      />
+                    </td>
+                    <td>{book.title}</td>
+                    <td>{book.author}</td>
+                    <td>{book.year}</td>
+                    <td>{book.category.name}</td>
+                    <td>{book.collection?.name}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </Table>
+        )}
+
+        {this.props.type === 'detailed' && (
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Year</th>
+                <th>Category</th>
+                <th>Collection</th>
+                <th>Pages</th>
+                <th>Editorial</th>
+                <th>ISBN</th>
+                <th>URL</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.fullList.length === 0 && !this.state.message ? (
+                <tr>
+                  <td colSpan={9}>Loading books...</td>
+                </tr>
+              ) : (
+                this.state.books.map((book) => (
+                  <tr key={book.id} onClick={() => this.showBookDetails(book)}>
+                    <td>{book.title}</td>
+                    <td>{book.author}</td>
+                    <td>{book.year}</td>
+                    <td>{book.category.name}</td>
+                    <td>{book.collection?.name}</td>
+                    <td>{book.pages}</td>
+                    <td>{book.editorial}</td>
+                    <td>{book.isbn}</td>
+                    <td>{book.url}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </Table>
+        )}
       </>
     );
   }
 }
 
-export default () => {
+export function BooksListConcise() {
   const history = useHistory();
-  return <BooksList history={history} />;
-};
+  return <BooksList history={history} type={'concise'} />;
+}
+
+export function BooksListShelf() {
+  const history = useHistory();
+  return <BooksList history={history} type={'shelf'} />;
+}
+
+export function BooksListDetailed() {
+  const history = useHistory();
+  return <BooksList history={history} type={'detailed'} />;
+}

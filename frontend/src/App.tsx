@@ -5,7 +5,11 @@ import { Link, Redirect, Route, Router, Switch } from 'react-router-dom';
 import './App.css';
 import BookDetails from './books/BookDetails';
 import BookForm from './books/BookForm';
-import BooksList from './books/BooksList';
+import {
+  BooksListConcise,
+  BooksListDetailed,
+  BooksListShelf,
+} from './books/BooksList';
 import CategoriesList from './categories/CategoriesList';
 import CollectionsList from './collections/CollectionsList';
 
@@ -41,8 +45,14 @@ class App extends Component {
         </Navbar>
 
         <Switch>
+          <Route path="/books/list/detailed">
+            <BooksListDetailed />
+          </Route>
+          <Route path="/books/list/shelf">
+            <BooksListShelf />
+          </Route>
           <Route path="/books/list">
-            <BooksList />
+            <BooksListConcise />
           </Route>
           <Route path="/books/new">
             <BookForm />

@@ -27,6 +27,27 @@ export class BooksService {
     });
   }
 
+  async getDetailedBooks(): Promise<any> {
+    const books = await this.repository.retrieveBooks();
+    return books.map((book) => {
+      return {
+        id: book.id,
+        title: book.title,
+        titleOV: book.titleOV,
+        author: book.author,
+        year: book.year,
+        category: book.category,
+        collection: book.collection,
+        pages: book.pages,
+        editorial: book.editorial,
+        isbn: book.isbn,
+        url: book.url,
+        created: book.created,
+        modified: book.modified,
+      };
+    });
+  }
+
   async getBook(bookId: string): Promise<Book> {
     if (!bookId) {
       const msg = 'Book ID not specified';

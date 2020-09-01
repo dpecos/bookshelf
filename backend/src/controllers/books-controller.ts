@@ -21,6 +21,13 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
   );
 
   router.get(
+    '/detailed',
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      res.send(await booksService.getDetailedBooks());
+    })
+  );
+
+  router.get(
     '/:bookId',
     asyncHandler(async (req: express.Request, res: express.Response) => {
       try {
