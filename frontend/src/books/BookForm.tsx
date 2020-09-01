@@ -217,9 +217,35 @@ class BookForm extends Component<IProps, IState> {
             </Row>
           </Container>
         )}
-        <Container>
-          <Form id="bookForm">
+        <Container id="bookForm">
+          <Form>
             <Row>
+              <Col lg="6">
+                <img
+                  alt={this.state.book?.title}
+                  src={
+                    this.state.book?.cover ||
+                    '/img/book-cover-not-available.jpg'
+                  }
+                  id="bookCover"
+                />
+                <Form.File
+                  id="cover"
+                  label="Book cover"
+                  custom
+                  onChange={(event: any) => this.handleChangeEvent(event)}
+                />
+                <Form.Group controlId="abstract" id="bookAbstract">
+                  <Form.Label>Abstract</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={15}
+                    placeholder="Abstract"
+                    value={this.state.book?.abstract || ''}
+                    onChange={(event) => this.handleChangeEvent(event)}
+                  />
+                </Form.Group>
+              </Col>
               <Col lg="6">
                 {[
                   { id: 'title', label: 'Title' },
@@ -302,31 +328,6 @@ class BookForm extends Component<IProps, IState> {
                   }
                 })}
               </Col>
-              <Col lg="6">
-                {this.state.book?.cover && (
-                  <img
-                    alt={this.state.book?.title}
-                    src={this.state.book.cover}
-                    width="350px"
-                  />
-                )}
-                <Form.File
-                  id="cover"
-                  label="Book cover"
-                  custom
-                  onChange={(event: any) => this.handleChangeEvent(event)}
-                />
-                <Form.Group controlId="abstract">
-                  <Form.Label>Abstract</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={10}
-                    placeholder="Abstract"
-                    value={this.state.book?.abstract || ''}
-                    onChange={(event) => this.handleChangeEvent(event)}
-                  />
-                </Form.Group>
-              </Col>
             </Row>
           </Form>
         </Container>
@@ -360,7 +361,7 @@ class BookForm extends Component<IProps, IState> {
             )}
             {!this.state.isNew && (
               <>
-                <Button variant="warning" onClick={() => this.editBook()}>
+                <Button variant="success" onClick={() => this.editBook()}>
                   Save
                 </Button>
               </>

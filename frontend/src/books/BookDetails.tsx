@@ -1,6 +1,7 @@
 import { History } from 'history';
 import React, { Component } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import './books.css';
 import { getLanguage } from './languages';
 import {
   Alert,
@@ -10,6 +11,7 @@ import {
   Navbar,
   Row,
   Table,
+  Card,
 } from 'react-bootstrap';
 
 interface IProps {
@@ -94,8 +96,35 @@ export class BookDetails extends Component<IProps, IState> {
           </Container>
         )}
 
-        <Container>
+        <Container id="bookDetails">
           <Row>
+            <Col lg="6">
+              {this.state.book && (
+                <Card>
+                  <Card.Img
+                    variant="top"
+                    src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${this.state.book?.id}/cover`}
+                    onError={(event: any) =>
+                      (event.target.src = '/img/book-cover-not-available.jpg')
+                    }
+                  />
+                  {this.state.book?.abstract && (
+                    <Card.Body>
+                      <Card.Subtitle className="mb-2 text-muted">
+                        Abstract
+                      </Card.Subtitle>
+                      <Card.Text>
+                        {this.state.book?.abstract
+                          .split('\n')
+                          .map((line: string) => (
+                            <p key={line}>{line}</p>
+                          ))}
+                      </Card.Text>
+                    </Card.Body>
+                  )}
+                </Card>
+              )}
+            </Col>
             <Col lg="6">
               <Table striped bordered hover>
                 <tbody>
@@ -144,18 +173,6 @@ export class BookDetails extends Component<IProps, IState> {
                 </tbody>
               </Table>
             </Col>
-            <Col lg="6">
-              {this.state.book && (
-                <img
-                  alt={this.state.book?.title}
-                  src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${this.state.book?.id}/cover`}
-                  width="350px"
-                />
-              )}
-            </Col>
-          </Row>
-          <Row>
-            <Col lg={12}>{this.state.book?.abstract}</Col>
           </Row>
         </Container>
 

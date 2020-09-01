@@ -1,6 +1,7 @@
 import { History } from 'history';
 import React, { Component } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import './books.css';
 import { getLanguage } from './languages';
 import {
   Alert,
@@ -13,6 +14,7 @@ import {
   Row,
   Table,
   Card,
+  Button,
 } from 'react-bootstrap';
 
 interface IProps {
@@ -86,11 +88,6 @@ class BooksList extends Component<IProps, IState> {
             </Nav>
           </Navbar.Collapse>
           <Navbar.Collapse className="justify-content-end">
-            <Nav>
-              <Nav.Link as={Link} to="/books/new">
-                New book
-              </Nav.Link>
-            </Nav>
             <Form inline>
               <FormControl
                 type="text"
@@ -99,6 +96,11 @@ class BooksList extends Component<IProps, IState> {
                 onChange={(event) => this.filterBooks(event)}
               />
             </Form>
+            <Nav>
+              <Button as={Link} to="/books/new" variant="success">
+                New book
+              </Button>
+            </Nav>
           </Navbar.Collapse>
         </Navbar>
 
@@ -130,6 +132,10 @@ class BooksList extends Component<IProps, IState> {
                       <Card.Img
                         variant="top"
                         src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${book.id}/cover`}
+                        onError={(event: any) =>
+                          (event.target.src =
+                            '/img/book-cover-not-available.jpg')
+                        }
                       />
 
                       <Card.Body>
@@ -179,6 +185,10 @@ class BooksList extends Component<IProps, IState> {
                         alt={book.title}
                         src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${book.id}/cover`}
                         width="50px"
+                        onError={(event: any) =>
+                          (event.target.src =
+                            '/img/book-cover-not-available.jpg')
+                        }
                       />
                     </td>
                     <td>{book.title}</td>
@@ -224,6 +234,10 @@ class BooksList extends Component<IProps, IState> {
                         alt={book.title}
                         src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${book.id}/cover`}
                         width="50px"
+                        onError={(event: any) =>
+                          (event.target.src =
+                            '/img/book-cover-not-available.jpg')
+                        }
                       />
                     </td>
                     <td>{book.title}</td>
