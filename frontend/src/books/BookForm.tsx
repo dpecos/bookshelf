@@ -175,7 +175,7 @@ class BookForm extends Component<IProps, IState> {
     if (event) {
       const book = this.state.book;
       const field = event.target.id;
-      const value = event.target.value.trim() || null;
+      const value = event.target.value || null;
 
       if (field === 'category') {
         const category = this.state.categories.find(
