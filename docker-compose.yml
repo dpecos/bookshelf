@@ -7,19 +7,29 @@ services:
       - postgres
     environment:
       NODE_ENV: production
-    ports:
-      - '3101:8080'
+    # ports:
+    # - '3101:8080'
+    labels:
+      - traefik.enable=true
+      - traefik.port=8080
+      - traefik.http.routers.backend.rule=PathPrefix(`/api/`)
+      - traefik.http.routers.backend.entrypoints=web
 
   frontend:
     restart: unless-stopped
     build:
       context: ./frontend
       args:
-        - REACT_APP_BACKEND_PORT=3101
+        - REACT_APP_BACKEND_PORT=3100
     depends_on:
       - backend
-    ports:
-      - '3100:80'
+    # ports:
+    # - '3102:80'
+    labels:
+      - traefik.enable=true
+      - traefik.port=80
+      - traefik.http.routers.frontend.rule=PathPrefix(`/`)
+      - traefik.http.routers.frontend.entrypoints=web
 
   postgres:
     restart: unless-stopped
@@ -30,6 +40,23 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: bookshelf-prod
       POSTGRES_DB: bookshelf
+
+  traefik:
+    image: traefik:v2.2
+    command:
+      # - --log.level=DEBUG
+      - --api.insecure=true
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+    depends_on:
+      - backend
+      - frontend
+    ports:
+      - '3100:80'
+      # - '3199:8080'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
 
 volumes:
   postgres_data:
