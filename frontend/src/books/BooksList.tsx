@@ -1,6 +1,6 @@
-import { History } from 'history';
+import { History, Location } from 'history';
 import React, { Component } from 'react';
-import { Link, NavLink, useHistory } from 'react-router-dom';
+import { Link, NavLink, useHistory, useLocation } from 'react-router-dom';
 import './books.css';
 import { getLanguage } from './languages';
 import {
@@ -19,6 +19,7 @@ import {
 
 interface IProps {
   history: History;
+  location: Location;
   type: string | undefined;
 }
 
@@ -42,16 +43,37 @@ class BooksList extends Component<IProps, IState> {
     this.fetchBooks();
   }
 
+  componentDidUpdate(prevProps: IProps) {
+    if (this.props.location.search !== prevProps.location.search) {
+      this.fetchBooks();
+    }
+  }
+
   async fetchBooks() {
-    const url =
+    let url =
       this.props.type === 'detailed'
         ? `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/detailed`
         : `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books`;
 
-    fetch(url)
-      .then((response) => response.json())
-      .then((json) => this.setState({ fullList: json, books: json }))
-      .catch((err) => this.setState({ message: 'Error retrieving books' }));
+    const urlParams = new URLSearchParams(window.location.search);
+    const parameters = Array.from(urlParams.keys());
+
+    if (parameters.length > 0) {
+      const paramsList = parameters.map(
+        (param) => `${param}=${urlParams.get(param)}`
+      );
+      url = `${url}?${paramsList.join('&')}`;
+    }
+
+    const response = await fetch(url);
+    const json = await response.json();
+    if (response.status === 200) {
+      this.setState({ fullList: json, books: json });
+    } else {
+      this.setState({
+        message: `${json.type.toUpperCase()}: ${json.message}`,
+      });
+    }
   }
 
   showBookDetails(book: any) {
@@ -142,13 +164,29 @@ class BooksList extends Component<IProps, IState> {
                         <Card.Title>{book.title}</Card.Title>
                         {book.collection && (
                           <Card.Subtitle className="mb-2 text-muted">
-                            {book.collection.name}
+                            <Link
+                              to={`?collection=${book.collection?.id}`}
+                              onClick={(evt) => evt.stopPropagation()}
+                            >
+                              {book.collection?.name}
+                            </Link>
                           </Card.Subtitle>
                         )}
                         <Card.Text>
-                          {book.author} ({book.year})
+                          <Link
+                            to={`${window.location.pathname}?author=${book.author}`}
+                            onClick={(evt) => evt.stopPropagation()}
+                          >
+                            {book.author}
+                          </Link>{' '}
+                          ({book.year})
                           <br />
-                          {book.category?.name}
+                          <Link
+                            to={`?category=${book.category.id}`}
+                            onClick={(evt) => evt.stopPropagation()}
+                          >
+                            {book.category?.name}
+                          </Link>
                         </Card.Text>
                         {/*<Button variant="primary">Go somewhere</Button> */}
                       </Card.Body>
@@ -193,10 +231,31 @@ class BooksList extends Component<IProps, IState> {
                     </td>
                     <td>{book.title}</td>
                     <td>{getLanguage(book.language)}</td>
-                    <td>{book.author}</td>
+                    <td>
+                      <Link
+                        to={`${window.location.pathname}?author=${book.author}`}
+                        onClick={(evt) => evt.stopPropagation()}
+                      >
+                        {book.author}
+                      </Link>
+                    </td>
                     <td>{book.year}</td>
-                    <td>{book.category.name}</td>
-                    <td>{book.collection?.name}</td>
+                    <td>
+                      <Link
+                        to={`?category=${book.category.id}`}
+                        onClick={(evt) => evt.stopPropagation()}
+                      >
+                        {book.category?.name}
+                      </Link>
+                    </td>
+                    <td>
+                      <Link
+                        to={`?collection=${book.collection?.id}`}
+                        onClick={(evt) => evt.stopPropagation()}
+                      >
+                        {book.collection?.name}
+                      </Link>
+                    </td>
                   </tr>
                 ))
               )}
@@ -242,10 +301,31 @@ class BooksList extends Component<IProps, IState> {
                     </td>
                     <td>{book.title}</td>
                     <td>{getLanguage(book.language)}</td>
-                    <td>{book.author}</td>
+                    <td>
+                      <Link
+                        to={`${window.location.pathname}?author=${book.author}`}
+                        onClick={(evt) => evt.stopPropagation()}
+                      >
+                        {book.author}
+                      </Link>
+                    </td>
                     <td>{book.year}</td>
-                    <td>{book.category.name}</td>
-                    <td>{book.collection?.name}</td>
+                    <td>
+                      <Link
+                        to={`?category=${book.category.id}`}
+                        onClick={(evt) => evt.stopPropagation()}
+                      >
+                        {book.category?.name}
+                      </Link>
+                    </td>
+                    <td>
+                      <Link
+                        to={`?collection=${book.collection?.id}`}
+                        onClick={(evt) => evt.stopPropagation()}
+                      >
+                        {book.collection?.name}
+                      </Link>
+                    </td>
                     <td>{book.pages}</td>
                     <td>{book.editorial}</td>
                     <td>{book.isbn}</td>
@@ -263,15 +343,18 @@ class BooksList extends Component<IProps, IState> {
 
 export function BooksListConcise() {
   const history = useHistory();
-  return <BooksList history={history} type={'concise'} />;
+  const location = useLocation();
+  return <BooksList history={history} location={location} type={'concise'} />;
 }
 
 export function BooksListShelf() {
   const history = useHistory();
-  return <BooksList history={history} type={'shelf'} />;
+  const location = useLocation();
+  return <BooksList history={history} location={location} type={'shelf'} />;
 }
 
 export function BooksListDetailed() {
   const history = useHistory();
-  return <BooksList history={history} type={'detailed'} />;
+  const location = useLocation();
+  return <BooksList history={history} location={location} type={'detailed'} />;
 }

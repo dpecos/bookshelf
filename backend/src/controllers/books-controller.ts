@@ -1,4 +1,5 @@
 import { Book } from '@repository/models/book';
+import { BookFilter } from '@repository/repository';
 import { BooksService } from '@services/books-service';
 import { getLogger } from '@utils/logger';
 import express from 'express';
@@ -16,14 +17,14 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
   router.get(
     '/',
     asyncHandler(async (req: express.Request, res: express.Response) => {
-      res.send(await booksService.getBooks());
+      res.send(await booksService.getBooks(req.query as BookFilter));
     })
   );
 
   router.get(
     '/detailed',
     asyncHandler(async (req: express.Request, res: express.Response) => {
-      res.send(await booksService.getDetailedBooks());
+      res.send(await booksService.getDetailedBooks(req.query as BookFilter));
     })
   );
 

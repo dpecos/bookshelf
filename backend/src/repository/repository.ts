@@ -6,6 +6,12 @@ import { Book } from './models/book';
 import { Category } from './models/category';
 import { Collection } from './models/collection';
 
+export class BookFilter {
+  author: string;
+  category: string;
+  collection: string;
+}
+
 export class Repository {
   connection: Connection;
   logger: winston.Logger;
@@ -77,9 +83,24 @@ export class Repository {
     return await collectionsRepository.find({ order: { name: 'ASC' } });
   }
 
-  async retrieveBooks(): Promise<Book[]> {
+  async retrieveBooks(filter: BookFilter): Promise<Book[]> {
     const booksRepository = this.connection.getRepository(Book);
-    return await booksRepository.find({ order: { readingDates: 'DESC' } });
+
+    let where: any = {};
+    if (filter?.author) {
+      where.author = filter.author;
+    }
+    if (filter.category) {
+      where.category = { id: filter.category };
+    }
+    if (filter.collection) {
+      where.collection = { id: filter.collection };
+    }
+
+    return await booksRepository.find({
+      where,
+      order: { readingDates: 'DESC' },
+    });
   }
 
   async retrieveBook(bookId: string): Promise<Book> {

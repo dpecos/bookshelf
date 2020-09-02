@@ -1,5 +1,5 @@
 import { Book } from '@repository/models/book';
-import { Repository } from '@repository/repository';
+import { BookFilter, Repository } from '@repository/repository';
 import { getLogger } from '@utils/logger';
 import winston from 'winston';
 
@@ -10,8 +10,8 @@ export class BooksService {
     this.logger = getLogger('service:books');
   }
 
-  async getBooks(): Promise<any> {
-    const books = await this.repository.retrieveBooks();
+  async getBooks(filter: BookFilter): Promise<any> {
+    const books = await this.repository.retrieveBooks(filter);
     return books.map((book) => {
       return {
         id: book.id,
@@ -28,8 +28,8 @@ export class BooksService {
     });
   }
 
-  async getDetailedBooks(): Promise<any> {
-    const books = await this.repository.retrieveBooks();
+  async getDetailedBooks(filter: BookFilter): Promise<any> {
+    const books = await this.repository.retrieveBooks(filter);
     return books.map((book) => {
       return {
         id: book.id,
