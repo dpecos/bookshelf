@@ -1,17 +1,24 @@
 import { createBrowserHistory } from 'history';
 import React, { Component } from 'react';
 import { Nav, Navbar } from 'react-bootstrap';
-import { Link, Redirect, Route, Router, Switch } from 'react-router-dom';
 import './App.css';
 import BookDetails from './books/BookDetails';
 import BookForm from './books/BookForm';
+import CategoriesList from './categories/CategoriesList';
+import CollectionsList from './collections/CollectionsList';
+import {
+  Link,
+  NavLink,
+  Redirect,
+  Route,
+  Router,
+  Switch,
+} from 'react-router-dom';
 import {
   BooksListConcise,
   BooksListDetailed,
   BooksListShelf,
 } from './books/BooksList';
-import CategoriesList from './categories/CategoriesList';
-import CollectionsList from './collections/CollectionsList';
 
 class App extends Component {
   render() {
@@ -24,13 +31,13 @@ class App extends Component {
           </Navbar.Brand>
           <Navbar.Collapse>
             <Nav className="mr-auto">
-              <Nav.Link as={Link} to="/books/list">
+              <Nav.Link as={NavLink} to="/books/list">
                 Books
               </Nav.Link>
-              <Nav.Link as={Link} to="/categories/list">
+              <Nav.Link as={NavLink} to="/categories/list">
                 Categories
               </Nav.Link>
-              <Nav.Link as={Link} to="/collections/list">
+              <Nav.Link as={NavLink} to="/collections/list">
                 Collections
               </Nav.Link>
             </Nav>

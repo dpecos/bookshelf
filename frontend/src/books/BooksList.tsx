@@ -1,6 +1,6 @@
 import { History } from 'history';
 import React, { Component } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, NavLink, useHistory } from 'react-router-dom';
 import './books.css';
 import { getLanguage } from './languages';
 import {
@@ -75,14 +75,14 @@ class BooksList extends Component<IProps, IState> {
         <Navbar>
           <Navbar.Brand>Books</Navbar.Brand>
           <Navbar.Collapse className="justify-content-start">
-            <Nav>
-              <Nav.Link as={Link} to="/books/list">
+            <Nav variant="pills">
+              <Nav.Link as={NavLink} to="/books/list" exact={true}>
                 Normal list
               </Nav.Link>
-              <Nav.Link as={Link} to="/books/list/detailed">
+              <Nav.Link as={NavLink} to="/books/list/detailed" exact={true}>
                 Detailed list
               </Nav.Link>
-              <Nav.Link as={Link} to="/books/list/shelf">
+              <Nav.Link as={NavLink} to="/books/list/shelf" exact={true}>
                 Shelf
               </Nav.Link>
             </Nav>

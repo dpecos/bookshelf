@@ -16,3 +16,7 @@
 .navbar .btn {
   margin-left: 10px;
 }
+
+.navbar .nav-link.active {
+  color: white !important;
+}

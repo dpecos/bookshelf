@@ -9,6 +9,7 @@ import {
   Navbar,
   Row,
   Table,
+  Button,
 } from 'react-bootstrap';
 
 interface IProps {
@@ -51,9 +52,9 @@ class CategoriesList extends Component<IProps, IState> {
           <Navbar.Brand>Categories</Navbar.Brand>
           <Navbar.Collapse className="justify-content-end">
             <Nav>
-              <Nav.Link as={Link} to="/categories/new">
+              <Button as={Link} to="/categories/new" variant="success">
                 New category
-              </Nav.Link>
+              </Button>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
