@@ -103,6 +103,7 @@ export class BookDetails extends Component<IProps, IState> {
                 <Card>
                   <Card.Img
                     variant="top"
+                    id="bookCover"
                     src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${this.state.book?.id}/cover`}
                     onError={(event: any) =>
                       (event.target.src = '/img/book-cover-not-available.jpg')
@@ -113,13 +114,11 @@ export class BookDetails extends Component<IProps, IState> {
                       <Card.Subtitle className="mb-2 text-muted">
                         Abstract
                       </Card.Subtitle>
-                      <Card.Text>
-                        {this.state.book?.abstract
-                          .split('\n')
-                          .map((line: string) => (
-                            <p key={line}>{line}</p>
-                          ))}
-                      </Card.Text>
+                      {this.state.book?.abstract
+                        .split('\n')
+                        .map((line: string, idx: number) => (
+                          <Card.Text key={idx}>{line}</Card.Text>
+                        ))}
                     </Card.Body>
                   )}
                 </Card>
