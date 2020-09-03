@@ -15,19 +15,24 @@ export class BooksRepository {
     const booksRepository = this.connection.getRepository(Book);
 
     let where: any = {};
+    let order: any = { readingDates: 'DESC' };
+
     if (filter?.author) {
       where.author = filter.author;
+      order = { year: 'ASC' };
     }
     if (filter.category) {
       where.category = { id: filter.category };
+      order = { title: 'ASC' };
     }
     if (filter.collection) {
       where.collection = { id: filter.collection };
+      order = { collectionNumber: 'ASC', year: 'ASC' };
     }
 
     return await booksRepository.find({
       where,
-      order: { readingDates: 'DESC' },
+      order,
     });
   }
 

@@ -43,7 +43,7 @@ export class Book {
   collection: Collection;
 
   @Column({ nullable: true })
-  collectionNumber: number;
+  collectionNumber: string;
 
   @Column({ nullable: true })
   year: number;
