@@ -369,7 +369,11 @@ class BookForm extends Component<IProps, IState> {
           </Navbar.Collapse>
         </Navbar>
 
-        <Modal show={this.state.showConfirmDeletion} animation={false}>
+        <Modal
+          show={this.state.showConfirmDeletion}
+          animation={false}
+          onHide={() => this.closeConfirmationDialog()}
+        >
           <Modal.Header closeButton>
             <Modal.Title>Delete this book?</Modal.Title>
           </Modal.Header>
