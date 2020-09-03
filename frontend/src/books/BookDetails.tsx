@@ -1,6 +1,6 @@
 import { History } from 'history';
 import React, { Component } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import './books.css';
 import { getLanguage } from './languages';
 import {
@@ -140,17 +140,23 @@ export class BookDetails extends Component<IProps, IState> {
                       label: 'Language OV',
                       value: getLanguage(this.state.book?.languageOV),
                     },
-                    { id: 'author', label: 'Author' },
+                    {
+                      id: 'author',
+                      label: 'Author',
+                      link: `/books/list?author=${this.state.book?.author}`,
+                    },
                     { id: 'year', label: 'Year' },
                     {
                       id: 'category',
                       label: 'Category',
                       value: this.state.book?.category.name,
+                      link: `/books/list?category=${this.state.book?.category.id}`,
                     },
                     {
                       id: 'collection',
                       label: 'Collection',
                       value: this.state.book?.collection?.name,
+                      link: `/books/list?collection=${this.state.book?.collection?.id}`,
                     },
                     { id: 'pages', label: 'Pages' },
                     { id: 'editorial', label: 'Editorial' },
@@ -165,7 +171,16 @@ export class BookDetails extends Component<IProps, IState> {
                     <tr key={field.id}>
                       <td>{field.label}</td>
                       <td>
-                        {field.value || this.state.book?.[field.id] || ''}
+                        {field.link && (
+                          <Link
+                            to={field.link}
+                            onClick={(evt) => evt.stopPropagation()}
+                          >
+                            {field.value || this.state.book?.[field.id] || ''}
+                          </Link>
+                        )}
+                        {!field.link &&
+                          (field.value || this.state.book?.[field.id] || '')}
                       </td>
                     </tr>
                   ))}
