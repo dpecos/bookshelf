@@ -1,9 +1,9 @@
 import { Book } from '@repository/models/book';
-import { BookFilter } from '@repository/repository';
 import { BooksService } from '@services/books-service';
 import { getLogger } from '@utils/logger';
 import express from 'express';
 import asyncHandler from 'express-async-handler';
+import { BookFilter } from './filters/books-filter';
 import {
   convertBufferToDataURL,
   convertDataURLToBuffer,

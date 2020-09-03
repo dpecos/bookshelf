@@ -2,22 +2,23 @@ import { loadConfig } from '@utils/config';
 import { getLogger } from '@utils/logger';
 import { Connection, createConnection } from 'typeorm';
 import winston from 'winston';
+import { BooksRepository } from './books-repository';
+import { CategoriesRepository } from './categories-repository';
+import { CollectionsRepository } from './collections-repository';
 import { Book } from './models/book';
 import { Category } from './models/category';
 import { Collection } from './models/collection';
-
-export class BookFilter {
-  author: string;
-  category: string;
-  collection: string;
-}
 
 export class Repository {
   connection: Connection;
   logger: winston.Logger;
 
+  books: BooksRepository;
+  categories: CategoriesRepository;
+  collections: CollectionsRepository;
+
   constructor() {
-    this.logger = getLogger('repository');
+    this.logger = getLogger('repository:database');
   }
 
   async connect() {
@@ -49,102 +50,16 @@ export class Repository {
       err.handled = true;
       throw err;
     }
+
+    this.books = new BooksRepository(this.connection);
+    this.categories = new CategoriesRepository(this.connection);
+    this.collections = new CollectionsRepository(this.connection);
   }
 
   async disconnect() {
     if (this.connection) {
       await this.connection.close();
       this.logger.warn('Database disconnected');
-    }
-  }
-
-  // async saveTester(tester: Tester): Promise<Tester> {
-  //   const testerRepository = this.connection.getRepository(Tester);
-
-  //   return await testerRepository.save(tester);
-  // }
-
-  // async retrieveTesterProfile(
-  //   app: string,
-  //   platformId: string
-  // ): Promise<Tester> {
-  //   const testerRepository = this.connection.getRepository(Tester);
-
-  //   return await testerRepository.findOne({ app, platformId });
-  // }
-
-  async retrieveCategories(): Promise<Category[]> {
-    const categoriesRepository = this.connection.getRepository(Category);
-    return await categoriesRepository.find({ order: { name: 'ASC' } });
-  }
-
-  async retrieveCollections(): Promise<Collection[]> {
-    const collectionsRepository = this.connection.getRepository(Collection);
-    return await collectionsRepository.find({ order: { name: 'ASC' } });
-  }
-
-  async retrieveBooks(filter: BookFilter): Promise<Book[]> {
-    const booksRepository = this.connection.getRepository(Book);
-
-    let where: any = {};
-    if (filter?.author) {
-      where.author = filter.author;
-    }
-    if (filter.category) {
-      where.category = { id: filter.category };
-    }
-    if (filter.collection) {
-      where.collection = { id: filter.collection };
-    }
-
-    return await booksRepository.find({
-      where,
-      order: { readingDates: 'DESC' },
-    });
-  }
-
-  async retrieveBook(bookId: string): Promise<Book> {
-    try {
-      const booksRepository = this.connection.getRepository(Book);
-      return await booksRepository.findOneOrFail({ where: { id: bookId } });
-    } catch (err) {
-      const message = 'Error retrieving book';
-      this.logger.error(`${message}: ${err}`);
-      throw new Error(message);
-    }
-  }
-
-  async updateBook(book: Book): Promise<void> {
-    try {
-      const booksRepository = this.connection.getRepository(Book);
-      await booksRepository.update(book.id, book);
-    } catch (err) {
-      const message = 'Error updating book';
-      this.logger.error(`${message}: ${err}`);
-      throw new Error(message);
-    }
-  }
-
-  async createBook(book: Book): Promise<Book> {
-    try {
-      const booksRepository = this.connection.getRepository(Book);
-      delete book.id;
-      return await booksRepository.save(book);
-    } catch (err) {
-      const message = 'Error creating book';
-      this.logger.error(`${message}: ${err}`);
-      throw new Error(message);
-    }
-  }
-
-  async deleteBook(bookId: string): Promise<void> {
-    try {
-      const booksRepository = this.connection.getRepository(Book);
-      await booksRepository.delete(bookId);
-    } catch (err) {
-      const message = 'Error deleting book';
-      this.logger.error(`${message}: ${err}`);
-      throw new Error(message);
     }
   }
 }

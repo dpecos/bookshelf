@@ -1,5 +1,6 @@
+import { BookFilter } from '@controllers/filters/books-filter';
 import { Book } from '@repository/models/book';
-import { BookFilter, Repository } from '@repository/repository';
+import { Repository } from '@repository/repository';
 import { getLogger } from '@utils/logger';
 import winston from 'winston';
 
@@ -11,7 +12,7 @@ export class BooksService {
   }
 
   async getBooks(filter: BookFilter): Promise<any> {
-    const books = await this.repository.retrieveBooks(filter);
+    const books = await this.repository.books.retrieveBooks(filter);
     return books.map((book) => {
       return {
         id: book.id,
@@ -29,7 +30,7 @@ export class BooksService {
   }
 
   async getDetailedBooks(filter: BookFilter): Promise<any> {
-    const books = await this.repository.retrieveBooks(filter);
+    const books = await this.repository.books.retrieveBooks(filter);
     return books.map((book) => {
       return {
         id: book.id,
@@ -57,7 +58,7 @@ export class BooksService {
       throw new Error(msg);
     }
 
-    const book = await this.repository.retrieveBook(bookId);
+    const book = await this.repository.books.retrieveBook(bookId);
     return book;
   }
 
@@ -68,23 +69,23 @@ export class BooksService {
       throw new Error(msg);
     }
 
-    const book = await this.repository.retrieveBook(bookId);
+    const book = await this.repository.books.retrieveBook(bookId);
     return book.cover;
   }
 
   async updateBook(book: Book): Promise<void> {
-    await this.repository.updateBook(book);
+    await this.repository.books.updateBook(book);
     this.logger.debug(`Book ${book.id} updated successfully`);
   }
 
   async createBook(book: Book): Promise<Book> {
-    const newBook = await this.repository.createBook(book);
+    const newBook = await this.repository.books.createBook(book);
     this.logger.debug(`Book ${book.id} created successfully`);
     return newBook;
   }
 
   async deleteBook(bookId: string): Promise<void> {
-    await this.repository.deleteBook(bookId);
+    await this.repository.books.deleteBook(bookId);
     this.logger.debug(`Book ${bookId} deleted successfully`);
   }
 }
