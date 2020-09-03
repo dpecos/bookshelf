@@ -43,6 +43,9 @@ export class Book {
   collection: Collection;
 
   @Column({ nullable: true })
+  collectionNumber: number;
+
+  @Column({ nullable: true })
   year: number;
 
   @Column({ nullable: true })

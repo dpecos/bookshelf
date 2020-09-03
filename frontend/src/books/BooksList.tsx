@@ -170,6 +170,9 @@ class BooksList extends Component<IProps, IState> {
                             >
                               {book.collection?.name}
                             </Link>
+                            {book.collectionNumber
+                              ? ` (${book.collectionNumber})`
+                              : ''}
                           </Card.Subtitle>
                         )}
                         <Card.Text>
@@ -255,6 +258,9 @@ class BooksList extends Component<IProps, IState> {
                       >
                         {book.collection?.name}
                       </Link>
+                      {book.collectionNumber
+                        ? ` (${book.collectionNumber})`
+                        : ''}
                     </td>
                   </tr>
                 ))
@@ -325,6 +331,9 @@ class BooksList extends Component<IProps, IState> {
                       >
                         {book.collection?.name}
                       </Link>
+                      {book.collectionNumber
+                        ? ` (${book.collectionNumber})`
+                        : ''}
                     </td>
                     <td>{book.pages}</td>
                     <td>{book.editorial}</td>

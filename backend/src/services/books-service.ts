@@ -23,6 +23,7 @@ export class BooksService {
         year: book.year,
         category: book.category,
         collection: book.collection,
+        collectionNumber: book.collectionNumber,
         created: book.created,
         modified: book.modified,
       };
@@ -41,6 +42,7 @@ export class BooksService {
         year: book.year,
         category: book.category,
         collection: book.collection,
+        collectionNumber: book.collectionNumber,
         pages: book.pages,
         editorial: book.editorial,
         isbn: book.isbn,

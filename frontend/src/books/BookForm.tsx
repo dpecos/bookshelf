@@ -277,6 +277,7 @@ class BookForm extends Component<IProps, IState> {
                       return { value: collection.id, label: collection.name };
                     }),
                   },
+                  { id: 'collectionNumber', label: 'Collection #' },
                   { id: 'pages', label: 'Pages' },
                   { id: 'editorial', label: 'Editorial' },
                   { id: 'isbn', label: 'ISBN' },

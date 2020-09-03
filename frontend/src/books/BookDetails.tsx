@@ -158,6 +158,7 @@ export class BookDetails extends Component<IProps, IState> {
                       value: this.state.book?.collection?.name,
                       link: `/books/list?collection=${this.state.book?.collection?.id}`,
                     },
+                    { id: 'collectionNumber', label: 'Collection #' },
                     { id: 'pages', label: 'Pages' },
                     { id: 'editorial', label: 'Editorial' },
                     { id: 'isbn', label: 'ISBN' },
