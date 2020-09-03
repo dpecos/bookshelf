@@ -27,6 +27,12 @@ class App extends Component {
       <Router history={history}>
         <Navbar bg="dark" variant="dark" expand="lg">
           <Navbar.Brand as={Link} to="/">
+            <img
+              alt="BookShelf"
+              src="/logo192.png"
+              width="30px"
+              style={{ margin: '0px 20px 0px 5px' }}
+            />
             BookShelf
           </Navbar.Brand>
           <Navbar.Collapse>
