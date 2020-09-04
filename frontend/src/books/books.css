@@ -21,3 +21,12 @@
 .navbar .nav-link.active {
   color: white !important;
 }
+
+#filterInfo {
+  margin: 30px 80px;
+}
+
+#filterInfo a {
+  margin: 10px 0px 20px 0px;
+  display: block;
+}

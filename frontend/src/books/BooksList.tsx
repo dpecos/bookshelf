@@ -1,6 +1,11 @@
 import { History, Location } from 'history';
 import React, { Component } from 'react';
-import { Link, NavLink, useHistory, useLocation } from 'react-router-dom';
+import {
+  Link,
+  NavLink,
+  useHistory,
+  useLocation
+  } from 'react-router-dom';
 import './books.css';
 import { getLanguage } from './languages';
 import {
@@ -15,6 +20,7 @@ import {
   Table,
   Card,
   Button,
+  Jumbotron,
 } from 'react-bootstrap';
 
 interface IProps {
@@ -27,6 +33,9 @@ interface IState {
   books: any[];
   fullList: any[];
   message: string | null;
+  filterHeader: string | null;
+  filterBody: string | null;
+  filterLink: string | null;
 }
 class BooksList extends Component<IProps, IState> {
   constructor(props: IProps) {
@@ -36,6 +45,9 @@ class BooksList extends Component<IProps, IState> {
       books: [],
       fullList: [],
       message: null,
+      filterHeader: null,
+      filterBody: null,
+      filterLink: null,
     };
   }
 
@@ -49,21 +61,80 @@ class BooksList extends Component<IProps, IState> {
     }
   }
 
+  async fetchCategory(id: string | null): Promise<any> {
+    if (!id) {
+      return null;
+    }
+
+    const response = await fetch(
+      `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/categories/${id}`
+    );
+    const json = await response.json();
+    return json;
+  }
+
+  async fetchCollection(id: string | null): Promise<any> {
+    if (!id) {
+      return null;
+    }
+
+    const response = await fetch(
+      `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/collections/${id}`
+    );
+    const json = await response.json();
+    return json;
+  }
+
+  async parseFilterParameters(): Promise<string> {
+    const urlParams = new URLSearchParams(window.location.search);
+    const parameters = Array.from(urlParams.keys());
+
+    let url: string = '';
+
+    if (parameters.length > 0) {
+      const paramsList = parameters.map(
+        (param) => `${param}=${urlParams.get(param)}`
+      );
+      url = `?${paramsList.join('&')}`;
+
+      const filter = parameters.pop() || '';
+      const filterValue = urlParams.get(filter);
+
+      if (filter === 'author') {
+        this.setState({
+          filterHeader: filterValue,
+          filterBody: null,
+          filterLink: null,
+        });
+      } else if (filter === 'category') {
+        const category = await this.fetchCategory(filterValue);
+        this.setState({
+          filterHeader: category.name,
+          filterBody: null,
+          filterLink: null,
+        });
+      } else if (filter === 'collection') {
+        const collection = await this.fetchCollection(filterValue);
+        this.setState({
+          filterHeader: collection.name,
+          filterBody: collection.description,
+          filterLink: collection.link,
+        });
+      }
+    } else {
+      this.setState({ filterHeader: null, filterBody: null });
+    }
+
+    return url;
+  }
+
   async fetchBooks() {
     let url =
       this.props.type === 'detailed'
         ? `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/detailed`
         : `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books`;
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const parameters = Array.from(urlParams.keys());
-
-    if (parameters.length > 0) {
-      const paramsList = parameters.map(
-        (param) => `${param}=${urlParams.get(param)}`
-      );
-      url = `${url}?${paramsList.join('&')}`;
-    }
+    url = `${url}${await this.parseFilterParameters()}`;
 
     const response = await fetch(url);
     const json = await response.json();
@@ -137,6 +208,26 @@ class BooksList extends Component<IProps, IState> {
               </Col>
             </Row>
           </Container>
+        )}
+
+        {this.state.filterHeader && (
+          <Jumbotron id="filterInfo">
+            <h1>{this.state.filterHeader}</h1>
+            {this.state.filterLink && (
+              <a
+                href={this.state.filterLink}
+                onClick={(evt) => evt.stopPropagation()}
+                target="_new"
+              >
+                {this.state.filterLink}
+              </a>
+            )}
+            {this.state.filterBody
+              ?.split('\n')
+              .map((line: string, idx: number) => (
+                <p key={idx}>{line}</p>
+              ))}
+          </Jumbotron>
         )}
 
         {this.props.type === 'shelf' &&
