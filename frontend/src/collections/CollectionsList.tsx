@@ -157,6 +157,7 @@ class CollectionsList extends Component<IProps, IState> {
             <tr>
               <th>Name</th>
               <th>Link</th>
+              <th>Description</th>
             </tr>
           </thead>
           <tbody>
@@ -179,6 +180,7 @@ class CollectionsList extends Component<IProps, IState> {
                     </Link>
                   </td>
                   <td>{collection?.link}</td>
+                  <td>{collection?.description}</td>
                 </tr>
               ))
             )}
@@ -215,6 +217,16 @@ class CollectionsList extends Component<IProps, IState> {
                   type="text"
                   placeholder="Link"
                   value={this.state.collection?.link || ''}
+                  onChange={(event) => this.handleChangeEvent(event)}
+                />
+              </Form.Group>
+              <Form.Group controlId="description" id="description">
+                <Form.Label>Description</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={15}
+                  placeholder="Description"
+                  value={this.state.collection?.description || ''}
                   onChange={(event) => this.handleChangeEvent(event)}
                 />
               </Form.Group>
