@@ -428,7 +428,15 @@ class BooksList extends Component<IProps, IState> {
                     </td>
                     <td>{book.pages}</td>
                     <td>{book.editorial}</td>
-                    <td>{book.isbn}</td>
+                    <td>
+                      <a
+                        href={`https://en.wikipedia.org/wiki/Special:BookSources?isbn=${book.isbn}`}
+                        onClick={(evt) => evt.stopPropagation()}
+                        target="_new"
+                      >
+                        {book.isbn}
+                      </a>
+                    </td>
                     <td>{book.url}</td>
                   </tr>
                 ))

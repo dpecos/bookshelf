@@ -161,7 +161,12 @@ export class BookDetails extends Component<IProps, IState> {
                     { id: 'collectionNumber', label: 'Collection #' },
                     { id: 'pages', label: 'Pages' },
                     { id: 'editorial', label: 'Editorial' },
-                    { id: 'isbn', label: 'ISBN' },
+                    {
+                      id: 'isbn',
+                      label: 'ISBN',
+                      link: `https://en.wikipedia.org/wiki/Special:BookSources?isbn=${this.state.book?.isbn}`,
+                      target: '_new',
+                    },
                     { id: 'url', label: 'URL' },
                     {
                       id: 'readingDates',
@@ -172,13 +177,22 @@ export class BookDetails extends Component<IProps, IState> {
                     <tr key={field.id}>
                       <td>{field.label}</td>
                       <td>
-                        {field.link && (
+                        {field.link && !field.target && (
                           <Link
                             to={field.link}
                             onClick={(evt) => evt.stopPropagation()}
                           >
                             {field.value || this.state.book?.[field.id] || ''}
                           </Link>
+                        )}
+                        {field.link && field.target && (
+                          <a
+                            href={field.link}
+                            onClick={(evt) => evt.stopPropagation()}
+                            target={field.target}
+                          >
+                            {field.value || this.state.book?.[field.id] || ''}
+                          </a>
                         )}
                         {!field.link &&
                           (field.value || this.state.book?.[field.id] || '')}
