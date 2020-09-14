@@ -1,3 +1,4 @@
+import { Author } from './author';
 import { Category } from './category';
 import { Collection } from './collection';
 import {
@@ -25,6 +26,13 @@ export class Book {
 
   @Column({ nullable: true })
   languageOV: string;
+
+  @ManyToOne(() => Author, (author) => author.books, {
+    cascade: false,
+    // nullable: false,
+    eager: true,
+  })
+  authorEntity: Author;
 
   @Column()
   author: string;
