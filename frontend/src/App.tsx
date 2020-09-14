@@ -2,6 +2,7 @@ import { createBrowserHistory } from 'history';
 import React, { Component } from 'react';
 import { Nav, Navbar } from 'react-bootstrap';
 import './App.css';
+import AuthorsList from './authors/AuthorsList';
 import BookDetails from './books/BookDetails';
 import BookForm from './books/BookForm';
 import CategoriesList from './categories/CategoriesList';
@@ -35,10 +36,13 @@ class App extends Component {
             />
             BookShelf
           </Navbar.Brand>
-          <Navbar.Collapse>
+          <Navbar>
             <Nav className="mr-auto">
               <Nav.Link as={NavLink} to="/books/list">
                 Books
+              </Nav.Link>
+              <Nav.Link as={NavLink} to="/authors/list">
+                Authors
               </Nav.Link>
               <Nav.Link as={NavLink} to="/categories/list">
                 Categories
@@ -47,7 +51,7 @@ class App extends Component {
                 Collections
               </Nav.Link>
             </Nav>
-          </Navbar.Collapse>
+          </Navbar>
           <Navbar.Collapse className="justify-content-end">
             <Nav>
               <Nav.Link href="https://github.com/dpecos/bookshelf">
@@ -75,6 +79,10 @@ class App extends Component {
           </Route>
           <Route path="/books/:bookId">
             <BookDetails />
+          </Route>
+
+          <Route path="/authors/list">
+            <AuthorsList />
           </Route>
 
           <Route path="/categories/list">

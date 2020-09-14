@@ -29,7 +29,7 @@ export class Book {
 
   @ManyToOne(() => Author, (author) => author.books, {
     cascade: false,
-    // nullable: false,
+    nullable: false,
     eager: true,
   })
   author: Author;

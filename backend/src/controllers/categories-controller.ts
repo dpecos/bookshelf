@@ -7,7 +7,7 @@ import asyncHandler from 'express-async-handler';
 export function setupCategoriesAPI(
   categoriesService: CategoriesService
 ): express.Router {
-  const logger = getLogger('controller:cateogries');
+  const logger = getLogger('controller:categories');
 
   const router = new express.Router();
 

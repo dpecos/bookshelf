@@ -61,6 +61,18 @@ class BooksList extends Component<IProps, IState> {
     }
   }
 
+  async fetchAuthor(id: string | null): Promise<any> {
+    if (!id) {
+      return null;
+    }
+
+    const response = await fetch(
+      `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/authors/${id}`
+    );
+    const json = await response.json();
+    return json;
+  }
+
   async fetchCategory(id: string | null): Promise<any> {
     if (!id) {
       return null;
@@ -101,8 +113,9 @@ class BooksList extends Component<IProps, IState> {
       const filterValue = urlParams.get(filter);
 
       if (filter === 'author') {
+        const author = await this.fetchAuthor(filterValue);
         this.setState({
-          filterHeader: filterValue,
+          filterHeader: author.name,
           filterBody: null,
           filterLink: null,
         });
@@ -157,7 +170,8 @@ class BooksList extends Component<IProps, IState> {
       books: this.state.fullList.filter(
         (book) =>
           book.title.toLowerCase().indexOf(filter) !== -1 ||
-          (book.titleOV && book.titleOV.toLowerCase().indexOf(filter) !== -1)
+          (book.titleOV && book.titleOV.toLowerCase().indexOf(filter) !== -1) ||
+          book.author.name.toLowerCase().indexOf(filter) !== -1
       ),
     });
   }
@@ -268,10 +282,10 @@ class BooksList extends Component<IProps, IState> {
                         )}
                         <Card.Text>
                           <Link
-                            to={`${window.location.pathname}?author=${book.author}`}
+                            to={`${window.location.pathname}?author=${book.author.id}`}
                             onClick={(evt) => evt.stopPropagation()}
                           >
-                            {book.author}
+                            {book.author.name}
                           </Link>{' '}
                           ({book.year})
                           <br />
@@ -327,10 +341,10 @@ class BooksList extends Component<IProps, IState> {
                     <td>{getLanguage(book.language)}</td>
                     <td>
                       <Link
-                        to={`${window.location.pathname}?author=${book.author}`}
+                        to={`${window.location.pathname}?author=${book.author.id}`}
                         onClick={(evt) => evt.stopPropagation()}
                       >
-                        {book.author}
+                        {book.author.name}
                       </Link>
                     </td>
                     <td>{book.year}</td>
@@ -400,10 +414,10 @@ class BooksList extends Component<IProps, IState> {
                     <td>{getLanguage(book.language)}</td>
                     <td>
                       <Link
-                        to={`${window.location.pathname}?author=${book.author}`}
+                        to={`${window.location.pathname}?author=${book.author.id}`}
                         onClick={(evt) => evt.stopPropagation()}
                       >
-                        {book.author}
+                        {book.author.name}
                       </Link>
                     </td>
                     <td>{book.year}</td>

@@ -24,8 +24,9 @@ interface IState {
   book: any;
   isNew: boolean;
   pageTitle: string;
-  collections: any;
-  categories: any;
+  authors: [];
+  collections: [];
+  categories: [];
   message: string | null;
   showConfirmDeletion: boolean;
 }
@@ -38,6 +39,7 @@ class BookForm extends Component<IProps, IState> {
       book: null,
       isNew: false,
       pageTitle: '',
+      authors: [],
       collections: [],
       categories: [],
       message: null,
@@ -48,6 +50,7 @@ class BookForm extends Component<IProps, IState> {
   componentDidMount() {
     bsCustomFileInput.init();
 
+    this.fetchAuthors();
     this.fetchCollections();
     this.fetchCategories();
 
@@ -57,6 +60,15 @@ class BookForm extends Component<IProps, IState> {
     } else {
       this.setState({ isNew: true, book: {}, pageTitle: 'New book' });
     }
+  }
+
+  fetchAuthors() {
+    fetch(
+      `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/authors`
+    )
+      .then((response) => response.json())
+      .then((json) => this.setState({ authors: json }))
+      .catch((err) => this.setState({ message: 'Error retrieving authors' }));
   }
 
   fetchCollections() {
@@ -260,7 +272,13 @@ class BookForm extends Component<IProps, IState> {
                     label: 'Language OV',
                     options: languages,
                   },
-                  { id: 'author', label: 'Author' },
+                  {
+                    id: 'author',
+                    label: 'Author',
+                    options: this.state.authors.map((author: any) => {
+                      return { value: author.id, label: author.name };
+                    }),
+                  },
                   { id: 'year', label: 'Year' },
                   {
                     id: 'category',

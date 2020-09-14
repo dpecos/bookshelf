@@ -18,7 +18,7 @@ export class BooksRepository {
     let order: any = { readingDates: 'DESC' };
 
     if (filter?.author) {
-      where.author = filter.author;
+      where.author = { id: filter.author };
       order = { year: 'ASC' };
     }
     if (filter.category) {

@@ -143,7 +143,8 @@ export class BookDetails extends Component<IProps, IState> {
                     {
                       id: 'author',
                       label: 'Author',
-                      link: `/books/list?author=${this.state.book?.author}`,
+                      value: this.state.book?.author.name,
+                      link: `/books/list?author=${this.state.book?.author.id}`,
                     },
                     { id: 'year', label: 'Year' },
                     {

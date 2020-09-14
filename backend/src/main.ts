@@ -1,5 +1,6 @@
 import { setupCORS } from '@controllers/middleware/cors';
 import { Repository } from '@repository/repository';
+import { AuthorsService } from '@services/authors-service';
 import { BooksService } from '@services/books-service';
 import { CategoriesService } from '@services/categories-service';
 import { CollectionsService } from '@services/collections-service';
@@ -27,12 +28,14 @@ export async function startServer(port?: number): Promise<http.Server> {
       await repository.connect();
     }
 
+    const authorsService = new AuthorsService(repository);
     const categoriesService = new CategoriesService(repository);
     const collectionsService = new CollectionsService(repository);
     const booksService = new BooksService(repository);
 
     await setupEndpoints(
       app,
+      authorsService,
       categoriesService,
       collectionsService,
       booksService
