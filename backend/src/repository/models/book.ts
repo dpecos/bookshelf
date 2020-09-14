@@ -32,7 +32,7 @@ export class Book {
     // nullable: false,
     eager: true,
   })
-  authorEntity: Author;
+  author: Author;
 
   @ManyToOne(() => Category, (category) => category.books, {
     cascade: false,
