@@ -34,9 +34,6 @@ export class Book {
   })
   authorEntity: Author;
 
-  @Column()
-  author: string;
-
   @ManyToOne(() => Category, (category) => category.books, {
     cascade: false,
     nullable: false,

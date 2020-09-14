@@ -16,7 +16,7 @@ export class Author {
   @Column({ unique: true })
   name: string;
 
-  @OneToMany(() => Book, (book) => book.author)
+  @OneToMany(() => Book, (book) => book.authorEntity)
   books: Book[];
 
   @CreateDateColumn({ type: 'timestamp with time zone' })
