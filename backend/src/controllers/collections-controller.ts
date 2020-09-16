@@ -1,4 +1,4 @@
-import { Collection } from '@repository/models/collection';
+import { Collection } from '@repository/entities/collection';
 import { CollectionsService } from '@services/collections-service';
 import { getLogger } from '@utils/logger';
 import express from 'express';

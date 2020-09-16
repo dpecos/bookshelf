@@ -6,10 +6,10 @@ import { AuthorsRepository } from './authors-repository';
 import { BooksRepository } from './books-repository';
 import { CategoriesRepository } from './categories-repository';
 import { CollectionsRepository } from './collections-repository';
-import { Author } from './models/author';
-import { Book } from './models/book';
-import { Category } from './models/category';
-import { Collection } from './models/collection';
+import { Author } from './entities/author';
+import { Book } from './entities/book';
+import { Category } from './entities/category';
+import { Collection } from './entities/collection';
 
 export class Repository {
   logger: winston.Logger;

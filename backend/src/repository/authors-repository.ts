@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
 import { BaseRepository } from './base-repository';
-import { Author } from './models/author';
+import { Author } from './entities/author';
 
 export class AuthorsRepository extends BaseRepository<Author> {
   constructor() {

@@ -2,9 +2,9 @@ import { BaseFilter } from '@repository/filters/base-filter';
 import { getLogger } from '@utils/logger';
 import { Repository } from 'typeorm';
 import winston from 'winston';
-import { BaseModel } from './models/base-model';
+import { BaseEntity } from './entities/base-entity';
 
-export abstract class BaseRepository<T extends BaseModel> {
+export abstract class BaseRepository<T extends BaseEntity> {
   logger: winston.Logger;
   plural: string;
 

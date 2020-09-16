@@ -1,5 +1,5 @@
+import { Book } from '@repository/entities/book';
 import { BookFilter } from '@repository/filters/books-filter';
-import { Book } from '@repository/models/book';
 import { BooksService } from '@services/books-service';
 import { getLogger } from '@utils/logger';
 import express from 'express';

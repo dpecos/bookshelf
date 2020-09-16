@@ -1,4 +1,4 @@
-import { Category } from '@repository/models/category';
+import { Category } from '@repository/entities/category';
 import { Repository } from '@repository/repository';
 import { getLogger } from '@utils/logger';
 import winston from 'winston';

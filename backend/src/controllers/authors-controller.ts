@@ -1,4 +1,4 @@
-import { Author } from '@repository/models/author';
+import { Author } from '@repository/entities/author';
 import { AuthorsService } from '@services/authors-service';
 import { getLogger } from '@utils/logger';
 import express from 'express';

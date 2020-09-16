@@ -1,9 +1,9 @@
 import { Column, Entity, OneToMany } from 'typeorm';
-import { BaseModel } from './base-model';
+import { BaseEntity } from './base-entity';
 import { Book } from './book';
 
 @Entity({ name: 'collections' })
-export class Collection extends BaseModel {
+export class Collection extends BaseEntity {
   @Column()
   name: string;
 

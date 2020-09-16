@@ -1,5 +1,5 @@
+import { Book } from '@repository/entities/book';
 import { BookFilter } from '@repository/filters/books-filter';
-import { Book } from '@repository/models/book';
 import { Repository } from '@repository/repository';
 import { getLogger } from '@utils/logger';
 import winston from 'winston';

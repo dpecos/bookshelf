@@ -1,4 +1,4 @@
-import { Category } from '@repository/models/category';
+import { Category } from '@repository/entities/category';
 import { CategoriesService } from '@services/categories-service';
 import { getLogger } from '@utils/logger';
 import express from 'express';

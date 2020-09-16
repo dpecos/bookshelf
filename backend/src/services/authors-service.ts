@@ -1,4 +1,4 @@
-import { Author } from '@repository/models/author';
+import { Author } from '@repository/entities/author';
 import { Repository } from '@repository/repository';
 import { getLogger } from '@utils/logger';
 import winston from 'winston';

@@ -1,9 +1,9 @@
 import { Column, Entity, OneToMany } from 'typeorm';
-import { BaseModel } from './base-model';
+import { BaseEntity } from './base-entity';
 import { Book } from './book';
 
 @Entity({ name: 'authors' })
-export class Author extends BaseModel {
+export class Author extends BaseEntity {
   @Column({ unique: true })
   name: string;
 

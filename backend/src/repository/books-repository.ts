@@ -1,7 +1,7 @@
 import { BookFilter } from '@repository/filters/books-filter';
 import { getRepository } from 'typeorm';
 import { BaseRepository } from './base-repository';
-import { Book } from './models/book';
+import { Book } from './entities/book';
 
 export class BooksRepository extends BaseRepository<Book> {
   constructor() {

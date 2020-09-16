@@ -1,4 +1,4 @@
-import { Collection } from '@repository/models/collection';
+import { Collection } from '@repository/entities/collection';
 import { Repository } from '@repository/repository';
 import { getLogger } from '@utils/logger';
 import winston from 'winston';

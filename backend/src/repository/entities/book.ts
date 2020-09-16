@@ -1,11 +1,11 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { Author } from './author';
-import { BaseModel } from './base-model';
+import { BaseEntity } from './base-entity';
 import { Category } from './category';
 import { Collection } from './collection';
 
 @Entity({ name: 'books' })
-export class Book extends BaseModel {
+export class Book extends BaseEntity {
   @Column()
   title: string;
 
