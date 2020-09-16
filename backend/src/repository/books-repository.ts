@@ -1,19 +1,14 @@
-import { BookFilter } from '@controllers/filters/books-filter';
-import { getLogger } from '@utils/logger';
+import { BookFilter } from '@repository/filters/books-filter';
 import { getRepository } from 'typeorm';
-import winston from 'winston';
+import { BaseRepository } from './base-repository';
 import { Book } from './models/book';
 
-export class BooksRepository {
-  logger: winston.Logger;
-
+export class BooksRepository extends BaseRepository<Book> {
   constructor() {
-    this.logger = getLogger('repository:books');
+    super(getRepository(Book), 'book');
   }
 
-  async retrieveBooks(filter: BookFilter): Promise<Book[]> {
-    const booksRepository = getRepository(Book);
-
+  async list(filter: BookFilter): Promise<Book[]> {
     let where: any = {};
     let order: any = { readingDates: 'DESC' };
 
@@ -30,54 +25,6 @@ export class BooksRepository {
       order = { collectionNumber: 'ASC', year: 'ASC' };
     }
 
-    return await booksRepository.find({
-      where,
-      order,
-    });
-  }
-
-  async retrieveBook(bookId: string): Promise<Book> {
-    try {
-      const booksRepository = getRepository(Book);
-      return await booksRepository.findOneOrFail({ where: { id: bookId } });
-    } catch (err) {
-      const message = 'Error retrieving book';
-      this.logger.error(`${message}: ${err}`);
-      throw new Error(message);
-    }
-  }
-
-  async updateBook(book: Book): Promise<void> {
-    try {
-      const booksRepository = getRepository(Book);
-      await booksRepository.update(book.id, book);
-    } catch (err) {
-      const message = 'Error updating book';
-      this.logger.error(`${message}: ${err}`);
-      throw new Error(message);
-    }
-  }
-
-  async createBook(book: Book): Promise<Book> {
-    try {
-      const booksRepository = getRepository(Book);
-      delete book.id;
-      return await booksRepository.save(book);
-    } catch (err) {
-      const message = 'Error creating book';
-      this.logger.error(`${message}: ${err}`);
-      throw new Error(message);
-    }
-  }
-
-  async deleteBook(bookId: string): Promise<void> {
-    try {
-      const booksRepository = getRepository(Book);
-      await booksRepository.delete(bookId);
-    } catch (err) {
-      const message = 'Error deleting book';
-      this.logger.error(`${message}: ${err}`);
-      throw new Error(message);
-    }
+    return this.query(order, where);
   }
 }

@@ -1,18 +1,9 @@
+import { Column, Entity, OneToMany } from 'typeorm';
+import { BaseModel } from './base-model';
 import { Book } from './book';
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  OneToMany,
-} from 'typeorm';
 
 @Entity({ name: 'collections' })
-export class Collection {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class Collection extends BaseModel {
   @Column()
   name: string;
 
@@ -24,10 +15,4 @@ export class Collection {
 
   @Column({ nullable: true })
   description: string;
-
-  @CreateDateColumn({ type: 'timestamp with time zone' })
-  created: Date;
-
-  @UpdateDateColumn({ type: 'timestamp with time zone' })
-  modified: Date;
 }

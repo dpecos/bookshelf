@@ -1,64 +1,9 @@
-import { getLogger } from '@utils/logger';
 import { getRepository } from 'typeorm';
-import winston from 'winston';
+import { BaseRepository } from './base-repository';
 import { Collection } from './models/collection';
 
-export class CollectionsRepository {
-  logger: winston.Logger;
-
+export class CollectionsRepository extends BaseRepository<Collection> {
   constructor() {
-    this.logger = getLogger('repository:collections');
-  }
-
-  async retrieveCollections(): Promise<Collection[]> {
-    const collectionsRepository = getRepository(Collection);
-    return await collectionsRepository.find({ order: { name: 'ASC' } });
-  }
-
-  async retrieveCollection(collectionId: string): Promise<Collection> {
-    try {
-      const collectionsRepository = getRepository(Collection);
-      return await collectionsRepository.findOneOrFail({
-        where: { id: collectionId },
-      });
-    } catch (err) {
-      const message = 'Error retrieving collection';
-      this.logger.error(`${message}: ${err}`);
-      throw new Error(message);
-    }
-  }
-
-  async updateCollection(collection: Collection): Promise<void> {
-    try {
-      const collectionsRepository = getRepository(Collection);
-      await collectionsRepository.update(collection.id, collection);
-    } catch (err) {
-      const message = 'Error updating collection';
-      this.logger.error(`${message}: ${err}`);
-      throw new Error(message);
-    }
-  }
-
-  async createCollection(collection: Collection): Promise<Collection> {
-    try {
-      const collectionsRepository = getRepository(Collection);
-      delete collection.id;
-      return await collectionsRepository.save(collection);
-    } catch (err) {
-      const message = 'Error creating collection';
-      this.logger.error(`${message}: ${err}`);
-      throw new Error(message);
-    }
-  }
-
-  async deleteCollection(collectionId: string): Promise<void> {
-    try {
-      const collectionsRepository = getRepository(Collection);
-      await collectionsRepository.delete(collectionId);
-    } catch (err) {
-      const message = 'Error deleting collection';
-      this.logger.error(`${message}: ${err}`);
-      throw new Error(message);
-    }
+    super(getRepository(Collection), 'collection');
   }
 }

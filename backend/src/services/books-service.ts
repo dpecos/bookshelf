@@ -1,4 +1,4 @@
-import { BookFilter } from '@controllers/filters/books-filter';
+import { BookFilter } from '@repository/filters/books-filter';
 import { Book } from '@repository/models/book';
 import { Repository } from '@repository/repository';
 import { getLogger } from '@utils/logger';
@@ -12,7 +12,7 @@ export class BooksService {
   }
 
   async getBooks(filter: BookFilter): Promise<any> {
-    const books = await this.repository.books.retrieveBooks(filter);
+    const books = await this.repository.books.list(filter);
     return books.map((book) => {
       return {
         id: book.id,
@@ -31,7 +31,7 @@ export class BooksService {
   }
 
   async getDetailedBooks(filter: BookFilter): Promise<any> {
-    const books = await this.repository.books.retrieveBooks(filter);
+    const books = await this.repository.books.list(filter);
     return books.map((book) => {
       return {
         id: book.id,
@@ -60,7 +60,7 @@ export class BooksService {
       throw new Error(msg);
     }
 
-    const book = await this.repository.books.retrieveBook(bookId);
+    const book = await this.repository.books.get(bookId);
     return book;
   }
 
@@ -71,23 +71,23 @@ export class BooksService {
       throw new Error(msg);
     }
 
-    const book = await this.repository.books.retrieveBook(bookId);
+    const book = await this.repository.books.get(bookId);
     return book.cover;
   }
 
   async updateBook(book: Book): Promise<void> {
-    await this.repository.books.updateBook(book);
+    await this.repository.books.update(book);
     this.logger.debug(`Book ${book.id} updated successfully`);
   }
 
   async createBook(book: Book): Promise<Book> {
-    const newBook = await this.repository.books.createBook(book);
+    const newBook = await this.repository.books.create(book);
     this.logger.debug(`Book ${book.id} created successfully`);
     return newBook;
   }
 
   async deleteBook(bookId: string): Promise<void> {
-    await this.repository.books.deleteBook(bookId);
+    await this.repository.books.delete(bookId);
     this.logger.debug(`Book ${bookId} deleted successfully`);
   }
 }

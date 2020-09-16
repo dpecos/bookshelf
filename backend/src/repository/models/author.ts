@@ -1,27 +1,12 @@
+import { Column, Entity, OneToMany } from 'typeorm';
+import { BaseModel } from './base-model';
 import { Book } from './book';
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  OneToMany,
-} from 'typeorm';
 
 @Entity({ name: 'authors' })
-export class Author {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class Author extends BaseModel {
   @Column({ unique: true })
   name: string;
 
   @OneToMany(() => Book, (book) => book.author)
   books: Book[];
-
-  @CreateDateColumn({ type: 'timestamp with time zone' })
-  created: Date;
-
-  @UpdateDateColumn({ type: 'timestamp with time zone' })
-  modified: Date;
 }

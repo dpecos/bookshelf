@@ -11,7 +11,7 @@ export class AuthorsService {
   }
 
   async getAuthors(): Promise<Author[]> {
-    return await this.repository.authors.retrieveAuthors();
+    return await this.repository.authors.list();
   }
 
   async getAuthor(authorId: string): Promise<Author> {
@@ -21,22 +21,22 @@ export class AuthorsService {
       throw new Error(msg);
     }
 
-    return await this.repository.authors.retrieveAuthor(authorId);
+    return await this.repository.authors.get(authorId);
   }
 
   async createAuthor(author: Author): Promise<Author> {
-    const newAuthor = await this.repository.authors.createAuthor(author);
+    const newAuthor = await this.repository.authors.create(author);
     this.logger.debug(`Author ${author.id} created successfully`);
     return newAuthor;
   }
 
   async updateAuthor(author: Author): Promise<void> {
-    await this.repository.authors.updateAuthor(author);
+    await this.repository.authors.update(author);
     this.logger.debug(`Author ${author.id} updated successfully`);
   }
 
   async deleteAuthor(authorId: string): Promise<void> {
-    await this.repository.authors.deleteAuthor(authorId);
+    await this.repository.authors.delete(authorId);
     this.logger.debug(`Author ${authorId} deleted successfully`);
   }
 }

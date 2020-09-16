@@ -1,20 +1,11 @@
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { Author } from './author';
+import { BaseModel } from './base-model';
 import { Category } from './category';
 import { Collection } from './collection';
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
 
 @Entity({ name: 'books' })
-export class Book {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class Book extends BaseModel {
   @Column()
   title: string;
 
@@ -73,10 +64,4 @@ export class Book {
 
   @Column({ type: 'bytea', nullable: true })
   cover: Buffer;
-
-  @CreateDateColumn({ type: 'timestamp with time zone' })
-  created: Date;
-
-  @UpdateDateColumn({ type: 'timestamp with time zone' })
-  modified: Date;
 }

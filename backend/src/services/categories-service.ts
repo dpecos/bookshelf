@@ -11,7 +11,7 @@ export class CategoriesService {
   }
 
   async getCategories(): Promise<Category[]> {
-    return await this.repository.categories.retrieveCategories();
+    return await this.repository.categories.list();
   }
 
   async getCategory(categoryId: string): Promise<Category> {
@@ -21,24 +21,22 @@ export class CategoriesService {
       throw new Error(msg);
     }
 
-    return await this.repository.categories.retrieveCategory(categoryId);
+    return await this.repository.categories.get(categoryId);
   }
 
   async createCategory(category: Category): Promise<Category> {
-    const newCategory = await this.repository.categories.createCategory(
-      category
-    );
+    const newCategory = await this.repository.categories.create(category);
     this.logger.debug(`Category ${category.id} created successfully`);
     return newCategory;
   }
 
   async updateCategory(category: Category): Promise<void> {
-    await this.repository.categories.updateCategory(category);
+    await this.repository.categories.update(category);
     this.logger.debug(`Category ${category.id} updated successfully`);
   }
 
   async deleteCategory(categoryId: string): Promise<void> {
-    await this.repository.categories.deleteCategory(categoryId);
+    await this.repository.categories.delete(categoryId);
     this.logger.debug(`Category ${categoryId} deleted successfully`);
   }
 }

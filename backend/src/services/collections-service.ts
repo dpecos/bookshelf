@@ -11,7 +11,7 @@ export class CollectionsService {
   }
 
   async getCollections(): Promise<Collection[]> {
-    return await this.repository.collections.retrieveCollections();
+    return await this.repository.collections.list();
   }
 
   async getCollection(collectionId: string): Promise<Collection> {
@@ -21,24 +21,22 @@ export class CollectionsService {
       throw new Error(msg);
     }
 
-    return await this.repository.collections.retrieveCollection(collectionId);
+    return await this.repository.collections.get(collectionId);
   }
 
   async createCollection(collection: Collection): Promise<Collection> {
-    const newCollection = await this.repository.collections.createCollection(
-      collection
-    );
+    const newCollection = await this.repository.collections.create(collection);
     this.logger.debug(`Collection ${collection.id} created successfully`);
     return newCollection;
   }
 
   async updateCollection(collection: Collection): Promise<void> {
-    await this.repository.collections.updateCollection(collection);
+    await this.repository.collections.update(collection);
     this.logger.debug(`Collection ${collection.id} updated successfully`);
   }
 
   async deleteCollection(collectionId: string): Promise<void> {
-    await this.repository.collections.deleteCollection(collectionId);
+    await this.repository.collections.delete(collectionId);
     this.logger.debug(`Collection ${collectionId} deleted successfully`);
   }
 }
