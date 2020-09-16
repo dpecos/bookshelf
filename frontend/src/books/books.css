@@ -24,9 +24,18 @@
 
 #filterInfo {
   margin: 30px 80px;
+  display: flex;
 }
 
-#filterInfo a {
+#filterInfo img {
+  max-height: 250px;
+  margin: 0 30px 0 0;
+}
+
+#filterInfo #filterContent {
+}
+
+#filterInfo #filterContent a {
   margin: 10px 0px 20px 0px;
   display: block;
 }

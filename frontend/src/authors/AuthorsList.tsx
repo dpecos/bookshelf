@@ -1,6 +1,7 @@
 import { History } from 'history';
 import React, { Component } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import './authors.css';
 import {
   Alert,
   Button,
@@ -49,12 +50,35 @@ class AuthorsList extends Component<IProps, IState> {
       .catch((err) => this.setState({ message: 'Error retrieving authors' }));
   }
 
-  showEditDialog(author: any) {
+  fetchAuthor(id: string) {
+    return new Promise((resolve, reject) => {
+      fetch(
+        `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/authors/${id}`
+      )
+        .then((response) => response.json())
+        .then((json) => resolve(json))
+        .catch((err) => this.setState({ message: 'Error retrieving authors' }));
+    });
+  }
+
+  async showEditDialog(authorRow: any) {
+    const author = await this.fetchAuthor(authorRow.id);
     this.setState({ author });
   }
 
   hideEditDialog() {
     this.setState({ author: null });
+  }
+
+  convertImageToBase64(input: any): Promise<string> {
+    return new Promise((resolve) => {
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onloadend = function () {
+        resolve(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    });
   }
 
   async handleChangeEvent(event: any) {
@@ -63,7 +87,11 @@ class AuthorsList extends Component<IProps, IState> {
       const field = event.target.id;
       const value = event.target.value || null;
 
-      author[field] = value;
+      if (field === 'photo') {
+        author.photo = await this.convertImageToBase64(event.currentTarget);
+      } else {
+        author[field] = value;
+      }
 
       this.setState({ author });
     }
@@ -153,7 +181,11 @@ class AuthorsList extends Component<IProps, IState> {
         <Table striped bordered hover>
           <thead>
             <tr>
+              <th>Photo</th>
               <th>Name</th>
+              <th>Year</th>
+              <th>Nationality</th>
+              <th>Link</th>
             </tr>
           </thead>
           <tbody>
@@ -165,6 +197,18 @@ class AuthorsList extends Component<IProps, IState> {
               this.state.authors.map((author) => (
                 <tr key={author.id} onClick={() => this.showEditDialog(author)}>
                   <td>
+                    <img
+                      id="authorPhotoSmall"
+                      alt={author.name}
+                      src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/authors/${author.id}/photo`}
+                      width="50px"
+                      onError={(event: any) =>
+                        (event.target.src =
+                          '/img/author-photo-not-available.png')
+                      }
+                    />
+                  </td>
+                  <td>
                     <Link
                       to={`/books/list?author=${author.id}`}
                       onClick={(evt) => evt.stopPropagation()}
@@ -172,6 +216,9 @@ class AuthorsList extends Component<IProps, IState> {
                       {author?.name}
                     </Link>
                   </td>
+                  <td>{author?.year}</td>
+                  <td>{author?.nationality}</td>
+                  <td>{author?.link}</td>
                 </tr>
               ))
             )}
@@ -181,6 +228,7 @@ class AuthorsList extends Component<IProps, IState> {
         <Modal
           show={!!this.state.author}
           animation={false}
+          size="xl"
           onHide={() => this.hideEditDialog()}
         >
           <Modal.Header closeButton>
@@ -189,15 +237,76 @@ class AuthorsList extends Component<IProps, IState> {
           </Modal.Header>
           <Modal.Body>
             <Form>
-              <Form.Group controlId="name" key="name">
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Name"
-                  value={this.state.author?.name || ''}
-                  onChange={(event) => this.handleChangeEvent(event)}
-                />
-              </Form.Group>
+              <Row>
+                <Col lg="6">
+                  <Form.Group controlId="name" key="name">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Name"
+                      value={this.state.author?.name || ''}
+                      onChange={(event) => this.handleChangeEvent(event)}
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="year" key="year">
+                    <Form.Label>Year</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Year"
+                      value={this.state.author?.year || ''}
+                      onChange={(event) => this.handleChangeEvent(event)}
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="nationality" key="nationality">
+                    <Form.Label>Nationality</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Nationality"
+                      value={this.state.author?.nationality || ''}
+                      onChange={(event) => this.handleChangeEvent(event)}
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="link" key="link">
+                    <Form.Label>Link</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Link"
+                      value={this.state.author?.link || ''}
+                      onChange={(event) => this.handleChangeEvent(event)}
+                    />
+                  </Form.Group>
+                </Col>
+                <Col lg="6">
+                  <img
+                    alt={this.state.author?.name}
+                    src={
+                      this.state.author?.photo ||
+                      '/img/author-photo-not-available.png'
+                    }
+                    id="authorPhoto"
+                  />
+                  <Form.File
+                    id="photo"
+                    label="Author Photo"
+                    custom
+                    onChange={(event: any) => this.handleChangeEvent(event)}
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col lg="12">
+                  <Form.Group controlId="biography" id="authorBiography">
+                    <Form.Label>Biography</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      rows={7}
+                      placeholder="Biography"
+                      value={this.state.author?.biography || ''}
+                      onChange={(event) => this.handleChangeEvent(event)}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
             </Form>
           </Modal.Body>
           <Modal.Footer>

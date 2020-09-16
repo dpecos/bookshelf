@@ -1,0 +1,10 @@
+#authorPhoto {
+  display: block;
+  width: 225px;
+  margin: 20px auto;
+}
+
+#authorPhotoSmall {
+  display: block;
+  margin: 0 auto;
+}

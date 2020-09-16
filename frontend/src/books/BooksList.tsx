@@ -33,6 +33,7 @@ interface IState {
   books: any[];
   fullList: any[];
   message: string | null;
+  filterPicture: string | null;
   filterHeader: string | null;
   filterBody: string | null;
   filterLink: string | null;
@@ -45,6 +46,7 @@ class BooksList extends Component<IProps, IState> {
       books: [],
       fullList: [],
       message: null,
+      filterPicture: null,
       filterHeader: null,
       filterBody: null,
       filterLink: null,
@@ -114,14 +116,23 @@ class BooksList extends Component<IProps, IState> {
 
       if (filter === 'author') {
         const author = await this.fetchAuthor(filterValue);
+        let filterHeader = author.name;
+        if (author.nationality || author.year) {
+          filterHeader = `${filterHeader} (${[
+            author.nationality,
+            author.year,
+          ].join(', ')})`;
+        }
         this.setState({
-          filterHeader: author.name,
-          filterBody: null,
-          filterLink: null,
+          filterPicture: `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/authors/${author.id}/photo`,
+          filterHeader,
+          filterBody: author.biography,
+          filterLink: author.link,
         });
       } else if (filter === 'category') {
         const category = await this.fetchCategory(filterValue);
         this.setState({
+          filterPicture: null,
           filterHeader: category.name,
           filterBody: null,
           filterLink: null,
@@ -129,13 +140,19 @@ class BooksList extends Component<IProps, IState> {
       } else if (filter === 'collection') {
         const collection = await this.fetchCollection(filterValue);
         this.setState({
+          filterPicture: null,
           filterHeader: collection.name,
           filterBody: collection.description,
           filterLink: collection.link,
         });
       }
     } else {
-      this.setState({ filterHeader: null, filterBody: null });
+      this.setState({
+        filterPicture: null,
+        filterHeader: null,
+        filterBody: null,
+        filterLink: null,
+      });
     }
 
     return url;
@@ -226,21 +243,31 @@ class BooksList extends Component<IProps, IState> {
 
         {this.state.filterHeader && (
           <Jumbotron id="filterInfo">
-            <h1>{this.state.filterHeader}</h1>
-            {this.state.filterLink && (
-              <a
-                href={this.state.filterLink}
-                onClick={(evt) => evt.stopPropagation()}
-                target="_new"
-              >
-                {this.state.filterLink}
-              </a>
+            {this.state.filterPicture && (
+              <img
+                src={this.state.filterPicture}
+                onError={(event: any) =>
+                  (event.target.src = '/img/author-photo-not-available.png')
+                }
+              ></img>
             )}
-            {this.state.filterBody
-              ?.split('\n')
-              .map((line: string, idx: number) => (
-                <p key={idx}>{line}</p>
-              ))}
+            <div id="filterContent">
+              <h1>{this.state.filterHeader}</h1>
+              {this.state.filterLink && (
+                <a
+                  href={this.state.filterLink}
+                  onClick={(evt) => evt.stopPropagation()}
+                  target="_new"
+                >
+                  {this.state.filterLink}
+                </a>
+              )}
+              {this.state.filterBody
+                ?.split('\n')
+                .map((line: string, idx: number) => (
+                  <p key={idx}>{line}</p>
+                ))}
+            </div>
           </Jumbotron>
         )}
 

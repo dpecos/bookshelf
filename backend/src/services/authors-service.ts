@@ -24,6 +24,17 @@ export class AuthorsService {
     return await this.repository.authors.get(authorId);
   }
 
+  async getAuthorPhoto(authorId: string): Promise<Buffer> {
+    if (!authorId) {
+      const msg = 'Author ID not specified';
+      this.logger.error(msg);
+      throw new Error(msg);
+    }
+
+    const author = await this.repository.authors.get(authorId);
+    return author.photo;
+  }
+
   async createAuthor(author: Author): Promise<Author> {
     const newAuthor = await this.repository.authors.create(author);
     this.logger.debug(`Author ${author.id} created successfully`);

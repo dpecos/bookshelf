@@ -243,7 +243,7 @@ class BookForm extends Component<IProps, IState> {
                 />
                 <Form.File
                   id="cover"
-                  label="Book cover"
+                  label="Book Cover"
                   custom
                   onChange={(event: any) => this.handleChangeEvent(event)}
                 />

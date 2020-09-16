@@ -157,7 +157,6 @@ class CollectionsList extends Component<IProps, IState> {
             <tr>
               <th>Name</th>
               <th>Link</th>
-              <th>Description</th>
             </tr>
           </thead>
           <tbody>
@@ -180,7 +179,6 @@ class CollectionsList extends Component<IProps, IState> {
                     </Link>
                   </td>
                   <td>{collection?.link}</td>
-                  <td>{collection?.description}</td>
                 </tr>
               ))
             )}
