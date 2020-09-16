@@ -11,7 +11,7 @@ export class BooksService {
     this.logger = getLogger('service:books');
   }
 
-  async getBooks(filter: BookFilter): Promise<any> {
+  async getBooks(filter: BookFilter): Promise<Book[]> {
     return await this.repository.books.list(filter);
   }
 

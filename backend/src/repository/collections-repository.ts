@@ -6,4 +6,8 @@ export class CollectionsRepository extends BaseRepository<Collection> {
   constructor() {
     super(getRepository(Collection), 'collection');
   }
+
+  async list(): Promise<Collection[]> {
+    return this.query(null, { name: 'ASC' });
+  }
 }
