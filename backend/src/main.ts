@@ -47,8 +47,8 @@ export async function startServer(port?: number): Promise<http.Server> {
 
     logger.info(`*** bookshelf listening on port ${config.web.port} ***`);
 
-    server.on('close', () => {
-      repository.disconnect();
+    server.on('close', async () => {
+      await repository.disconnect();
     });
 
     return server;

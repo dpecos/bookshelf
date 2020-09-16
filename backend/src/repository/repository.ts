@@ -1,6 +1,6 @@
 import { loadConfig } from '@utils/config';
 import { getLogger } from '@utils/logger';
-import { Connection, createConnection } from 'typeorm';
+import { Connection, createConnection, getConnection } from 'typeorm';
 import winston from 'winston';
 import { AuthorsRepository } from './authors-repository';
 import { BooksRepository } from './books-repository';
@@ -12,7 +12,6 @@ import { Category } from './models/category';
 import { Collection } from './models/collection';
 
 export class Repository {
-  connection: Connection;
   logger: winston.Logger;
 
   books: BooksRepository;
@@ -27,7 +26,7 @@ export class Repository {
   async connect() {
     const config = loadConfig();
     try {
-      this.connection = await createConnection({
+      const connection = await createConnection({
         type: 'postgres',
         host: config.db.host,
         port: parseInt(config.db.port),
@@ -45,7 +44,7 @@ export class Repository {
         },
       });
 
-      await this.connection.runMigrations();
+      await connection.runMigrations();
 
       this.logger.info(`Database initialized`);
     } catch (err) {
@@ -54,16 +53,14 @@ export class Repository {
       throw err;
     }
 
-    this.books = new BooksRepository(this.connection);
-    this.categories = new CategoriesRepository(this.connection);
-    this.collections = new CollectionsRepository(this.connection);
-    this.authors = new AuthorsRepository(this.connection);
+    this.books = new BooksRepository();
+    this.categories = new CategoriesRepository();
+    this.collections = new CollectionsRepository();
+    this.authors = new AuthorsRepository();
   }
 
   async disconnect() {
-    if (this.connection) {
-      await this.connection.close();
-      this.logger.warn('Database disconnected');
-    }
+    await getConnection().close();
+    this.logger.warn('Database disconnected');
   }
 }

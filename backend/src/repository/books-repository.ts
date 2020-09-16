@@ -1,18 +1,18 @@
 import { BookFilter } from '@controllers/filters/books-filter';
 import { getLogger } from '@utils/logger';
-import { Connection } from 'typeorm';
+import { getRepository } from 'typeorm';
 import winston from 'winston';
 import { Book } from './models/book';
 
 export class BooksRepository {
   logger: winston.Logger;
 
-  constructor(private connection: Connection) {
+  constructor() {
     this.logger = getLogger('repository:books');
   }
 
   async retrieveBooks(filter: BookFilter): Promise<Book[]> {
-    const booksRepository = this.connection.getRepository(Book);
+    const booksRepository = getRepository(Book);
 
     let where: any = {};
     let order: any = { readingDates: 'DESC' };
@@ -38,7 +38,7 @@ export class BooksRepository {
 
   async retrieveBook(bookId: string): Promise<Book> {
     try {
-      const booksRepository = this.connection.getRepository(Book);
+      const booksRepository = getRepository(Book);
       return await booksRepository.findOneOrFail({ where: { id: bookId } });
     } catch (err) {
       const message = 'Error retrieving book';
@@ -49,7 +49,7 @@ export class BooksRepository {
 
   async updateBook(book: Book): Promise<void> {
     try {
-      const booksRepository = this.connection.getRepository(Book);
+      const booksRepository = getRepository(Book);
       await booksRepository.update(book.id, book);
     } catch (err) {
       const message = 'Error updating book';
@@ -60,7 +60,7 @@ export class BooksRepository {
 
   async createBook(book: Book): Promise<Book> {
     try {
-      const booksRepository = this.connection.getRepository(Book);
+      const booksRepository = getRepository(Book);
       delete book.id;
       return await booksRepository.save(book);
     } catch (err) {
@@ -72,7 +72,7 @@ export class BooksRepository {
 
   async deleteBook(bookId: string): Promise<void> {
     try {
-      const booksRepository = this.connection.getRepository(Book);
+      const booksRepository = getRepository(Book);
       await booksRepository.delete(bookId);
     } catch (err) {
       const message = 'Error deleting book';
