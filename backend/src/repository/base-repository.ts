@@ -6,13 +6,14 @@ import { BaseModel } from './models/base-model';
 
 export abstract class BaseRepository<T extends BaseModel> {
   logger: winston.Logger;
+  plural: string;
 
   constructor(private repository: Repository<T>, private name: string) {
-    const plural = name.endsWith('y')
+    this.plural = name.endsWith('y')
       ? `${name.substring(0, name.length - 1)}ies`
       : `${name}s`;
-    this.logger = getLogger(`repository:${plural}`);
-    this.logger.debug(`Repository for ${plural} created`);
+    this.logger = getLogger(`repository:${this.plural}`);
+    this.logger.debug(`Repository for ${this.plural} created`);
   }
 
   async list(filter?: BaseFilter): Promise<T[]> {
@@ -20,7 +21,20 @@ export abstract class BaseRepository<T extends BaseModel> {
   }
 
   protected async query(where: any, order: any): Promise<T[]> {
-    return await this.repository.find({ where, order });
+    try {
+      const filter = {};
+      if (where) {
+        filter['where'] = where;
+      }
+      if (order) {
+        filter['order'] = order;
+      }
+      return await this.repository.find(filter);
+    } catch (err) {
+      const message = `Error querying ${this.plural}`;
+      this.logger.error(`${message}: ${err}`);
+      throw new Error(message);
+    }
   }
 
   async get(id: string): Promise<T> {
@@ -29,7 +43,7 @@ export abstract class BaseRepository<T extends BaseModel> {
         where: { id: id },
       });
     } catch (err) {
-      const message = `Error retrieving ${this.name}`;
+      const message = `Error fetching ${this.name}`;
       this.logger.error(`${message}: ${err}`);
       throw new Error(message);
     }

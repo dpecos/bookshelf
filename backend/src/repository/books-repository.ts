@@ -25,6 +25,6 @@ export class BooksRepository extends BaseRepository<Book> {
       order = { collectionNumber: 'ASC', year: 'ASC' };
     }
 
-    return this.query(order, where);
+    return this.query(where, order);
   }
 }
