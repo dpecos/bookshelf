@@ -55,7 +55,7 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
             pages: book.pages,
             editorial: book.editorial,
             isbn: book.isbn,
-            url: book.url,
+            link: book.link,
             created: book.created,
             modified: book.modified,
           };

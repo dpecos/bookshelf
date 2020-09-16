@@ -388,7 +388,7 @@ class BooksList extends Component<IProps, IState> {
                 <th>Pages</th>
                 <th>Editorial</th>
                 <th>ISBN</th>
-                <th>URL</th>
+                <th>Link</th>
               </tr>
             </thead>
             <tbody>
@@ -451,7 +451,7 @@ class BooksList extends Component<IProps, IState> {
                         {book.isbn}
                       </a>
                     </td>
-                    <td>{book.url}</td>
+                    <td>{book.link}</td>
                   </tr>
                 ))
               )}

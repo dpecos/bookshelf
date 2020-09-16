@@ -54,7 +54,7 @@ export class Book extends BaseEntity {
   isbn: string;
 
   @Column({ nullable: true })
-  url: string;
+  link: string;
 
   @Column({ nullable: true })
   abstract: string;

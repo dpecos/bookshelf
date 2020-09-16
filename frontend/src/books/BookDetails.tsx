@@ -168,7 +168,7 @@ export class BookDetails extends Component<IProps, IState> {
                       link: `https://en.wikipedia.org/wiki/Special:BookSources?isbn=${this.state.book?.isbn}`,
                       target: '_new',
                     },
-                    { id: 'url', label: 'URL' },
+                    { id: 'link', label: 'Link' },
                     {
                       id: 'readingDates',
                       label: 'Reading Dates',

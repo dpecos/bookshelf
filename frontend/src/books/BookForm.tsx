@@ -299,7 +299,7 @@ class BookForm extends Component<IProps, IState> {
                   { id: 'pages', label: 'Pages' },
                   { id: 'editorial', label: 'Editorial' },
                   { id: 'isbn', label: 'ISBN' },
-                  { id: 'url', label: 'URL' },
+                  { id: 'link', label: 'Link' },
                   {
                     id: 'readingDates',
                     label: 'Reading Dates',
