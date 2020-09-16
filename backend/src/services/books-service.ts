@@ -12,45 +12,7 @@ export class BooksService {
   }
 
   async getBooks(filter: BookFilter): Promise<any> {
-    const books = await this.repository.books.list(filter);
-    return books.map((book) => {
-      return {
-        id: book.id,
-        title: book.title,
-        titleOV: book.titleOV,
-        language: book.language,
-        author: book.author,
-        year: book.year,
-        category: book.category,
-        collection: book.collection,
-        collectionNumber: book.collectionNumber,
-        created: book.created,
-        modified: book.modified,
-      };
-    });
-  }
-
-  async getDetailedBooks(filter: BookFilter): Promise<any> {
-    const books = await this.repository.books.list(filter);
-    return books.map((book) => {
-      return {
-        id: book.id,
-        title: book.title,
-        titleOV: book.titleOV,
-        language: book.language,
-        author: book.author,
-        year: book.year,
-        category: book.category,
-        collection: book.collection,
-        collectionNumber: book.collectionNumber,
-        pages: book.pages,
-        editorial: book.editorial,
-        isbn: book.isbn,
-        url: book.url,
-        created: book.created,
-        modified: book.modified,
-      };
-    });
+    return await this.repository.books.list(filter);
   }
 
   async getBook(bookId: string): Promise<Book> {

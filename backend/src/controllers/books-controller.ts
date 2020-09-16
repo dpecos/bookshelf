@@ -17,14 +17,50 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
   router.get(
     '/',
     asyncHandler(async (req: express.Request, res: express.Response) => {
-      res.send(await booksService.getBooks(req.query as BookFilter));
+      res.send(
+        (await booksService.getBooks(req.query as BookFilter)).map((book) => {
+          return {
+            id: book.id,
+            title: book.title,
+            titleOV: book.titleOV,
+            language: book.language,
+            author: book.author,
+            year: book.year,
+            category: book.category,
+            collection: book.collection,
+            collectionNumber: book.collectionNumber,
+            created: book.created,
+            modified: book.modified,
+          };
+        })
+      );
     })
   );
 
   router.get(
     '/detailed',
     asyncHandler(async (req: express.Request, res: express.Response) => {
-      res.send(await booksService.getDetailedBooks(req.query as BookFilter));
+      res.send(
+        (await booksService.getBooks(req.query as BookFilter)).map((book) => {
+          return {
+            id: book.id,
+            title: book.title,
+            titleOV: book.titleOV,
+            language: book.language,
+            author: book.author,
+            year: book.year,
+            category: book.category,
+            collection: book.collection,
+            collectionNumber: book.collectionNumber,
+            pages: book.pages,
+            editorial: book.editorial,
+            isbn: book.isbn,
+            url: book.url,
+            created: book.created,
+            modified: book.modified,
+          };
+        })
+      );
     })
   );
 
