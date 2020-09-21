@@ -24,7 +24,10 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
             title: book.title,
             titleOV: book.titleOV,
             language: book.language,
-            author: book.author,
+            author: {
+              id: book.author.id,
+              name: book.author.name,
+            },
             year: book.year,
             category: book.category,
             collection: book.collection,
@@ -47,7 +50,10 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
             title: book.title,
             titleOV: book.titleOV,
             language: book.language,
-            author: book.author,
+            author: {
+              id: book.author.id,
+              name: book.author.name,
+            },
             year: book.year,
             category: book.category,
             collection: book.collection,
