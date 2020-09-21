@@ -1,19 +1,20 @@
 import bsCustomFileInput from 'bs-custom-file-input';
 import { History } from 'history';
 import React, { Component } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
-import './books.css';
-import { languages } from './languages';
 import {
   Alert,
   Button,
   Col,
   Container,
   Form,
+  Modal,
   Navbar,
   Row,
-  Modal,
+  Toast,
 } from 'react-bootstrap';
+import { useHistory, useParams } from 'react-router-dom';
+import './books.css';
+import { languages } from './languages';
 
 interface IProps {
   history: History;
@@ -130,7 +131,7 @@ class BookForm extends Component<IProps, IState> {
   }
 
   async deleteBook() {
-    await fetch(
+    const response = await fetch(
       `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${this.props.bookId}`,
       {
         method: 'delete',
@@ -140,7 +141,13 @@ class BookForm extends Component<IProps, IState> {
         },
       }
     );
-    this.props.history.push('/');
+
+    if (response.ok) {
+      this.props.history.push('/');
+    } else {
+      const json = await response.json();
+      this.setState({ message: `${json.type.toUpperCase()}: ${json.message}` });
+    }
   }
 
   showConfirmationDialog() {
@@ -164,10 +171,10 @@ class BookForm extends Component<IProps, IState> {
       }
     );
 
-    const json = await response.json();
     if (response.ok) {
       this.closeBookForm();
     } else {
+      const json = await response.json();
       this.setState({ message: `${json.type.toUpperCase()}: ${json.message}` });
     }
   }
@@ -210,6 +217,10 @@ class BookForm extends Component<IProps, IState> {
     }
   }
 
+  dismissErrorMessage() {
+    this.setState({ message: null });
+  }
+
   render() {
     return (
       <>
@@ -218,17 +229,21 @@ class BookForm extends Component<IProps, IState> {
         </Navbar>
 
         {this.state.message && (
-          <Container>
-            <Row>
-              <Col lg="12">
-                <Alert key={'error'} variant={'danger'}>
-                  <Alert.Heading>Oh no! There was an error!</Alert.Heading>
-                  <p>{this.state.message}</p>
-                </Alert>
-              </Col>
-            </Row>
-          </Container>
+          <Toast
+            delay={10000}
+            autohide
+            onClose={() => this.dismissErrorMessage()}
+          >
+            <Toast.Header>
+              <strong className="mr-auto">Server message</strong>
+            </Toast.Header>
+            <Toast.Body>
+              <p>There was an error processing last request:</p>
+              <Alert variant="danger">{this.state.message}</Alert>
+            </Toast.Body>
+          </Toast>
         )}
+
         <Container id="bookForm">
           <Form>
             <Row>

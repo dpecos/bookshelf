@@ -1,18 +1,16 @@
 import { History } from 'history';
 import React, { Component } from 'react';
-import { Link, useHistory } from 'react-router-dom';
 import {
   Alert,
   Button,
-  Col,
-  Container,
   Form,
   Modal,
   Nav,
   Navbar,
-  Row,
   Table,
+  Toast,
 } from 'react-bootstrap';
+import { Link, useHistory } from 'react-router-dom';
 
 interface IProps {
   history: History;
@@ -92,17 +90,17 @@ class CategoriesList extends Component<IProps, IState> {
       body: JSON.stringify(this.state.category),
     });
 
-    const json = await response.json();
     if (response.ok) {
       this.hideEditDialog();
       this.fetchCategories();
     } else {
+      const json = await response.json();
       this.setState({ message: `${json.type.toUpperCase()}: ${json.message}` });
     }
   }
 
   async deleteCategory() {
-    await fetch(
+    const response = await fetch(
       `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/categories/${this.state.category.id}`,
       {
         method: 'delete',
@@ -112,9 +110,14 @@ class CategoriesList extends Component<IProps, IState> {
         },
       }
     );
+    if (response.ok) {
+      this.hideEditDialog();
+      this.fetchCategories();
+    } else {
+      const json = await response.json();
+      this.setState({ message: `${json.type.toUpperCase()}: ${json.message}` });
+    }
     this.closeConfirmationDialog();
-    this.hideEditDialog();
-    this.fetchCategories();
   }
 
   showConfirmationDialog() {
@@ -123,6 +126,10 @@ class CategoriesList extends Component<IProps, IState> {
 
   closeConfirmationDialog() {
     this.setState({ showConfirmDeletion: false });
+  }
+
+  dismissErrorMessage() {
+    this.setState({ message: null });
   }
 
   render() {
@@ -140,16 +147,19 @@ class CategoriesList extends Component<IProps, IState> {
         </Navbar>
 
         {this.state.message && (
-          <Container>
-            <Row>
-              <Col lg="12">
-                <Alert key={'error'} variant={'danger'}>
-                  <Alert.Heading>Oh no! There was an error!</Alert.Heading>
-                  <p>{this.state.message}</p>
-                </Alert>
-              </Col>
-            </Row>
-          </Container>
+          <Toast
+            delay={10000}
+            autohide
+            onClose={() => this.dismissErrorMessage()}
+          >
+            <Toast.Header>
+              <strong className="mr-auto">Server message</strong>
+            </Toast.Header>
+            <Toast.Body>
+              <p>There was an error processing last request:</p>
+              <Alert variant="danger">{this.state.message}</Alert>
+            </Toast.Body>
+          </Toast>
         )}
 
         <Table striped bordered hover>

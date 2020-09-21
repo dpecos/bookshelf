@@ -1,18 +1,19 @@
 import { History } from 'history';
 import React, { Component } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
-import './books.css';
-import { getLanguage } from './languages';
 import {
   Alert,
   Button,
+  Card,
   Col,
   Container,
   Navbar,
   Row,
   Table,
-  Card,
+  Toast,
 } from 'react-bootstrap';
+import { Link, useHistory, useParams } from 'react-router-dom';
+import './books.css';
+import { getLanguage } from './languages';
 
 interface IProps {
   history: History;
@@ -59,6 +60,10 @@ export class BookDetails extends Component<IProps, IState> {
     this.props.history.push(`/books/${this.props.bookId}/edit`);
   }
 
+  dismissErrorMessage() {
+    this.setState({ message: null });
+  }
+
   render() {
     return (
       <>
@@ -84,16 +89,19 @@ export class BookDetails extends Component<IProps, IState> {
         </Navbar>
 
         {this.state.message && (
-          <Container>
-            <Row>
-              <Col lg="12">
-                <Alert key={'error'} variant={'danger'}>
-                  <Alert.Heading>Oh no! There was an error!</Alert.Heading>
-                  <p>{this.state.message}</p>
-                </Alert>
-              </Col>
-            </Row>
-          </Container>
+          <Toast
+            delay={10000}
+            autohide
+            onClose={() => this.dismissErrorMessage()}
+          >
+            <Toast.Header>
+              <strong className="mr-auto">Server message</strong>
+            </Toast.Header>
+            <Toast.Body>
+              <p>There was an error processing last request:</p>
+              <Alert variant="danger">{this.state.message}</Alert>
+            </Toast.Body>
+          </Toast>
         )}
 
         <Container id="bookDetails">

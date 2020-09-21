@@ -1,3 +1,10 @@
 .navbar.fixed-bottom button {
   margin: 0 5px;
 }
+
+.toast {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 9999999;
+}
