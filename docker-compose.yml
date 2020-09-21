@@ -28,8 +28,10 @@ services:
     labels:
       - traefik.enable=true
       - traefik.port=80
+      - traefik.http.middlewares.frontend-auth.basicauth.users=bookshelf:$$apr1$$qRr7fgOH$$s2h1lckjG2qvMNjN8YWAj1
       - traefik.http.routers.frontend.rule=PathPrefix(`/`)
       - traefik.http.routers.frontend.entrypoints=web
+      - traefik.http.routers.frontend.middlewares=frontend-auth
 
   postgres:
     restart: unless-stopped
