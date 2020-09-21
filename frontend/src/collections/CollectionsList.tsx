@@ -1,5 +1,6 @@
 import { History } from 'history';
 import React, { Component } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import {
   Alert,
   Button,
@@ -10,7 +11,6 @@ import {
   Table,
   Toast,
 } from 'react-bootstrap';
-import { Link, useHistory } from 'react-router-dom';
 
 interface IProps {
   history: History;
@@ -21,6 +21,7 @@ interface IState {
   message: string | null;
   collection: any;
   showConfirmDeletion: boolean;
+  formValidated: boolean;
 }
 class CollectionsList extends Component<IProps, IState> {
   constructor(props: IProps) {
@@ -31,6 +32,7 @@ class CollectionsList extends Component<IProps, IState> {
       message: null,
       collection: null,
       showConfirmDeletion: false,
+      formValidated: false,
     };
   }
 
@@ -50,11 +52,11 @@ class CollectionsList extends Component<IProps, IState> {
   }
 
   showEditDialog(collection: any) {
-    this.setState({ collection });
+    this.setState({ collection, formValidated: false });
   }
 
   hideEditDialog() {
-    this.setState({ collection: null });
+    this.setState({ collection: null, formValidated: false });
   }
 
   async handleChangeEvent(event: any) {
@@ -69,7 +71,21 @@ class CollectionsList extends Component<IProps, IState> {
     }
   }
 
+  checkForm(): boolean {
+    const form: any = document.getElementById('collectionForm');
+    let formValid = false;
+    if (form) {
+      this.setState({ formValidated: true });
+      formValid = form.checkValidity();
+    }
+    return formValid;
+  }
+
   async saveCollection() {
+    if (!this.checkForm()) {
+      return;
+    }
+
     let url = null;
     let method = null;
 
@@ -211,15 +227,23 @@ class CollectionsList extends Component<IProps, IState> {
             )}
           </Modal.Header>
           <Modal.Body>
-            <Form>
+            <Form
+              id="collectionForm"
+              noValidate
+              validated={this.state.formValidated}
+            >
               <Form.Group controlId="name" key="name">
                 <Form.Label>Name</Form.Label>
                 <Form.Control
+                  required
                   type="text"
                   placeholder="Name"
                   value={this.state.collection?.name || ''}
                   onChange={(event) => this.handleChangeEvent(event)}
                 />
+                <Form.Control.Feedback type="invalid">
+                  Please provide a name
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group controlId="link" key="link">
                 <Form.Label>Link</Form.Label>

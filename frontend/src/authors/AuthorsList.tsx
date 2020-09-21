@@ -6,7 +6,6 @@ import {
   Alert,
   Button,
   Col,
-  Container,
   Form,
   Modal,
   Nav,
@@ -25,6 +24,7 @@ interface IState {
   message: string | null;
   author: any;
   showConfirmDeletion: boolean;
+  formValidated: boolean;
 }
 class AuthorsList extends Component<IProps, IState> {
   constructor(props: IProps) {
@@ -35,6 +35,7 @@ class AuthorsList extends Component<IProps, IState> {
       message: null,
       author: null,
       showConfirmDeletion: false,
+      formValidated: false,
     };
   }
 
@@ -64,11 +65,11 @@ class AuthorsList extends Component<IProps, IState> {
 
   async showEditDialog(authorRow: any) {
     const author = await this.fetchAuthor(authorRow.id);
-    this.setState({ author });
+    this.setState({ author, formValidated: false });
   }
 
   hideEditDialog() {
-    this.setState({ author: null });
+    this.setState({ author: null, formValidated: false });
   }
 
   convertImageToBase64(input: any): Promise<string> {
@@ -98,7 +99,21 @@ class AuthorsList extends Component<IProps, IState> {
     }
   }
 
+  checkForm(): boolean {
+    const form: any = document.getElementById('authorForm');
+    let formValid = false;
+    if (form) {
+      this.setState({ formValidated: true });
+      formValid = form.checkValidity();
+    }
+    return formValid;
+  }
+
   async saveAuthor() {
+    if (!this.checkForm()) {
+      return;
+    }
+
     let url = null;
     let method = null;
 
@@ -251,17 +266,25 @@ class AuthorsList extends Component<IProps, IState> {
             {!this.state.author?.id && <Modal.Title>New author</Modal.Title>}
           </Modal.Header>
           <Modal.Body>
-            <Form>
+            <Form
+              id="authorForm"
+              noValidate
+              validated={this.state.formValidated}
+            >
               <Row>
                 <Col lg="6">
                   <Form.Group controlId="name" key="name">
                     <Form.Label>Name</Form.Label>
                     <Form.Control
+                      required
                       type="text"
                       placeholder="Name"
                       value={this.state.author?.name || ''}
                       onChange={(event) => this.handleChangeEvent(event)}
                     />
+                    <Form.Control.Feedback type="invalid">
+                      Please provide a name
+                    </Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group controlId="year" key="year">
                     <Form.Label>Year</Form.Label>

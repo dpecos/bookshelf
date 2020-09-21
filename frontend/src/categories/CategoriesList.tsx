@@ -1,5 +1,6 @@
 import { History } from 'history';
 import React, { Component } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import {
   Alert,
   Button,
@@ -10,7 +11,6 @@ import {
   Table,
   Toast,
 } from 'react-bootstrap';
-import { Link, useHistory } from 'react-router-dom';
 
 interface IProps {
   history: History;
@@ -21,6 +21,7 @@ interface IState {
   message: string | null;
   category: any;
   showConfirmDeletion: boolean;
+  formValidated: boolean;
 }
 class CategoriesList extends Component<IProps, IState> {
   constructor(props: IProps) {
@@ -31,6 +32,7 @@ class CategoriesList extends Component<IProps, IState> {
       message: null,
       category: null,
       showConfirmDeletion: false,
+      formValidated: false,
     };
   }
 
@@ -50,11 +52,11 @@ class CategoriesList extends Component<IProps, IState> {
   }
 
   showEditDialog(category: any) {
-    this.setState({ category });
+    this.setState({ category, formValidated: false });
   }
 
   hideEditDialog() {
-    this.setState({ category: null });
+    this.setState({ category: null, formValidated: false });
   }
 
   async handleChangeEvent(event: any) {
@@ -69,7 +71,21 @@ class CategoriesList extends Component<IProps, IState> {
     }
   }
 
+  checkForm(): boolean {
+    const form: any = document.getElementById('categoryForm');
+    let formValid = false;
+    if (form) {
+      this.setState({ formValidated: true });
+      formValid = form.checkValidity();
+    }
+    return formValid;
+  }
+
   async saveCategory() {
+    if (!this.checkForm()) {
+      return;
+    }
+
     let url = null;
     let method = null;
 
@@ -207,15 +223,23 @@ class CategoriesList extends Component<IProps, IState> {
             )}
           </Modal.Header>
           <Modal.Body>
-            <Form>
+            <Form
+              id="categoryForm"
+              noValidate
+              validated={this.state.formValidated}
+            >
               <Form.Group controlId="name" key="name">
                 <Form.Label>Name</Form.Label>
                 <Form.Control
+                  required
                   type="text"
                   placeholder="Name"
                   value={this.state.category?.name || ''}
                   onChange={(event) => this.handleChangeEvent(event)}
                 />
+                <Form.Control.Feedback type="invalid">
+                  Please provide a name
+                </Form.Control.Feedback>
               </Form.Group>
             </Form>
           </Modal.Body>

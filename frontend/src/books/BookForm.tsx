@@ -1,6 +1,9 @@
 import bsCustomFileInput from 'bs-custom-file-input';
 import { History } from 'history';
 import React, { Component } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import './books.css';
+import { languages } from './languages';
 import {
   Alert,
   Button,
@@ -12,9 +15,6 @@ import {
   Row,
   Toast,
 } from 'react-bootstrap';
-import { useHistory, useParams } from 'react-router-dom';
-import './books.css';
-import { languages } from './languages';
 
 interface IProps {
   history: History;
@@ -30,6 +30,7 @@ interface IState {
   categories: [];
   message: string | null;
   showConfirmDeletion: boolean;
+  formValidated: boolean;
 }
 
 class BookForm extends Component<IProps, IState> {
@@ -45,6 +46,7 @@ class BookForm extends Component<IProps, IState> {
       categories: [],
       message: null,
       showConfirmDeletion: false,
+      formValidated: false,
     };
   }
 
@@ -109,7 +111,21 @@ class BookForm extends Component<IProps, IState> {
     this.props.history.goBack();
   }
 
+  checkForm(): boolean {
+    const form: any = document.getElementById('bookForm');
+    let formValid = false;
+    if (form) {
+      this.setState({ formValidated: true });
+      formValid = form.checkValidity();
+    }
+    return formValid;
+  }
+
   async createBook() {
+    if (!this.checkForm()) {
+      return;
+    }
+
     const response = await fetch(
       `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books`,
       {
@@ -126,6 +142,31 @@ class BookForm extends Component<IProps, IState> {
     if (response.ok) {
       this.props.history.push(`/books/${json.id}`);
     } else {
+      this.setState({ message: `${json.type.toUpperCase()}: ${json.message}` });
+    }
+  }
+
+  async editBook() {
+    if (!this.checkForm()) {
+      return;
+    }
+
+    const response = await fetch(
+      `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${this.props.bookId}`,
+      {
+        method: 'put',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(this.state.book),
+      }
+    );
+
+    if (response.ok) {
+      this.closeBookForm();
+    } else {
+      const json = await response.json();
       this.setState({ message: `${json.type.toUpperCase()}: ${json.message}` });
     }
   }
@@ -156,27 +197,6 @@ class BookForm extends Component<IProps, IState> {
 
   closeConfirmationDialog() {
     this.setState({ showConfirmDeletion: false });
-  }
-
-  async editBook() {
-    const response = await fetch(
-      `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${this.props.bookId}`,
-      {
-        method: 'put',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(this.state.book),
-      }
-    );
-
-    if (response.ok) {
-      this.closeBookForm();
-    } else {
-      const json = await response.json();
-      this.setState({ message: `${json.type.toUpperCase()}: ${json.message}` });
-    }
   }
 
   convertImageToBase64(input: any): Promise<string> {
@@ -244,8 +264,8 @@ class BookForm extends Component<IProps, IState> {
           </Toast>
         )}
 
-        <Container id="bookForm">
-          <Form>
+        <Container>
+          <Form id="bookForm" noValidate validated={this.state.formValidated}>
             <Row>
               <Col lg="6">
                 <img
@@ -275,7 +295,7 @@ class BookForm extends Component<IProps, IState> {
               </Col>
               <Col lg="6">
                 {[
-                  { id: 'title', label: 'Title' },
+                  { id: 'title', label: 'Title', required: true },
                   { id: 'titleOV', label: 'Title OV' },
                   {
                     id: 'language',
@@ -290,6 +310,7 @@ class BookForm extends Component<IProps, IState> {
                   {
                     id: 'author',
                     label: 'Author',
+                    required: true,
                     options: this.state.authors.map((author: any) => {
                       return { value: author.id, label: author.name };
                     }),
@@ -298,6 +319,7 @@ class BookForm extends Component<IProps, IState> {
                   {
                     id: 'category',
                     label: 'Category',
+                    required: true,
                     options: this.state.categories.map((category: any) => {
                       return { value: category.id, label: category.name };
                     }),
@@ -318,15 +340,17 @@ class BookForm extends Component<IProps, IState> {
                   {
                     id: 'readingDates',
                     label: 'Reading Dates',
+                    required: true,
                     value: this.state.book?.readingDates?.join(','),
                   },
-                ].map((field) => {
+                ].map((field: any) => {
                   if (field.options) {
                     return (
                       <Form.Group controlId={field.id} key={field.id}>
                         <Form.Label>{field.label}</Form.Label>
                         <Form.Control
                           as="select"
+                          required={field.required || false}
                           placeholder={field.label}
                           value={
                             field.value ||
@@ -343,6 +367,11 @@ class BookForm extends Component<IProps, IState> {
                             </option>
                           ))}
                         </Form.Control>
+                        {field.required && (
+                          <Form.Control.Feedback type="invalid">
+                            Please provide a {field.label.toLowerCase()}
+                          </Form.Control.Feedback>
+                        )}
                       </Form.Group>
                     );
                   } else {
@@ -350,6 +379,7 @@ class BookForm extends Component<IProps, IState> {
                       <Form.Group controlId={field.id} key={field.id}>
                         <Form.Label>{field.label}</Form.Label>
                         <Form.Control
+                          required={field.required || false}
                           type="text"
                           placeholder={field.label}
                           value={
