@@ -340,6 +340,7 @@ class BookForm extends Component<IProps, IState> {
                   {
                     id: 'readingDates',
                     label: 'Reading Dates',
+                    placeholder: 'Format: YYYY/MM, YYYY/MM...',
                     required: true,
                     value: this.state.book?.readingDates?.join(','),
                   },
@@ -351,7 +352,7 @@ class BookForm extends Component<IProps, IState> {
                         <Form.Control
                           as="select"
                           required={field.required || false}
-                          placeholder={field.label}
+                          placeholder={field.placeholder || field.label}
                           value={
                             field.value ||
                             this.state.book?.[field.id]?.id ||
@@ -381,12 +382,17 @@ class BookForm extends Component<IProps, IState> {
                         <Form.Control
                           required={field.required || false}
                           type="text"
-                          placeholder={field.label}
+                          placeholder={field.placeholder || field.label}
                           value={
                             field.value || this.state.book?.[field.id] || ''
                           }
                           onChange={(event) => this.handleChangeEvent(event)}
                         />
+                        {field.required && (
+                          <Form.Control.Feedback type="invalid">
+                            Please provide a {field.label.toLowerCase()}
+                          </Form.Control.Feedback>
+                        )}
                       </Form.Group>
                     );
                   }
