@@ -16,3 +16,9 @@ To rebuild an specific container:
 
     docker exec -i bookshelf_postgres_1 psql -U postgres -d bookshelf < bookshelf_xxx.sql
  
+
+## HTTP Auth
+
+Traefik is configured to use HTTP Auth for frontend. The user / password to use in `docker-compose.yml` can be generated with the following command:
+
+    echo $(htpasswd -nb bookshelf bookshelf) | sed -e s/\\$/\\$\\$/g
