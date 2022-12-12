@@ -1,22 +1,22 @@
-import { Author } from '@repository/entities/author';
-import { AuthorsService } from '@services/authors-service';
-import { getLogger } from '@utils/logger';
-import express from 'express';
-import asyncHandler from 'express-async-handler';
+import { Author } from "@repository/entities/author";
+import { AuthorsService } from "@services/authors-service";
 import {
   convertBufferToDataURL,
   convertDataURLToBuffer,
-} from '@utils/data-urls';
+} from "@utils/data-urls";
+import { getLogger } from "@utils/logger";
+import express from "express";
+import asyncHandler from "express-async-handler";
 
 export function setupAuthorsAPI(
   authorsService: AuthorsService
 ): express.Router {
-  const logger = getLogger('controller:authors');
+  const logger = getLogger("controller:authors");
 
   const router = new express.Router();
 
   router.get(
-    '/',
+    "/",
     asyncHandler(async (req: express.Request, res: express.Response) => {
       res.send(
         (await authorsService.getAuthors()).map((author) => {
@@ -35,24 +35,24 @@ export function setupAuthorsAPI(
   );
 
   router.get(
-    '/:authorId',
+    "/:authorId",
     asyncHandler(async (req: express.Request, res: express.Response) => {
       const author = await authorsService.getAuthor(req.params.authorId);
 
-      let photo = convertBufferToDataURL(author.photo, 'image/jpeg');
+      let photo = convertBufferToDataURL(author.photo, "image/jpeg");
 
       res.send({ ...author, photo });
     })
   );
 
   router.get(
-    '/:authorId/photo',
+    "/:authorId/photo",
     asyncHandler(async (req: express.Request, res: express.Response) => {
       try {
         const cover = await authorsService.getAuthorPhoto(req.params.authorId);
         res.writeHead(200, {
-          'Content-Type': 'image/jpeg',
-          'Content-Length': cover.length,
+          "Content-Type": "image/jpeg",
+          "Content-Length": cover.length,
         });
         res.end(cover);
       } catch (err) {
@@ -62,7 +62,7 @@ export function setupAuthorsAPI(
   );
 
   router.post(
-    '/',
+    "/",
     asyncHandler(async (req: express.Request, res: express.Response) => {
       const author = req.body as Author;
 
@@ -75,7 +75,7 @@ export function setupAuthorsAPI(
   );
 
   router.put(
-    '/:authorId',
+    "/:authorId",
     asyncHandler(async (req: express.Request, res: express.Response) => {
       const author = req.body as Author;
 
@@ -88,7 +88,7 @@ export function setupAuthorsAPI(
   );
 
   router.delete(
-    '/:authorId',
+    "/:authorId",
     asyncHandler(async (req: express.Request, res: express.Response) => {
       const author = req.body as Author;
 
@@ -98,7 +98,7 @@ export function setupAuthorsAPI(
     })
   );
 
-  logger.info('API: Endpoints for authors activated');
+  logger.info("API: Endpoints for authors activated");
 
   return router;
 }

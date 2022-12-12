@@ -1,14 +1,14 @@
-import { Book } from '@repository/entities/book';
-import { BookFilter } from '@repository/filters/books-filter';
-import { Repository } from '@repository/repository';
-import { getLogger } from '@utils/logger';
-import winston from 'winston';
+import { Book } from "@repository/entities/book";
+import { BookFilter } from "@repository/filters/books-filter";
+import { Repository } from "@repository/repository";
+import { getLogger } from "@utils/logger";
+import winston from "winston";
 
 export class BooksService {
   logger: winston.Logger;
 
   constructor(private repository: Repository) {
-    this.logger = getLogger('service:books');
+    this.logger = getLogger("service:books");
   }
 
   async getBooks(filter: BookFilter): Promise<Book[]> {
@@ -17,7 +17,7 @@ export class BooksService {
 
   async getBook(bookId: string): Promise<Book> {
     if (!bookId) {
-      const msg = 'Book ID not specified';
+      const msg = "Book ID not specified";
       this.logger.error(msg);
       throw new Error(msg);
     }
@@ -28,7 +28,7 @@ export class BooksService {
 
   async getBookCover(bookId: string): Promise<Buffer> {
     if (!bookId) {
-      const msg = 'Book ID not specified';
+      const msg = "Book ID not specified";
       this.logger.error(msg);
       throw new Error(msg);
     }
