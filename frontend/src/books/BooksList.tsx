@@ -16,6 +16,7 @@ import {
   Toast,
 } from 'react-bootstrap';
 import { Link, NavLink, useHistory, useLocation } from 'react-router-dom';
+import { Rating } from '../common/rating';
 import './books.css';
 import { getLanguage } from './languages';
 
@@ -325,6 +326,8 @@ class BooksList extends Component<IProps, IState> {
                           >
                             {book.category?.name}
                           </Link>
+                          <br />
+                          {book.rating && <Rating rating={book.rating} />}
                         </Card.Text>
                         {/*<Button variant="primary">Go somewhere</Button> */}
                       </Card.Body>
@@ -346,6 +349,7 @@ class BooksList extends Component<IProps, IState> {
                 <th>Year</th>
                 <th>Category</th>
                 <th>Collection</th>
+                <th>Rating</th>
               </tr>
             </thead>
             <tbody>
@@ -397,6 +401,9 @@ class BooksList extends Component<IProps, IState> {
                         ? ` (${book.collectionNumber})`
                         : ''}
                     </td>
+                    <td>
+                      <Rating rating={book.rating} />
+                    </td>
                   </tr>
                 ))
               )}
@@ -415,6 +422,7 @@ class BooksList extends Component<IProps, IState> {
                 <th>Year</th>
                 <th>Category</th>
                 <th>Collection</th>
+                <th>Rating</th>
                 <th>Pages</th>
                 <th>Editorial</th>
                 <th>ISBN</th>
@@ -469,6 +477,9 @@ class BooksList extends Component<IProps, IState> {
                       {book.collectionNumber
                         ? ` (${book.collectionNumber})`
                         : ''}
+                    </td>
+                    <td>
+                      <Rating rating={book.rating} />
                     </td>
                     <td>{book.pages}</td>
                     <td>{book.editorial}</td>

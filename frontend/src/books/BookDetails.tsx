@@ -12,7 +12,7 @@ import {
   Toast,
 } from 'react-bootstrap';
 import { Link, useHistory, useParams } from 'react-router-dom';
-import StarRatingComponent from 'react-star-rating-component';
+import { Rating } from '../common/rating';
 import './books.css';
 import { getLanguage } from './languages';
 
@@ -211,18 +211,8 @@ export class BookDetails extends Component<IProps, IState> {
                           </a>
                         )}
                         {field.type === 'stars' && (
-                          <StarRatingComponent
-                            name="rating"
-                            value={field.value || 0}
-                            editing={false}
-                          />
+                          <Rating rating={field.value} />
                         )}
-                        {field.type === 'stars' &&
-                          ((field.value === 1 && 'Bad') ||
-                            (field.value === 2 && 'Ok') ||
-                            (field.value === 3 && 'Good') ||
-                            (field.value === 4 && 'Great') ||
-                            (field.value === 5 && 'Wow'))}
                         {!field.link &&
                           !field.type &&
                           (field.value || this.state.book?.[field.id] || '')}
