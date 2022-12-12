@@ -12,6 +12,7 @@ import {
   Toast,
 } from 'react-bootstrap';
 import { Link, useHistory, useParams } from 'react-router-dom';
+import StarRatingComponent from 'react-star-rating-component';
 import './books.css';
 import { getLanguage } from './languages';
 
@@ -182,6 +183,12 @@ export class BookDetails extends Component<IProps, IState> {
                       label: 'Reading Dates',
                       value: this.state.book?.readingDates.join(' -- '),
                     },
+                    {
+                      id: 'rating',
+                      label: 'Rating',
+                      type: 'stars',
+                      value: this.state.book?.rating,
+                    },
                   ].map((field) => (
                     <tr key={field.id}>
                       <td>{field.label}</td>
@@ -203,7 +210,21 @@ export class BookDetails extends Component<IProps, IState> {
                             {field.value || this.state.book?.[field.id] || ''}
                           </a>
                         )}
+                        {field.type === 'stars' && (
+                          <StarRatingComponent
+                            name="rating"
+                            value={field.value || 0}
+                            editing={false}
+                          />
+                        )}
+                        {field.type === 'stars' &&
+                          ((field.value === 1 && 'Bad') ||
+                            (field.value === 2 && 'Ok') ||
+                            (field.value === 3 && 'Good') ||
+                            (field.value === 4 && 'Great') ||
+                            (field.value === 5 && 'Wow'))}
                         {!field.link &&
+                          !field.type &&
                           (field.value || this.state.book?.[field.id] || '')}
                       </td>
                     </tr>

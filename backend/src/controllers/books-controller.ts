@@ -1,21 +1,21 @@
-import { Book } from "@repository/entities/book";
-import { BookFilter } from "@repository/filters/books-filter";
-import { BooksService } from "@services/books-service";
+import express from 'express';
+import asyncHandler from 'express-async-handler';
+import { Book } from '@repository/entities/book';
+import { BookFilter } from '@repository/filters/books-filter';
+import { BooksService } from '@services/books-service';
 import {
   convertBufferToDataURL,
   convertDataURLToBuffer,
-} from "@utils/data-urls";
-import { getLogger } from "@utils/logger";
-import express from "express";
-import asyncHandler from "express-async-handler";
+} from '@utils/data-urls';
+import { getLogger } from '@utils/logger';
 
 export function setupBooksAPI(booksService: BooksService): express.Router {
-  const logger = getLogger("controller:books");
+  const logger = getLogger('controller:books');
 
   const router = new express.Router();
 
   router.get(
-    "/",
+    '/',
     asyncHandler(async (req: express.Request, res: express.Response) => {
       res.send(
         (await booksService.getBooks(req.query as BookFilter)).map((book) => {
@@ -42,7 +42,7 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
   );
 
   router.get(
-    "/detailed",
+    '/detailed',
     asyncHandler(async (req: express.Request, res: express.Response) => {
       res.send(
         (await booksService.getBooks(req.query as BookFilter)).map((book) => {
@@ -73,12 +73,12 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
   );
 
   router.get(
-    "/:bookId",
+    '/:bookId',
     asyncHandler(async (req: express.Request, res: express.Response) => {
       try {
         const book = await booksService.getBook(req.params.bookId);
 
-        let cover = convertBufferToDataURL(book.cover, "image/jpeg");
+        let cover = convertBufferToDataURL(book.cover, 'image/jpeg');
 
         res.send({ ...book, cover });
       } catch (err) {
@@ -88,13 +88,13 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
   );
 
   router.get(
-    "/:bookId/cover",
+    '/:bookId/cover',
     asyncHandler(async (req: express.Request, res: express.Response) => {
       try {
         const cover = await booksService.getBookCover(req.params.bookId);
         res.writeHead(200, {
-          "Content-Type": "image/jpeg",
-          "Content-Length": cover.length,
+          'Content-Type': 'image/jpeg',
+          'Content-Length': cover.length,
         });
         res.end(cover);
       } catch (err) {
@@ -104,7 +104,7 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
   );
 
   router.put(
-    "/:bookId",
+    '/:bookId',
     asyncHandler(async (req: express.Request, res: express.Response) => {
       const book = req.body as Book;
 
@@ -117,7 +117,7 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
   );
 
   router.post(
-    "/",
+    '/',
     asyncHandler(async (req: express.Request, res: express.Response) => {
       const book = req.body as Book;
 
@@ -130,7 +130,7 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
   );
 
   router.delete(
-    "/:bookId",
+    '/:bookId',
     asyncHandler(async (req: express.Request, res: express.Response) => {
       await booksService.deleteBook(req.params.bookId);
 
@@ -138,7 +138,7 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
     })
   );
 
-  logger.info("API: Endpoints for books activated");
+  logger.info('API: Endpoints for books activated');
 
   return router;
 }

@@ -1,9 +1,6 @@
 import bsCustomFileInput from 'bs-custom-file-input';
 import { History } from 'history';
 import React, { Component } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
-import './books.css';
-import { languages } from './languages';
 import {
   Alert,
   Button,
@@ -15,6 +12,9 @@ import {
   Row,
   Toast,
 } from 'react-bootstrap';
+import { useHistory, useParams } from 'react-router-dom';
+import './books.css';
+import { languages } from './languages';
 
 interface IProps {
   history: History;
@@ -343,6 +343,18 @@ class BookForm extends Component<IProps, IState> {
                     placeholder: 'Format: YYYY/MM, YYYY/MM...',
                     required: true,
                     value: this.state.book?.readingDates?.join(','),
+                  },
+                  {
+                    id: 'rating',
+                    label: 'Rating',
+                    required: true,
+                    options: [
+                      { value: 1, label: '1 - Bad' },
+                      { value: 2, label: '2 - Ok' },
+                      { value: 3, label: '3 - Good' },
+                      { value: 4, label: '4 - Great' },
+                      { value: 5, label: '5 - Wow' },
+                    ],
                   },
                 ].map((field: any) => {
                   if (field.options) {

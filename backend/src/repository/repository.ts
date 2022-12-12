@@ -1,7 +1,7 @@
-import { loadConfig } from '@utils/config';
-import { getLogger } from '@utils/logger';
 import { Connection, createConnection, getConnection } from 'typeorm';
 import winston from 'winston';
+import { loadConfig } from '@utils/config';
+import { getLogger } from '@utils/logger';
 import { AuthorsRepository } from './authors-repository';
 import { BooksRepository } from './books-repository';
 import { CategoriesRepository } from './categories-repository';

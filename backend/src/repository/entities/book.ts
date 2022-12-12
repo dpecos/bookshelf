@@ -64,4 +64,7 @@ export class Book extends BaseEntity {
 
   @Column({ type: 'bytea', nullable: true })
   cover: Buffer;
+
+  @Column({ nullable: true})
+  rating: number;
 }
