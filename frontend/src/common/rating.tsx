@@ -14,6 +14,37 @@ export class Rating extends Component<IProps> {
   }
 
   render() {
+    let text = '';
+    let color = '';
+
+    switch (this.props.rating) {
+      case 1: {
+        text = 'Bad';
+        color = 'darkred';
+        break;
+      }
+      case 2: {
+        text = 'Ok';
+        color = 'darkorange';
+        break;
+      }
+      case 3: {
+        text = 'Good';
+        color = '#999C63';
+        break;
+      }
+      case 4: {
+        text = 'Great';
+        color = 'green';
+        break;
+      }
+      case 5: {
+        text = 'Wow';
+        color = 'blue';
+        break;
+      }
+    }
+
     return (
       <>
         <StarRatingComponent
@@ -21,13 +52,7 @@ export class Rating extends Component<IProps> {
           value={this.props.rating || 0}
           editing={false}
         />
-        <span>
-          {(this.props.rating === 1 && 'Bad') ||
-            (this.props.rating === 2 && 'Ok') ||
-            (this.props.rating === 3 && 'Good') ||
-            (this.props.rating === 4 && 'Great') ||
-            (this.props.rating === 5 && 'Wow')}
-        </span>
+        <span style={{ color: color, fontWeight: 'bold' }}>{text}</span>
       </>
     );
   }
