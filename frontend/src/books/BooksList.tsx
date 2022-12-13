@@ -15,6 +15,11 @@ import {
   Table,
   Toast,
 } from 'react-bootstrap';
+import {
+  LazyLoadComponent,
+  LazyLoadImage,
+  trackWindowScroll,
+} from 'react-lazy-load-image-component';
 import { Link, NavLink, useHistory, useLocation } from 'react-router-dom';
 import { Rating } from '../common/rating';
 import './books.css';
@@ -194,6 +199,229 @@ class BooksList extends Component<IProps, IState> {
     this.setState({ message: null });
   }
 
+  renderConciseListing() {
+    return (
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Cover</th>
+            <th>Title</th>
+            <th>Language</th>
+            <th>Author</th>
+            <th>Year</th>
+            <th>Category</th>
+            <th>Collection</th>
+            <th>Rating</th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.state.fullList.length === 0 && !this.state.message ? (
+            <tr>
+              <td colSpan={7}>Loading books...</td>
+            </tr>
+          ) : (
+            this.state.books.map((book) => (
+              <tr key={book.id} onClick={() => this.showBookDetails(book)}>
+                <td>
+                  <LazyLoadImage
+                    alt={book.title}
+                    src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${book.id}/cover`}
+                    width="50px"
+                    onError={(event: any) =>
+                      (event.target.src = '/img/book-cover-not-available.jpg')
+                    }
+                  />
+                </td>
+                <td>{book.title}</td>
+                <td>{getLanguage(book.language)}</td>
+                <td>
+                  <Link
+                    to={`${window.location.pathname}?author=${book.author.id}`}
+                    onClick={(evt) => evt.stopPropagation()}
+                  >
+                    {book.author.name}
+                  </Link>
+                </td>
+                <td>{book.year}</td>
+                <td>
+                  <Link
+                    to={`?category=${book.category.id}`}
+                    onClick={(evt) => evt.stopPropagation()}
+                  >
+                    {book.category?.name}
+                  </Link>
+                </td>
+                <td>
+                  <Link
+                    to={`?collection=${book.collection?.id}`}
+                    onClick={(evt) => evt.stopPropagation()}
+                  >
+                    {book.collection?.name}
+                  </Link>
+                  {book.collectionNumber ? ` (${book.collectionNumber})` : ''}
+                </td>
+                <td>
+                  <Rating rating={book.rating} />
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </Table>
+    );
+  }
+
+  renderDetailedListing() {
+    return (
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Cover</th>
+            <th>Title</th>
+            <th>Language</th>
+            <th>Author</th>
+            <th>Year</th>
+            <th>Category</th>
+            <th>Collection</th>
+            <th>Rating</th>
+            <th>Pages</th>
+            <th>Editorial</th>
+            <th>ISBN</th>
+            <th>Link</th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.state.fullList.length === 0 && !this.state.message ? (
+            <tr>
+              <td colSpan={11}>Loading books...</td>
+            </tr>
+          ) : (
+            this.state.books.map((book) => (
+              <tr key={book.id} onClick={() => this.showBookDetails(book)}>
+                <td>
+                  <LazyLoadImage
+                    alt={book.title}
+                    src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${book.id}/cover`}
+                    width="50px"
+                    onError={(event: any) =>
+                      (event.target.src = '/img/book-cover-not-available.jpg')
+                    }
+                  />
+                </td>
+                <td>{book.title}</td>
+                <td>{getLanguage(book.language)}</td>
+                <td>
+                  <Link
+                    to={`${window.location.pathname}?author=${book.author.id}`}
+                    onClick={(evt) => evt.stopPropagation()}
+                  >
+                    {book.author.name}
+                  </Link>
+                </td>
+                <td>{book.year}</td>
+                <td>
+                  <Link
+                    to={`?category=${book.category.id}`}
+                    onClick={(evt) => evt.stopPropagation()}
+                  >
+                    {book.category?.name}
+                  </Link>
+                </td>
+                <td>
+                  <Link
+                    to={`?collection=${book.collection?.id}`}
+                    onClick={(evt) => evt.stopPropagation()}
+                  >
+                    {book.collection?.name}
+                  </Link>
+                  {book.collectionNumber ? ` (${book.collectionNumber})` : ''}
+                </td>
+                <td>
+                  <Rating rating={book.rating} />
+                </td>
+                <td>{book.pages}</td>
+                <td>{book.editorial}</td>
+                <td>
+                  <a
+                    href={`https://en.wikipedia.org/wiki/Special:BookSources?isbn=${book.isbn}`}
+                    onClick={(evt) => evt.stopPropagation()}
+                    target="_new"
+                  >
+                    {book.isbn}
+                  </a>
+                </td>
+                <td>{book.link}</td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </Table>
+    );
+  }
+
+  renderShelf() {
+    return (
+      <Container fluid>
+        <Row>
+          {this.state.books.map((book) => (
+            <Col key={book.id}>
+              <Card
+                style={{ width: '18rem' }}
+                onClick={() => this.showBookDetails(book)}
+              >
+                <LazyLoadComponent>
+                  <Card.Img
+                    variant="top"
+                    src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${book.id}/cover`}
+                    onError={(event: any) =>
+                      (event.target.src = '/img/book-cover-not-available.jpg')
+                    }
+                  />
+                </LazyLoadComponent>
+
+                <Card.Body>
+                  <Card.Title>{book.title}</Card.Title>
+                  {book.collection && (
+                    <Card.Subtitle className="mb-2 text-muted">
+                      <Link
+                        to={`?collection=${book.collection?.id}`}
+                        onClick={(evt) => evt.stopPropagation()}
+                      >
+                        {book.collection?.name}
+                      </Link>
+                      {book.collectionNumber
+                        ? ` (${book.collectionNumber})`
+                        : ''}
+                    </Card.Subtitle>
+                  )}
+                  <Card.Text>
+                    <Link
+                      to={`${window.location.pathname}?author=${book.author.id}`}
+                      onClick={(evt) => evt.stopPropagation()}
+                    >
+                      {book.author.name}
+                    </Link>{' '}
+                    ({book.year})
+                    <br />
+                    <Link
+                      to={`?category=${book.category.id}`}
+                      onClick={(evt) => evt.stopPropagation()}
+                    >
+                      {book.category?.name}
+                    </Link>
+                    <br />
+                    {book.rating && <Rating rating={book.rating} />}
+                  </Card.Text>
+                  {/*<Button variant="primary">Go somewhere</Button> */}
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </Container>
+    );
+  }
+
   render() {
     return (
       <>
@@ -275,229 +503,14 @@ class BooksList extends Component<IProps, IState> {
           </Jumbotron>
         )}
 
-        {this.props.type === 'shelf' &&
-          (this.state.fullList.length === 0 && !this.state.message ? (
-            <>Loading books...</>
-          ) : (
-            <Container fluid>
-              <Row>
-                {this.state.books.map((book) => (
-                  <Col key={book.id}>
-                    <Card
-                      style={{ width: '18rem' }}
-                      onClick={() => this.showBookDetails(book)}
-                    >
-                      <Card.Img
-                        variant="top"
-                        src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${book.id}/cover`}
-                        onError={(event: any) =>
-                          (event.target.src =
-                            '/img/book-cover-not-available.jpg')
-                        }
-                      />
-
-                      <Card.Body>
-                        <Card.Title>{book.title}</Card.Title>
-                        {book.collection && (
-                          <Card.Subtitle className="mb-2 text-muted">
-                            <Link
-                              to={`?collection=${book.collection?.id}`}
-                              onClick={(evt) => evt.stopPropagation()}
-                            >
-                              {book.collection?.name}
-                            </Link>
-                            {book.collectionNumber
-                              ? ` (${book.collectionNumber})`
-                              : ''}
-                          </Card.Subtitle>
-                        )}
-                        <Card.Text>
-                          <Link
-                            to={`${window.location.pathname}?author=${book.author.id}`}
-                            onClick={(evt) => evt.stopPropagation()}
-                          >
-                            {book.author.name}
-                          </Link>{' '}
-                          ({book.year})
-                          <br />
-                          <Link
-                            to={`?category=${book.category.id}`}
-                            onClick={(evt) => evt.stopPropagation()}
-                          >
-                            {book.category?.name}
-                          </Link>
-                          <br />
-                          {book.rating && <Rating rating={book.rating} />}
-                        </Card.Text>
-                        {/*<Button variant="primary">Go somewhere</Button> */}
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                ))}
-              </Row>
-            </Container>
-          ))}
-
-        {this.props.type === 'concise' && (
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>Cover</th>
-                <th>Title</th>
-                <th>Language</th>
-                <th>Author</th>
-                <th>Year</th>
-                <th>Category</th>
-                <th>Collection</th>
-                <th>Rating</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.fullList.length === 0 && !this.state.message ? (
-                <tr>
-                  <td colSpan={7}>Loading books...</td>
-                </tr>
-              ) : (
-                this.state.books.map((book) => (
-                  <tr key={book.id} onClick={() => this.showBookDetails(book)}>
-                    <td>
-                      <img
-                        alt={book.title}
-                        src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${book.id}/cover`}
-                        width="50px"
-                        onError={(event: any) =>
-                          (event.target.src =
-                            '/img/book-cover-not-available.jpg')
-                        }
-                      />
-                    </td>
-                    <td>{book.title}</td>
-                    <td>{getLanguage(book.language)}</td>
-                    <td>
-                      <Link
-                        to={`${window.location.pathname}?author=${book.author.id}`}
-                        onClick={(evt) => evt.stopPropagation()}
-                      >
-                        {book.author.name}
-                      </Link>
-                    </td>
-                    <td>{book.year}</td>
-                    <td>
-                      <Link
-                        to={`?category=${book.category.id}`}
-                        onClick={(evt) => evt.stopPropagation()}
-                      >
-                        {book.category?.name}
-                      </Link>
-                    </td>
-                    <td>
-                      <Link
-                        to={`?collection=${book.collection?.id}`}
-                        onClick={(evt) => evt.stopPropagation()}
-                      >
-                        {book.collection?.name}
-                      </Link>
-                      {book.collectionNumber
-                        ? ` (${book.collectionNumber})`
-                        : ''}
-                    </td>
-                    <td>
-                      <Rating rating={book.rating} />
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </Table>
-        )}
-
-        {this.props.type === 'detailed' && (
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>Cover</th>
-                <th>Title</th>
-                <th>Language</th>
-                <th>Author</th>
-                <th>Year</th>
-                <th>Category</th>
-                <th>Collection</th>
-                <th>Rating</th>
-                <th>Pages</th>
-                <th>Editorial</th>
-                <th>ISBN</th>
-                <th>Link</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.fullList.length === 0 && !this.state.message ? (
-                <tr>
-                  <td colSpan={11}>Loading books...</td>
-                </tr>
-              ) : (
-                this.state.books.map((book) => (
-                  <tr key={book.id} onClick={() => this.showBookDetails(book)}>
-                    <td>
-                      <img
-                        alt={book.title}
-                        src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${book.id}/cover`}
-                        width="50px"
-                        onError={(event: any) =>
-                          (event.target.src =
-                            '/img/book-cover-not-available.jpg')
-                        }
-                      />
-                    </td>
-                    <td>{book.title}</td>
-                    <td>{getLanguage(book.language)}</td>
-                    <td>
-                      <Link
-                        to={`${window.location.pathname}?author=${book.author.id}`}
-                        onClick={(evt) => evt.stopPropagation()}
-                      >
-                        {book.author.name}
-                      </Link>
-                    </td>
-                    <td>{book.year}</td>
-                    <td>
-                      <Link
-                        to={`?category=${book.category.id}`}
-                        onClick={(evt) => evt.stopPropagation()}
-                      >
-                        {book.category?.name}
-                      </Link>
-                    </td>
-                    <td>
-                      <Link
-                        to={`?collection=${book.collection?.id}`}
-                        onClick={(evt) => evt.stopPropagation()}
-                      >
-                        {book.collection?.name}
-                      </Link>
-                      {book.collectionNumber
-                        ? ` (${book.collectionNumber})`
-                        : ''}
-                    </td>
-                    <td>
-                      <Rating rating={book.rating} />
-                    </td>
-                    <td>{book.pages}</td>
-                    <td>{book.editorial}</td>
-                    <td>
-                      <a
-                        href={`https://en.wikipedia.org/wiki/Special:BookSources?isbn=${book.isbn}`}
-                        onClick={(evt) => evt.stopPropagation()}
-                        target="_new"
-                      >
-                        {book.isbn}
-                      </a>
-                    </td>
-                    <td>{book.link}</td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </Table>
+        {this.state.fullList.length === 0 && !this.state.message ? (
+          <>Loading books...</>
+        ) : (
+          <>
+            {this.props.type === 'shelf' && this.renderShelf()}
+            {this.props.type === 'concise' && this.renderConciseListing()}
+            {this.props.type === 'detailed' && this.renderDetailedListing()}
+          </>
         )}
       </>
     );
