@@ -35,6 +35,7 @@ interface IState {
   books: any[];
   fullList: any[];
   message: string | null;
+  showCovers: boolean;
   filterPicture: string | null;
   filterHeader: string | null;
   filterBody: string | null;
@@ -48,6 +49,7 @@ class BooksList extends Component<IProps, IState> {
       books: [],
       fullList: [],
       message: null,
+      showCovers: this.props.type === 'shelf',
       filterPicture: null,
       filterHeader: null,
       filterBody: null,
@@ -204,7 +206,7 @@ class BooksList extends Component<IProps, IState> {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>Cover</th>
+            {this.state.showCovers && <th>Cover</th>}
             <th>Title</th>
             <th>Language</th>
             <th>Author</th>
@@ -222,16 +224,18 @@ class BooksList extends Component<IProps, IState> {
           ) : (
             this.state.books.map((book) => (
               <tr key={book.id} onClick={() => this.showBookDetails(book)}>
-                <td>
-                  <LazyLoadImage
-                    alt={book.title}
-                    src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${book.id}/cover`}
-                    width="50px"
-                    onError={(event: any) =>
-                      (event.target.src = '/img/book-cover-not-available.jpg')
-                    }
-                  />
-                </td>
+                {this.state.showCovers && (
+                  <td>
+                    <LazyLoadImage
+                      alt={book.title}
+                      src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${book.id}/cover`}
+                      width="50px"
+                      onError={(event: any) =>
+                        (event.target.src = '/img/book-cover-not-available.jpg')
+                      }
+                    />
+                  </td>
+                )}
                 <td>{book.title}</td>
                 <td>{getLanguage(book.language)}</td>
                 <td>
@@ -276,7 +280,7 @@ class BooksList extends Component<IProps, IState> {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>Cover</th>
+            {this.state.showCovers && <th>Cover</th>}
             <th>Title</th>
             <th>Language</th>
             <th>Author</th>
@@ -298,16 +302,18 @@ class BooksList extends Component<IProps, IState> {
           ) : (
             this.state.books.map((book) => (
               <tr key={book.id} onClick={() => this.showBookDetails(book)}>
-                <td>
-                  <LazyLoadImage
-                    alt={book.title}
-                    src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${book.id}/cover`}
-                    width="50px"
-                    onError={(event: any) =>
-                      (event.target.src = '/img/book-cover-not-available.jpg')
-                    }
-                  />
-                </td>
+                {this.state.showCovers && (
+                  <td>
+                    <LazyLoadImage
+                      alt={book.title}
+                      src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${book.id}/cover`}
+                      width="50px"
+                      onError={(event: any) =>
+                        (event.target.src = '/img/book-cover-not-available.jpg')
+                      }
+                    />
+                  </td>
+                )}
                 <td>{book.title}</td>
                 <td>{getLanguage(book.language)}</td>
                 <td>
@@ -369,15 +375,17 @@ class BooksList extends Component<IProps, IState> {
                 style={{ width: '18rem' }}
                 onClick={() => this.showBookDetails(book)}
               >
-                <LazyLoadComponent>
-                  <Card.Img
-                    variant="top"
-                    src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${book.id}/cover`}
-                    onError={(event: any) =>
-                      (event.target.src = '/img/book-cover-not-available.jpg')
-                    }
-                  />
-                </LazyLoadComponent>
+                {this.state.showCovers && (
+                  <LazyLoadComponent>
+                    <Card.Img
+                      variant="top"
+                      src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${book.id}/cover`}
+                      onError={(event: any) =>
+                        (event.target.src = '/img/book-cover-not-available.jpg')
+                      }
+                    />
+                  </LazyLoadComponent>
+                )}
 
                 <Card.Body>
                   <Card.Title>{book.title}</Card.Title>
@@ -429,15 +437,36 @@ class BooksList extends Component<IProps, IState> {
           <Navbar.Brand>Books</Navbar.Brand>
           <Navbar.Collapse className="justify-content-start">
             <Nav variant="pills">
-              <Nav.Link as={NavLink} to="/books/list" exact={true}>
-                Normal list
-              </Nav.Link>
-              <Nav.Link as={NavLink} to="/books/list/detailed" exact={true}>
-                Detailed list
-              </Nav.Link>
-              <Nav.Link as={NavLink} to="/books/list/shelf" exact={true}>
-                Shelf
-              </Nav.Link>
+              <Nav.Item>
+                <Nav.Link as={NavLink} to="/books/list" exact={true}>
+                  Normal list
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link as={NavLink} to="/books/list/detailed" exact={true}>
+                  Detailed list
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link as={NavLink} to="/books/list/shelf" exact={true}>
+                  Shelf
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Form.Check
+                  inline
+                  type="switch"
+                  id="show-covers"
+                  label="Show book covers"
+                  defaultChecked={this.state.showCovers}
+                  value={this.state.showCovers ? 'on' : 'off'}
+                  onChange={(event: any) => {
+                    this.setState({
+                      showCovers: !this.state.showCovers,
+                    });
+                  }}
+                />
+              </Nav.Item>
             </Nav>
           </Navbar.Collapse>
           <Navbar.Collapse className="justify-content-end">
