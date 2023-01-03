@@ -18,7 +18,7 @@
     "jest": "^26.1.0",
     "pg": "^8.3.0",
     "ts-node": "^8.10.2",
-    "tsconfig-paths": "^3.9.0",
+    "tsconfig-paths": "^3.10.1",
     "typeorm": "^0.2.26",
     "typescript": "^3.9.5",
     "winston": "^3.2.1",
