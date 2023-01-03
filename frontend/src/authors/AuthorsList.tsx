@@ -64,7 +64,7 @@ class AuthorsList extends Component<IProps, IState> {
   }
 
   async showEditDialog(authorRow: any) {
-    const author = await this.fetchAuthor(authorRow.id);
+    const author = authorRow.id ? await this.fetchAuthor(authorRow.id) : {};
     this.setState({ author, formValidated: false });
   }
 
@@ -76,7 +76,7 @@ class AuthorsList extends Component<IProps, IState> {
     return new Promise((resolve) => {
       const file = input.files[0];
       const reader = new FileReader();
-      reader.onloadend = function () {
+      reader.onloadend = function() {
         resolve(reader.result as string);
       };
       reader.readAsDataURL(file);
@@ -224,34 +224,34 @@ class AuthorsList extends Component<IProps, IState> {
                 <td colSpan={6}>Loading authors...</td>
               </tr>
             ) : (
-              this.state.authors.map((author) => (
-                <tr key={author.id} onClick={() => this.showEditDialog(author)}>
-                  <td>
-                    <img
-                      id="authorPhotoSmall"
-                      alt={author.name}
-                      src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/authors/${author.id}/photo`}
-                      width="50px"
-                      onError={(event: any) =>
-                        (event.target.src =
-                          '/img/author-photo-not-available.png')
-                      }
-                    />
-                  </td>
-                  <td>
-                    <Link
-                      to={`/books/list?author=${author.id}`}
-                      onClick={(evt) => evt.stopPropagation()}
-                    >
-                      {author?.name}
-                    </Link>
-                  </td>
-                  <td>{author?.year}</td>
-                  <td>{author?.nationality}</td>
-                  <td>{author?.link}</td>
-                </tr>
-              ))
-            )}
+                this.state.authors.map((author) => (
+                  <tr key={author.id} onClick={() => this.showEditDialog(author)}>
+                    <td>
+                      <img
+                        id="authorPhotoSmall"
+                        alt={author.name}
+                        src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/authors/${author.id}/photo`}
+                        width="50px"
+                        onError={(event: any) =>
+                          (event.target.src =
+                            '/img/author-photo-not-available.png')
+                        }
+                      />
+                    </td>
+                    <td>
+                      <Link
+                        to={`/books/list?author=${author.id}`}
+                        onClick={(evt) => evt.stopPropagation()}
+                      >
+                        {author?.name}
+                      </Link>
+                    </td>
+                    <td>{author?.year}</td>
+                    <td>{author?.nationality}</td>
+                    <td>{author?.link}</td>
+                  </tr>
+                ))
+              )}
           </tbody>
         </Table>
 
