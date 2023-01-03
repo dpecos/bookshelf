@@ -8,7 +8,7 @@ export abstract class BaseRepository<T extends BaseEntity> {
   logger: winston.Logger;
   plural: string;
 
-  constructor(private repository: Repository<T>, private name: string) {
+  constructor(protected repository: Repository<T>, private name: string) {
     this.plural = name.endsWith('y')
       ? `${name.substring(0, name.length - 1)}ies`
       : `${name}s`;
@@ -51,7 +51,7 @@ export abstract class BaseRepository<T extends BaseEntity> {
 
   async update(model: T): Promise<void> {
     try {
-      await this.repository.update(model.id, model as any);
+      await this.repository.save(model as any)
     } catch (err) {
       const message = `Error updating ${this.name}`;
       this.logger.error(`${message}: ${err}`);

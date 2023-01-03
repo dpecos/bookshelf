@@ -13,18 +13,25 @@ export class BooksRepository extends BaseRepository<Book> {
     let order: any = { readingDates: 'DESC' };
 
     if (filter?.author) {
-      where.author = { id: filter.author };
-      order = { year: 'ASC' };
-    }
-    if (filter.category) {
-      where.category = { id: filter.category };
-      order = { title: 'ASC' };
-    }
-    if (filter.collection) {
-      where.collection = { id: filter.collection };
-      order = { collectionNumber: 'ASC', year: 'ASC' };
-    }
+      const books = await this.repository
+        .createQueryBuilder('books')
+        .innerJoinAndSelect('books.authors', 'author')
+        .where('author.id = :id', { id: filter.author })
+        .orderBy('books.year', 'ASC')
+        .getMany()
 
-    return this.query(where, order);
+      return this.repository.findByIds(books.map(b => b.id))
+    } else {
+      if (filter.category) {
+        where.category = { id: filter.category };
+        order = { title: 'ASC' };
+      }
+      if (filter.collection) {
+        where.collection = { id: filter.collection };
+        order = { collectionNumber: 'ASC', year: 'ASC' };
+      }
+
+      return this.query(where, order);
+    }
   }
 }

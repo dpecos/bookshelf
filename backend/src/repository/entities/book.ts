@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
 import { Author } from './author';
 import { BaseEntity } from './base-entity';
 import { Category } from './category';
@@ -18,12 +18,21 @@ export class Book extends BaseEntity {
   @Column({ nullable: true })
   languageOV: string;
 
-  @ManyToOne(() => Author, (author) => author.books, {
-    cascade: false,
+  @ManyToMany(() => Author, (author) => author.books, {
+    cascade: true,
     nullable: false,
     eager: true,
   })
-  author: Author;
+  @JoinTable({
+    name: "book_authors", joinColumn: {
+      name: 'bookId',
+      referencedColumnName: 'id'
+    }, inverseJoinColumn: {
+      name: 'authorId',
+      referencedColumnName: 'id'
+    }
+  })
+  authors: Author[];
 
   @ManyToOne(() => Category, (category) => category.books, {
     cascade: false,
@@ -65,6 +74,6 @@ export class Book extends BaseEntity {
   @Column({ type: 'bytea', nullable: true })
   cover: Buffer;
 
-  @Column({ nullable: true})
+  @Column({ nullable: true })
   rating: number;
 }

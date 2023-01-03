@@ -203,7 +203,7 @@ class BookForm extends Component<IProps, IState> {
     return new Promise((resolve) => {
       const file = input.files[0];
       const reader = new FileReader();
-      reader.onloadend = function () {
+      reader.onloadend = function() {
         resolve(reader.result as string);
       };
       reader.readAsDataURL(file);
@@ -230,6 +230,10 @@ class BookForm extends Component<IProps, IState> {
         book.readingDates = value.split(',');
       } else if (field === 'cover') {
         book.cover = await this.convertImageToBase64(event.currentTarget);
+      } else if (field === 'authors') {
+        // book.authors = [].slice.call(event.target.selectedOptions).map((item: any) => item.value).filter(Boolean)
+        const selectedAuthors = [].slice.call(event.target.selectedOptions).map((item: any) => item.value).filter(Boolean)
+        book.authors = this.state.authors.filter((author: any) => selectedAuthors.includes(author.id));
       } else {
         book[field] = value;
       }
@@ -308,12 +312,13 @@ class BookForm extends Component<IProps, IState> {
                     options: languages,
                   },
                   {
-                    id: 'author',
-                    label: 'Author',
+                    id: 'authors',
+                    label: 'Authors',
                     required: true,
                     options: this.state.authors.map((author: any) => {
                       return { value: author.id, label: author.name };
                     }),
+                    multiple: true
                   },
                   { id: 'year', label: 'Year' },
                   {
@@ -358,6 +363,12 @@ class BookForm extends Component<IProps, IState> {
                   },
                 ].map((field: any) => {
                   if (field.options) {
+                    const value =
+                      field.multiple ? this.state.book?.[field.id]?.map((f: any) => f.id) : (field.value ||
+                        this.state.book?.[field.id]?.id ||
+                        this.state.book?.[field.id] ||
+                        '');
+
                     return (
                       <Form.Group controlId={field.id} key={field.id}>
                         <Form.Label>{field.label}</Form.Label>
@@ -365,11 +376,9 @@ class BookForm extends Component<IProps, IState> {
                           as="select"
                           required={field.required || false}
                           placeholder={field.placeholder || field.label}
+                          multiple={field.multiple || false}
                           value={
-                            field.value ||
-                            this.state.book?.[field.id]?.id ||
-                            this.state.book?.[field.id] ||
-                            ''
+                            field.multiple && !Array.isArray(value) ? [value] : value
                           }
                           onChange={(event) => this.handleChangeEvent(event)}
                         >

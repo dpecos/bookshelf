@@ -45,3 +45,7 @@
   margin: 10px 0px 20px 0px;
   display: block;
 }
+
+.author_link ~ .author_link::before {
+  content: ', ';
+}

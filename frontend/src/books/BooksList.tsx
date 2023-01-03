@@ -192,7 +192,7 @@ class BooksList extends Component<IProps, IState> {
         (book) =>
           book.title.toLowerCase().indexOf(filter) !== -1 ||
           (book.titleOV && book.titleOV.toLowerCase().indexOf(filter) !== -1) ||
-          book.author.name.toLowerCase().indexOf(filter) !== -1
+          book.authors.filter((author: any) => author.name.toLowerCase().indexOf(filter)).length > 0
       ),
     });
   }
@@ -209,7 +209,7 @@ class BooksList extends Component<IProps, IState> {
             {this.state.showCovers && <th>Cover</th>}
             <th>Title</th>
             <th>Language</th>
-            <th>Author</th>
+            <th>Authors</th>
             <th>Year</th>
             <th>Category</th>
             <th>Collection</th>
@@ -222,54 +222,57 @@ class BooksList extends Component<IProps, IState> {
               <td colSpan={7}>Loading books...</td>
             </tr>
           ) : (
-            this.state.books.map((book) => (
-              <tr key={book.id} onClick={() => this.showBookDetails(book)}>
-                {this.state.showCovers && (
+              this.state.books.map((book) => (
+                <tr key={book.id} onClick={() => this.showBookDetails(book)}>
+                  {this.state.showCovers && (
+                    <td>
+                      <LazyLoadImage
+                        alt={book.title}
+                        src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${book.id}/cover`}
+                        width="50px"
+                        onError={(event: any) =>
+                          (event.target.src = '/img/book-cover-not-available.jpg')
+                        }
+                      />
+                    </td>
+                  )}
+                  <td>{book.title}</td>
+                  <td>{getLanguage(book.language)}</td>
                   <td>
-                    <LazyLoadImage
-                      alt={book.title}
-                      src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${book.id}/cover`}
-                      width="50px"
-                      onError={(event: any) =>
-                        (event.target.src = '/img/book-cover-not-available.jpg')
-                      }
-                    />
+                    {book.authors.map((author: any) => (
+                      <Link
+                        className="author_link"
+                        to={`${window.location.pathname}?author=${author.id}`}
+                        onClick={(evt) => evt.stopPropagation()}
+                      >
+                        {author.name}
+                      </Link>
+                    ))}
                   </td>
-                )}
-                <td>{book.title}</td>
-                <td>{getLanguage(book.language)}</td>
-                <td>
-                  <Link
-                    to={`${window.location.pathname}?author=${book.author.id}`}
-                    onClick={(evt) => evt.stopPropagation()}
-                  >
-                    {book.author.name}
-                  </Link>
-                </td>
-                <td>{book.year}</td>
-                <td>
-                  <Link
-                    to={`?category=${book.category.id}`}
-                    onClick={(evt) => evt.stopPropagation()}
-                  >
-                    {book.category?.name}
-                  </Link>
-                </td>
-                <td>
-                  <Link
-                    to={`?collection=${book.collection?.id}`}
-                    onClick={(evt) => evt.stopPropagation()}
-                  >
-                    {book.collection?.name}
-                  </Link>
-                  {book.collectionNumber ? ` (${book.collectionNumber})` : ''}
-                </td>
-                <td>
-                  <Rating rating={book.rating} />
-                </td>
-              </tr>
-            ))
-          )}
+                  <td>{book.year}</td>
+                  <td>
+                    <Link
+                      to={`?category=${book.category?.id}`}
+                      onClick={(evt) => evt.stopPropagation()}
+                    >
+                      {book.category?.name}
+                    </Link>
+                  </td>
+                  <td>
+                    <Link
+                      to={`?collection=${book.collection?.id}`}
+                      onClick={(evt) => evt.stopPropagation()}
+                    >
+                      {book.collection?.name}
+                    </Link>
+                    {book.collectionNumber ? ` (${book.collectionNumber})` : ''}
+                  </td>
+                  <td>
+                    <Rating rating={book.rating} />
+                  </td>
+                </tr>
+              ))
+            )}
         </tbody>
       </Table>
     );
@@ -283,7 +286,7 @@ class BooksList extends Component<IProps, IState> {
             {this.state.showCovers && <th>Cover</th>}
             <th>Title</th>
             <th>Language</th>
-            <th>Author</th>
+            <th>Authors</th>
             <th>Year</th>
             <th>Category</th>
             <th>Collection</th>
@@ -300,66 +303,69 @@ class BooksList extends Component<IProps, IState> {
               <td colSpan={11}>Loading books...</td>
             </tr>
           ) : (
-            this.state.books.map((book) => (
-              <tr key={book.id} onClick={() => this.showBookDetails(book)}>
-                {this.state.showCovers && (
+              this.state.books.map((book) => (
+                <tr key={book.id} onClick={() => this.showBookDetails(book)}>
+                  {this.state.showCovers && (
+                    <td>
+                      <LazyLoadImage
+                        alt={book.title}
+                        src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${book.id}/cover`}
+                        width="50px"
+                        onError={(event: any) =>
+                          (event.target.src = '/img/book-cover-not-available.jpg')
+                        }
+                      />
+                    </td>
+                  )}
+                  <td>{book.title}</td>
+                  <td>{getLanguage(book.language)}</td>
                   <td>
-                    <LazyLoadImage
-                      alt={book.title}
-                      src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BACKEND_PORT}/api/books/${book.id}/cover`}
-                      width="50px"
-                      onError={(event: any) =>
-                        (event.target.src = '/img/book-cover-not-available.jpg')
-                      }
-                    />
+                    {book.authors.map((author: any) => (
+                      <Link
+                        className="author_link"
+                        to={`${window.location.pathname}?author=${author.id}`}
+                        onClick={(evt) => evt.stopPropagation()}
+                      >
+                        {author.name}
+                      </Link>
+                    ))}
                   </td>
-                )}
-                <td>{book.title}</td>
-                <td>{getLanguage(book.language)}</td>
-                <td>
-                  <Link
-                    to={`${window.location.pathname}?author=${book.author.id}`}
-                    onClick={(evt) => evt.stopPropagation()}
-                  >
-                    {book.author.name}
-                  </Link>
-                </td>
-                <td>{book.year}</td>
-                <td>
-                  <Link
-                    to={`?category=${book.category.id}`}
-                    onClick={(evt) => evt.stopPropagation()}
-                  >
-                    {book.category?.name}
-                  </Link>
-                </td>
-                <td>
-                  <Link
-                    to={`?collection=${book.collection?.id}`}
-                    onClick={(evt) => evt.stopPropagation()}
-                  >
-                    {book.collection?.name}
-                  </Link>
-                  {book.collectionNumber ? ` (${book.collectionNumber})` : ''}
-                </td>
-                <td>
-                  <Rating rating={book.rating} />
-                </td>
-                <td>{book.pages}</td>
-                <td>{book.editorial}</td>
-                <td>
-                  <a
-                    href={`https://en.wikipedia.org/wiki/Special:BookSources?isbn=${book.isbn}`}
-                    onClick={(evt) => evt.stopPropagation()}
-                    target="_new"
-                  >
-                    {book.isbn}
-                  </a>
-                </td>
-                <td>{book.link}</td>
-              </tr>
-            ))
-          )}
+                  <td>{book.year}</td>
+                  <td>
+                    <Link
+                      to={`?category=${book.category?.id}`}
+                      onClick={(evt) => evt.stopPropagation()}
+                    >
+                      {book.category?.name}
+                    </Link>
+                  </td>
+                  <td>
+                    <Link
+                      to={`?collection=${book.collection?.id}`}
+                      onClick={(evt) => evt.stopPropagation()}
+                    >
+                      {book.collection?.name}
+                    </Link>
+                    {book.collectionNumber ? ` (${book.collectionNumber})` : ''}
+                  </td>
+                  <td>
+                    <Rating rating={book.rating} />
+                  </td>
+                  <td>{book.pages}</td>
+                  <td>{book.editorial}</td>
+                  <td>
+                    <a
+                      href={`https://en.wikipedia.org/wiki/Special:BookSources?isbn=${book.isbn}`}
+                      onClick={(evt) => evt.stopPropagation()}
+                      target="_new"
+                    >
+                      {book.isbn}
+                    </a>
+                  </td>
+                  <td>{book.link}</td>
+                </tr>
+              ))
+            )}
         </tbody>
       </Table>
     );
@@ -403,16 +409,20 @@ class BooksList extends Component<IProps, IState> {
                     </Card.Subtitle>
                   )}
                   <Card.Text>
-                    <Link
-                      to={`${window.location.pathname}?author=${book.author.id}`}
-                      onClick={(evt) => evt.stopPropagation()}
-                    >
-                      {book.author.name}
-                    </Link>{' '}
+                    {book.authors.map((author: any) => (
+                      <Link
+                        className="author_link"
+                        to={`${window.location.pathname}?author=${author.id}`}
+                        onClick={(evt) => evt.stopPropagation()}
+                      >
+                        {author.name}
+                      </Link>
+                    ))}
+                    {' '}
                     ({book.year})
                     <br />
                     <Link
-                      to={`?category=${book.category.id}`}
+                      to={`?category=${book.category?.id}`}
                       onClick={(evt) => evt.stopPropagation()}
                     >
                       {book.category?.name}
@@ -535,12 +545,12 @@ class BooksList extends Component<IProps, IState> {
         {this.state.fullList.length === 0 && !this.state.message ? (
           <>Loading books...</>
         ) : (
-          <>
-            {this.props.type === 'shelf' && this.renderShelf()}
-            {this.props.type === 'concise' && this.renderConciseListing()}
-            {this.props.type === 'detailed' && this.renderDetailedListing()}
-          </>
-        )}
+            <>
+              {this.props.type === 'shelf' && this.renderShelf()}
+              {this.props.type === 'concise' && this.renderConciseListing()}
+              {this.props.type === 'detailed' && this.renderDetailedListing()}
+            </>
+          )}
       </>
     );
   }

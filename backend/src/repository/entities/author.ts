@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany, ManyToMany } from 'typeorm';
 import { BaseEntity } from './base-entity';
 import { Book } from './book';
 
@@ -22,6 +22,6 @@ export class Author extends BaseEntity {
   @Column({ type: 'bytea', nullable: true })
   photo: Buffer;
 
-  @OneToMany(() => Book, (book) => book.author)
+  @ManyToMany(() => Book, (book) => book.authors)
   books: Book[];
 }

@@ -14,6 +14,16 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
 
   const router = new express.Router();
 
+  const sortAuthors = (a, b) => {
+    if (a.name < b.name) {
+      return -1;
+    }
+    if (a.name > b.name) {
+      return 1;
+    }
+    return 0;
+  }
+
   router.get(
     '/',
     asyncHandler(async (req: express.Request, res: express.Response) => {
@@ -24,10 +34,12 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
             title: book.title,
             titleOV: book.titleOV,
             language: book.language,
-            author: {
-              id: book.author.id,
-              name: book.author.name,
-            },
+            authors: book.authors.map(author => {
+              return {
+                id: author.id,
+                name: author.name
+              }
+            }).sort(sortAuthors),
             year: book.year,
             category: book.category,
             collection: book.collection,
@@ -51,10 +63,12 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
             title: book.title,
             titleOV: book.titleOV,
             language: book.language,
-            author: {
-              id: book.author.id,
-              name: book.author.name,
-            },
+            authors: book.authors.map(author => {
+              return {
+                id: author.id,
+                name: author.name
+              }
+            }).sort(sortAuthors),
             year: book.year,
             category: book.category,
             collection: book.collection,
@@ -80,7 +94,7 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
 
         let cover = convertBufferToDataURL(book.cover, 'image/jpeg');
 
-        res.send({ ...book, cover });
+        res.send({ ...book, authors: book.authors.sort(sortAuthors), cover });
       } catch (err) {
         res.status(404).send();
       }

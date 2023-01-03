@@ -68,23 +68,6 @@ export class BookDetails extends Component<IProps, IState> {
   render() {
     return (
       <>
-        {/* <Modal
-          show={this.state.book !== null}
-          animation={false}
-          size="xl"
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
-          onHide={() => {
-            this.hideBookDetails();
-          }}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title id="contained-modal-title-vcenter">
-              {this.state.book?.title}
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body> */}
-
         <Navbar>
           <Navbar.Brand>{this.state.book?.title}</Navbar.Brand>
         </Navbar>
@@ -150,10 +133,10 @@ export class BookDetails extends Component<IProps, IState> {
                       value: getLanguage(this.state.book?.languageOV),
                     },
                     {
-                      id: 'author',
-                      label: 'Author',
-                      value: this.state.book?.author.name,
-                      link: `/books/list?author=${this.state.book?.author.id}`,
+                      id: 'authors',
+                      label: 'Authors',
+                      values: this.state.book?.authors.map((author: any) => author.name),
+                      links: this.state.book?.authors.map((author: any) => `/books/list?author=${author.id}`),
                     },
                     { id: 'year', label: 'Year' },
                     {
@@ -193,6 +176,15 @@ export class BookDetails extends Component<IProps, IState> {
                     <tr key={field.id}>
                       <td>{field.label}</td>
                       <td>
+                        {field.links && (field.links.map((link: any, i: number) => (
+                          <Link
+                            className="author_link"
+                            to={link}
+                            onClick={(evt) => evt.stopPropagation()}
+                          >
+                            {field.values[i]}
+                          </Link>
+                        )))}
                         {field.link && !field.target && (
                           <Link
                             to={field.link}
@@ -213,7 +205,7 @@ export class BookDetails extends Component<IProps, IState> {
                         {field.type === 'stars' && (
                           <Rating rating={field.value} />
                         )}
-                        {!field.link &&
+                        {!field.link && !field.links &&
                           !field.type &&
                           (field.value || this.state.book?.[field.id] || '')}
                       </td>
@@ -241,21 +233,6 @@ export class BookDetails extends Component<IProps, IState> {
           </Navbar.Collapse>
         </Navbar>
 
-        {/* </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={() => {
-                this.hideBookDetails();
-              }}
-            >
-              Close
-            </Button>
-            <Button variant="primary" onClick={() => this.editBook()}>
-              Edit
-            </Button>
-          </Modal.Footer>
-        </Modal> */}
       </>
     );
   }
