@@ -76,4 +76,7 @@ export class Book extends BaseEntity {
 
   @Column({ nullable: true })
   rating: number;
+
+  @Column({ default: 'FINISHED', nullable: false, type: 'enum', enum: ['FINISHED', 'READING', 'WISHLIST', 'ABANDONED'] })
+  status: 'FINISHED' | 'READING' | 'WISHLIST' | 'ABANDONED';
 }

@@ -24,6 +24,7 @@ import { Link, NavLink, useHistory, useLocation } from 'react-router-dom';
 import { Rating } from '../common/rating';
 import './books.css';
 import { getLanguage } from './languages';
+import { Status } from '../common/status';
 
 interface IProps {
   history: History;
@@ -213,6 +214,7 @@ class BooksList extends Component<IProps, IState> {
             <th>Year</th>
             <th>Category</th>
             <th>Collection</th>
+            <th>Status</th>
             <th>Rating</th>
           </tr>
         </thead>
@@ -268,6 +270,9 @@ class BooksList extends Component<IProps, IState> {
                     {book.collectionNumber ? ` (${book.collectionNumber})` : ''}
                   </td>
                   <td>
+                    <Status status={book.status} />
+                  </td>
+                  <td>
                     <Rating rating={book.rating} />
                   </td>
                 </tr>
@@ -290,11 +295,12 @@ class BooksList extends Component<IProps, IState> {
             <th>Year</th>
             <th>Category</th>
             <th>Collection</th>
-            <th>Rating</th>
             <th>Pages</th>
             <th>Editorial</th>
             <th>ISBN</th>
             <th>Link</th>
+            <th>Status</th>
+            <th>Rating</th>
           </tr>
         </thead>
         <tbody>
@@ -348,10 +354,7 @@ class BooksList extends Component<IProps, IState> {
                     </Link>
                     {book.collectionNumber ? ` (${book.collectionNumber})` : ''}
                   </td>
-                  <td>
-                    <Rating rating={book.rating} />
-                  </td>
-                  <td>{book.pages}</td>
+                   <td>{book.pages}</td>
                   <td>{book.editorial}</td>
                   <td>
                     <a
@@ -363,6 +366,12 @@ class BooksList extends Component<IProps, IState> {
                     </a>
                   </td>
                   <td>{book.link}</td>
+                  <td>
+                    <Status status={book.status} />
+                  </td>
+                  <td>
+                    <Rating rating={book.rating} />
+                  </td>
                 </tr>
               ))
             )}
@@ -427,6 +436,8 @@ class BooksList extends Component<IProps, IState> {
                     >
                       {book.category?.name}
                     </Link>
+                    <br />
+                    <Status status={book.status} />
                     <br />
                     {book.rating && <Rating rating={book.rating} />}
                   </Card.Text>

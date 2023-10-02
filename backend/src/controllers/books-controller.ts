@@ -47,6 +47,7 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
             rating: book.rating,
             created: book.created,
             modified: book.modified,
+            status: book.status,
           };
         })
       );
@@ -80,6 +81,7 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
             rating: book.rating,
             created: book.created,
             modified: book.modified,
+            status: book.status,
           };
         })
       );

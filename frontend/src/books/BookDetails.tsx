@@ -13,6 +13,7 @@ import {
 } from 'react-bootstrap';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { Rating } from '../common/rating';
+import { Status } from '../common/status';
 import './books.css';
 import { getLanguage } from './languages';
 
@@ -135,8 +136,12 @@ export class BookDetails extends Component<IProps, IState> {
                     {
                       id: 'authors',
                       label: 'Authors',
-                      values: this.state.book?.authors.map((author: any) => author.name),
-                      links: this.state.book?.authors.map((author: any) => `/books/list?author=${author.id}`),
+                      values: this.state.book?.authors.map(
+                        (author: any) => author.name
+                      ),
+                      links: this.state.book?.authors.map(
+                        (author: any) => `/books/list?author=${author.id}`
+                      ),
                     },
                     { id: 'year', label: 'Year' },
                     {
@@ -167,6 +172,12 @@ export class BookDetails extends Component<IProps, IState> {
                       value: this.state.book?.readingDates.join(' -- '),
                     },
                     {
+                      id: 'status',
+                      label: 'Status',
+                      type: 'status',
+                      value: this.state.book?.status,
+                    },
+                    {
                       id: 'rating',
                       label: 'Rating',
                       type: 'stars',
@@ -176,15 +187,16 @@ export class BookDetails extends Component<IProps, IState> {
                     <tr key={field.id}>
                       <td>{field.label}</td>
                       <td>
-                        {field.links && (field.links.map((link: any, i: number) => (
-                          <Link
-                            className="author_link"
-                            to={link}
-                            onClick={(evt) => evt.stopPropagation()}
-                          >
-                            {field.values[i]}
-                          </Link>
-                        )))}
+                        {field.links &&
+                          field.links.map((link: any, i: number) => (
+                            <Link
+                              className="author_link"
+                              to={link}
+                              onClick={(evt) => evt.stopPropagation()}
+                            >
+                              {field.values[i]}
+                            </Link>
+                          ))}
                         {field.link && !field.target && (
                           <Link
                             to={field.link}
@@ -205,7 +217,12 @@ export class BookDetails extends Component<IProps, IState> {
                         {field.type === 'stars' && (
                           <Rating rating={field.value} />
                         )}
-                        {!field.link && !field.links &&
+                        {field.type === 'status' && (
+                          <Status status={field.value} />
+                        )}
+
+                        {!field.link &&
+                          !field.links &&
                           !field.type &&
                           (field.value || this.state.book?.[field.id] || '')}
                       </td>
@@ -232,7 +249,6 @@ export class BookDetails extends Component<IProps, IState> {
             </Button>
           </Navbar.Collapse>
         </Navbar>
-
       </>
     );
   }
