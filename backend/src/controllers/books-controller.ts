@@ -22,7 +22,7 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
       return 1;
     }
     return 0;
-  }
+  };
 
   router.get(
     '/',
@@ -34,12 +34,14 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
             title: book.title,
             titleOV: book.titleOV,
             language: book.language,
-            authors: book.authors.map(author => {
-              return {
-                id: author.id,
-                name: author.name
-              }
-            }).sort(sortAuthors),
+            authors: book.authors
+              .map((author) => {
+                return {
+                  id: author.id,
+                  name: author.name,
+                };
+              })
+              .sort(sortAuthors),
             year: book.year,
             category: book.category,
             collection: book.collection,
@@ -64,12 +66,14 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
             title: book.title,
             titleOV: book.titleOV,
             language: book.language,
-            authors: book.authors.map(author => {
-              return {
-                id: author.id,
-                name: author.name
-              }
-            }).sort(sortAuthors),
+            authors: book.authors
+              .map((author) => {
+                return {
+                  id: author.id,
+                  name: author.name,
+                };
+              })
+              .sort(sortAuthors),
             year: book.year,
             category: book.category,
             collection: book.collection,
@@ -96,7 +100,14 @@ export function setupBooksAPI(booksService: BooksService): express.Router {
 
         let cover = convertBufferToDataURL(book.cover, 'image/jpeg');
 
-        res.send({ ...book, authors: book.authors.sort(sortAuthors), cover });
+        res.send({
+          ...book,
+          authors: book.authors.sort(sortAuthors).map((author) => ({
+            id: author.id,
+            name: author.name,
+          })),
+          cover,
+        });
       } catch (err) {
         res.status(404).send();
       }
