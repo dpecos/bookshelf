@@ -1,4 +1,5 @@
-version: '3'
+version: "3.7"
+
 services:
   backend:
     restart: unless-stopped
@@ -7,8 +8,6 @@ services:
       - postgres
     environment:
       NODE_ENV: production
-    # ports:
-    # - '3101:8080'
     labels:
       - traefik.enable=true
       - traefik.port=8080
@@ -23,8 +22,6 @@ services:
         - REACT_APP_BACKEND_PORT=3100
     depends_on:
       - backend
-    # ports:
-    # - '3102:80'
     labels:
       - traefik.enable=true
       - traefik.port=80
@@ -45,9 +42,8 @@ services:
 
   traefik:
     restart: unless-stopped
-    image: traefik:v2.2
+    image: traefik:v2.5
     command:
-      # - --log.level=DEBUG
       - --api.insecure=true
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
@@ -57,9 +53,9 @@ services:
       - frontend
     ports:
       - '3100:80'
-      # - '3199:8080'
     volumes:
-      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
 volumes:
   postgres_data:
